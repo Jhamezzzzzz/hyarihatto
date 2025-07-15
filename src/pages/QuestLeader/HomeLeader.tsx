@@ -8,7 +8,7 @@ import GraphLocationHyat from "../../components/common/GraphLocation";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function Home() {
+export default function HomeLeader() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const lokasiOptions = ["Area A", "Area B", "Area C"];
   const plantOptions = ["Plant 1", "Plant 2", "Plant 3"];

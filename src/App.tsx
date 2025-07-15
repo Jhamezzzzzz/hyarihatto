@@ -17,7 +17,7 @@ import FormElements from "./pages/Forms/FormElements";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
-import HomeLeader from "./pages/QuestLeader/HomeLeader";
+import Home from "./pages/QuestLeader/HomeLeader";
 import DetailPage from './pages/Dashboard/DetailPage';
 import HyarihattoSummary from "./pages/Hyarihatto/Summary";
 import HyarihattoReview from "./pages/Hyarihatto/Review";
@@ -29,6 +29,9 @@ import AccidentLevel from "./pages/Master/AccidentLevel";
 import HazardLevel from "./pages/Master/HazardLevel";
 import WorkFrequency from "./pages/Master/WorkFrequency";
 import ScoreRank from "./pages/Master/ScoreRank";
+import Homepage from "./pages/MainPages/MainHome"
+import QuestUser from "./pages/QuestUser/QuestUser"
+import ChoiceUser from "./pages/MainPages/MainUser.jsx"
 
 export default function App() {
   return (
@@ -38,7 +41,7 @@ export default function App() {
         <Routes>
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            <Route index path="/" element={<HomeLeader />} />
+            <Route  path="/" element={<Home />} />
             <Route path="/:id" element={<DetailPage />} />
 
             {/* Hyarihatto */}
@@ -60,6 +63,9 @@ export default function App() {
           </Route>
 
           {/* Auth Layout */}
+          <Route index path="/homepage" element={<Homepage />} />
+          <Route path="/homepage/choice-voice" element={<ChoiceUser />} />
+          <Route path="/quest-user" element={<QuestUser />} />
           <Route path="/signin" element={<SignInLead />} />
           <Route path="/signup" element={<SignUp />} />
 

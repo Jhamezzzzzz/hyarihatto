@@ -15,4 +15,10 @@ export default defineConfig({
       },
     }),
   ],
+  server: {
+    host: '0.0.0.0',       // 👈 allows access from LAN IP
+    port: 5173,            // optional: custom port
+    strictPort: true,      // optional: prevents fallback to another port
+    cors: true             // optional: basic CORS enabled
+  }
 });

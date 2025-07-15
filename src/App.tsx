@@ -17,7 +17,7 @@ import FormElements from "./pages/Forms/FormElements";
 import Blank from "./pages/Blank";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
-import Home from "./pages/Dashboard/Home";
+import HomeLeader from "./pages/QuestLeader/HomeLeader";
 import DetailPage from './pages/Dashboard/DetailPage';
 import HyarihattoSummary from "./pages/Hyarihatto/Summary";
 import HyarihattoReview from "./pages/Hyarihatto/Review";
@@ -38,7 +38,7 @@ export default function App() {
         <Routes>
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            <Route index path="/" element={<Home />} />
+            <Route index path="/" element={<HomeLeader />} />
             <Route path="/:id" element={<DetailPage />} />
 
             {/* Hyarihatto */}

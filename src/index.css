@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap")
 layer(base);
+@import url('https://fonts.googleapis.com/css2?family=Krona+One&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
 
 @import "tailwindcss";
 
@@ -8,6 +9,16 @@ layer(base);
 @theme {
   --font-*: initial;
   --font-outfit: Outfit, sans-serif;
+
+  --font-krona: Krona, sans-serif;
+
+  --color-secondary1: #8F8F8F;
+  --color-secondary2: #F6FBF5;
+  --color-primary1: #61BD98;
+  --color-primary2: #75C695;
+  --color-primary3: #88CF92;
+  --color-primary4: #A5DD8E;
+  --color-primary5: #D0FFEE;
 
   --breakpoint-*: initial;
   --breakpoint-2xsm: 375px;
@@ -42,13 +53,13 @@ layer(base);
   --color-black: #101828;
 
   --color-brand-25: #f2f7ff;
-  --color-brand-50: #ecf3ff;
+  --color-brand-50: #D0FFEE; /*primary5*/
   --color-brand-100: #dde9ff;
   --color-brand-200: #c2d6ff;
   --color-brand-300: #9cb9ff;
   --color-brand-400: #7592ff;
-  --color-brand-500: #465fff;
-  --color-brand-600: #3641f5;
+  --color-brand-500: #61BD98; /*primary1*/
+  --color-brand-600: #217D58; /*primary0*/
   --color-brand-700: #2a31d8;
   --color-brand-800: #252dae;
   --color-brand-900: #262e89;

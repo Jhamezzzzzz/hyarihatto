@@ -19,6 +19,16 @@ import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/Dashboard/Home";
 import DetailPage from './pages/Dashboard/DetailPage';
+import HyarihattoSummary from "./pages/Hyarihatto/Summary";
+import HyarihattoReview from "./pages/Hyarihatto/Review";
+import HyarihattoHistory from "./pages/Hyarihatto/History";
+import VoiceMemberSummary from "./pages/VoiceMember/Summary";
+import VoiceMemberReview from "./pages/VoiceMember/Review";
+import VoiceMemberHistory from "./pages/VoiceMember/History";
+import AccidentLevel from "./pages/Master/AccidentLevel";
+import HazardLevel from "./pages/Master/HazardLevel";
+import WorkFrequency from "./pages/Master/WorkFrequency";
+import ScoreRank from "./pages/Master/ScoreRank";
 
 export default function App() {
   return (
@@ -30,28 +40,23 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route index path="/" element={<Home />} />
             <Route path="/:id" element={<DetailPage />} />
-            {/* Others Page */}
-            <Route path="/profile" element={<UserProfiles />} />
-            <Route path="/calendar" element={<Calendar />} />
-            <Route path="/blank" element={<Blank />} />
 
-            {/* Forms */}
-            <Route path="/form-elements" element={<FormElements />} />
-
-            {/* Tables */}
-            <Route path="/basic-tables" element={<BasicTables />} />
-
-            {/* Ui Elements */}
-            <Route path="/alerts" element={<Alerts />} />
-            <Route path="/avatars" element={<Avatars />} />
-            <Route path="/badge" element={<Badges />} />
-            <Route path="/buttons" element={<Buttons />} />
-            <Route path="/images" element={<Images />} />
-            <Route path="/videos" element={<Videos />} />
-
-            {/* Charts */}
-            <Route path="/line-chart" element={<LineChart />} />
-            <Route path="/bar-chart" element={<BarChart />} />
+            {/* Hyarihatto */}
+            <Route path="/hyarihatto/summary" element={<HyarihattoSummary />} />
+            <Route path="/hyarihatto/review" element={<HyarihattoReview />} />
+            <Route path="/hyarihatto/history" element={<HyarihattoHistory />} />
+            
+            {/* Voice Member */}
+            <Route path="/voice-member/summary" element={<VoiceMemberSummary />} />
+            <Route path="/voice-member/review" element={<VoiceMemberReview />} />
+            <Route path="/voice-member/history" element={<VoiceMemberHistory />} />
+            
+            {/* Master */}
+            <Route path="/master/level-tipe-kecelakaan" element={<AccidentLevel />} />
+            <Route path="/master/level-pencegah-bahaya" element={<HazardLevel />} />
+            <Route path="/master/frekuensi-kerja" element={<WorkFrequency />} />
+            <Route path="/master/score-rank" element={<ScoreRank />} />
+            
           </Route>
 
           {/* Auth Layout */}

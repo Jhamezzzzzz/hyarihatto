@@ -29,29 +29,75 @@ const navItems: NavItem[] = [
     name: "Dashboard",
      path: "/",
   },
+];
+
+const hyarihattoItems: NavItem[] = [
   {
     icon: <PieChartIcon />,
-    name: "Charts",
-   path: "/line-chart",
+    name: "Summary",
+    path: "/hyarihatto/summary",
   },
   {
-    name: "Tables",
-    icon: <TableIcon />,
-  path: "/basic-tables"
+    icon: <PieChartIcon />,
+    name: "Review",
+    path: "/hyarihatto/review",
   },
- 
+  {
+    icon: <TableIcon />,
+    name: "History",
+    path: "/hyarihatto/history"
+  },
 ];
 
-const othersItems: NavItem[] = [
-
+const voiceMemberItems: NavItem[] = [
+  {
+    icon: <PieChartIcon />,
+    name: "Summary",
+    path: "/voice-member/summary",
+  },
+  {
+    icon: <PieChartIcon />,
+    name: "Review",
+    path: "/voice-member/review",
+  },
+  {
+    icon: <TableIcon />,
+    name: "History",
+    path: "/voice-member/history"
+  },
 ];
+
+const masterItems: NavItem[] = [
+  {
+    icon: <PieChartIcon />,
+    name: "Level Kecelakaan",
+    path: "/master/level-tipe-kecelakaan",
+  },
+  {
+    icon: <TableIcon />,
+    name: "Level Pencegah Bahaya",
+    path: "/master/level-pencegah-bahaya"
+  },
+  {
+    icon: <TableIcon />,
+    name: "Frekuensi Kerja",
+    path: "/master/frekuensi-kerja"
+  },
+  {
+    icon: <TableIcon />,
+    name: "Score Rank",
+    path: "/master/score-rank"
+  },
+];
+
+
 
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
 
   const [openSubmenu, setOpenSubmenu] = useState<{
-    type: "main" | "others";
+    type: "main" | "hyarihatto" | "voice-member" | "master";
     index: number;
   } | null>(null);
   const [subMenuHeight, setSubMenuHeight] = useState<Record<string, number>>(
@@ -68,13 +114,18 @@ const AppSidebar: React.FC = () => {
   useEffect(() => {
     let submenuMatched = false;
     ["main", "others"].forEach((menuType) => {
-      const items = menuType === "main" ? navItems : othersItems;
+      const items = 
+        menuType === "main" ? navItems : 
+        menuType === "hyarihatto" ? hyarihattoItems : 
+        menuType === "voice-member" ? voiceMemberItems : 
+        menuType === "master" ? masterItems : 
+        [];
       items.forEach((nav, index) => {
         if (nav.subItems) {
           nav.subItems.forEach((subItem) => {
             if (isActive(subItem.path)) {
               setOpenSubmenu({
-                type: menuType as "main" | "others",
+                type: menuType as "main" | "hyarihatto" | "voice-member" | "master",
                 index,
               });
               submenuMatched = true;
@@ -101,7 +152,7 @@ const AppSidebar: React.FC = () => {
     }
   }, [openSubmenu]);
 
-  const handleSubmenuToggle = (index: number, menuType: "main" | "others") => {
+  const handleSubmenuToggle = (index: number, menuType: "main" | "hyarihatto" | "voice-member" | "master") => {
     setOpenSubmenu((prevOpenSubmenu) => {
       if (
         prevOpenSubmenu &&
@@ -114,7 +165,7 @@ const AppSidebar: React.FC = () => {
     });
   };
 
-  const renderMenuItems = (items: NavItem[], menuType: "main" | "others") => (
+  const renderMenuItems = (items: NavItem[], menuType: "main" | "hyarihatto" | "voice-member" | "master") => (
     <ul className="flex flex-col gap-4">
       {items.map((nav, index) => (
         <li key={nav.name}>
@@ -262,14 +313,14 @@ const AppSidebar: React.FC = () => {
             <>
               <img
                 className="dark:hidden"
-                src="/images/logo/logo.svg"
+                src="/images/logo/logo-wide.png"
                 alt="Logo"
                 width={150}
                 height={40}
               />
               <img
                 className="hidden dark:block"
-                src="/images/logo/logo-dark.svg"
+                src="/images/logo/logo-wide-dark.png"
                 alt="Logo"
                 width={150}
                 height={40}
@@ -288,6 +339,7 @@ const AppSidebar: React.FC = () => {
       <div className="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar">
         <nav className="mb-6">
           <div className="flex flex-col gap-4">
+
             <div>
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
@@ -297,13 +349,66 @@ const AppSidebar: React.FC = () => {
                 }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Menu"
+                  "Home"
                 ) : (
                   <HorizontaLDots className="size-6" />
                 )}
               </h2>
               {renderMenuItems(navItems, "main")}
             </div>
+            
+            <div>
+              <h2
+                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                  !isExpanded && !isHovered
+                    ? "lg:justify-center"
+                    : "justify-start"
+                }`}
+              >
+                {isExpanded || isHovered || isMobileOpen ? (
+                  "Hyarihatto"
+                ) : (
+                  <HorizontaLDots className="size-6" />
+                )}
+              </h2>
+              {renderMenuItems(hyarihattoItems, "hyarihatto")}
+            </div>
+
+            <div>
+              <h2
+                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                  !isExpanded && !isHovered
+                    ? "lg:justify-center"
+                    : "justify-start"
+                }`}
+              >
+                {isExpanded || isHovered || isMobileOpen ? (
+                  "Voice Member"
+                ) : (
+                  <HorizontaLDots className="size-6" />
+                )}
+              </h2>
+              {renderMenuItems(voiceMemberItems, "voice-member")}
+            </div>
+
+            <div>
+              <h2
+                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                  !isExpanded && !isHovered
+                    ? "lg:justify-center"
+                    : "justify-start"
+                }`}
+              >
+                {isExpanded || isHovered || isMobileOpen ? (
+                  "Master"
+                ) : (
+                  <HorizontaLDots className="size-6" />
+                )}
+              </h2>
+              {renderMenuItems(masterItems, "master")}
+            </div>
+
+
             <div className="">
               <h2
                 className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${

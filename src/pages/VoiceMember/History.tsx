@@ -1,8 +1,12 @@
 import React from 'react'
+import PageBreadcrumb from '../../components/common/PageBreadCrumb'
 
 const VoiceMemberHistory = () => {
   return (
-    <div>History</div>
+    <div>
+      <PageBreadcrumb subPage='Voice Member' pageTitle='History'/>
+
+    </div>
   )
 }
 

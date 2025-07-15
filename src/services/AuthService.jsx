@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import axiosInstance from '../../utils/AxiosInstance'
+import axiosInstance from '../utils/AxiosInstance'
+import axiosTWIIS from '../utils/AxiosTWIIS'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 
@@ -16,7 +17,7 @@ const useAuthService = () => {
 
   const login = async (username, password) => {
     try {
-      const response = await axiosInstance.post('/login', { username, password })
+      const response = await axiosTWIIS.post('/login', { username, password })
       return response
     } catch (error) {
       if (error.response?.status === 403) {
@@ -28,7 +29,7 @@ const useAuthService = () => {
 
   const logout = async () => {
     try {
-      const response = await axiosInstance.delete('/logout')
+      const response = await axiosTWIIS.delete('/logout')
       return response
     } catch (error) {
       handleError(error, 'Error during logout:')
@@ -37,7 +38,7 @@ const useAuthService = () => {
 
   const resetPassword = async (password) => {
     try {
-      const response = await axiosInstance.post('/reset-password', password)
+      const response = await axiosTWIIS.post('/reset-password', password)
       return response
     } catch (error) {
       handleError(error, 'Error during reset password:')

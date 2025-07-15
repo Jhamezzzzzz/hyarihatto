@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import imageSafety from '../../components/image/warehouse_assident_05.jpg'
 import withReactContent from 'sweetalert2-react-content'
-import useAuthService from '../../components/service/AuthService'
+import useAuthService from '../../services/AuthService'
 import "../../css/home.css"; 
 
 

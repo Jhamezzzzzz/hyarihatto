@@ -141,15 +141,15 @@
  }
 
  /* //////////////////////////////////Answer User////////////////////////////////////// */
- .page-center {
+ /* .page-center {
 
   display: flex;
   flex-direction: column;
-  align-items: center;       /* Center horizontal */
-  justify-content: center;   /* Center vertical */
+  align-items: center;    
+  justify-content: center;  
 
   padding: 10px;
-}
+} */
 
 .container {
   border: 1px solid #ccc;
@@ -161,14 +161,14 @@
   max-width: 400px; /* ✅ Lebar maksimal agar tidak terlalu besar */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-.input-control {
+/* .input-control {
   width: 100%;
   padding: 5px;
   margin-bottom: 2px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 1rem;
-}
+} */
   .title-bigger-1 {
   font-size: 2rem;
   font-family:Verdana, Geneva, Tahoma, sans-serif;
@@ -184,24 +184,24 @@
   justify-content: start;
   margin: 0;
 }
-.form-label {
+/* .form-label {
   font-size: 0.9rem;
   margin: 0;
   color: #333;
   gap: 5px;
-}
-.text-end {
+} */
 
+.text-end {
 margin-top: 10px;
 }
-.page-finish{
+/* .page-finish{
  display: flex;
   flex-direction: column;
-  align-items: center;       /* Center horizontal */
-  justify-content: center;   /* Center vertical */
+  align-items: center;       Center horizontal
+  justify-content: center;  
 
   padding: 10px;
-}
+} */
 .step-bullet {
   width: 35px;
   height: 35px;

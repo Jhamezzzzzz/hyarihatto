@@ -1,11 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import {
-  CButton,
   CCard,
   CCardBody,
-  CCardGroup,
   CCol,
-  CContainer,
   CForm,
   CFormInput,
   CInputGroup,
@@ -13,7 +10,6 @@ import {
   CRow,
   CSpinner,
 } from '@coreui/react'
-import CIcon from '@coreui/icons-react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router-dom'
@@ -30,13 +26,13 @@ const MySwal = withReactContent(Swal)
 
 export default function SignInLead (){
 
-  const [loading, setLoading] = useState(false)
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [msg, setMsg] = useState('')
+  const [loading, setLoading] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [msg, setMsg] = useState<string>('');
 
-  const navigate = useNavigate()
-  const { login } = useAuthService()
+  const navigate = useNavigate();
+  const { login } = useAuthService();
 
   useEffect(() => {
     if (msg) {
@@ -44,41 +40,39 @@ export default function SignInLead (){
         icon: 'error',
         title: 'Oops...',
         text: msg,
-      })
-      setMsg('')
+      });
+      setMsg('');
     }
-  }, [msg])
+  }, [msg]);
 
-  const Auth = async (e) => {
-    e.preventDefault()
+  const Auth = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
     if (!username || !password) {
-      setMsg('Username dan password harus diisi')
-      return
+      setMsg('Username dan password harus diisi');
+      return;
     }
 
     if (password.length < 6) {
-      setMsg('Password harus lebih dari 6 karakter')
-      return
+      setMsg('Password harus lebih dari 6 karakter');
+      return;
     }
-    
 
     try {
-      setLoading(true)
-      await login(username, password)
-      navigate('/home')
-    } catch (error) {
-      if (error.response) {
-        setMsg(error.response.data.msg)
+      setLoading(true);
+      await login(username, password);
+      navigate('/home');
+    } catch (error: any) {
+      if (error.response?.data?.msg) {
+        setMsg(error.response.data.msg);
       } else {
-        console.error('Error:', error.message)
+        console.error('Error:', error.message);
+        setMsg('Terjadi kesalahan saat login');
       }
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-
-  
-  }
+  };
 
   return (
 <div

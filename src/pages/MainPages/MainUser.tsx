@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { FaUser, FaTrash } from "react-icons/fa"; // ✅ pakai ikon Font Awesome
+import { FaUser } from "react-icons/fa"; // ✅ pakai ikon Font Awesome
 import "../../css/home.css"; // ✅ pastikan file CSS ini ada
 import { motion } from 'framer-motion';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
 
-const MainHome = () => {
+export default function MainUser() {
     useEffect(() => {
   AOS.init({ duration: 1000 });
 }, []);
@@ -56,14 +56,14 @@ const MainHome = () => {
             data-aos="fade-up"
             data-aos-delay="0"
             className="button-user"
-            onClick={() => window.location.href = "/homepage/choice-voice"}>
+            onClick={() => window.location.href = "/quest-user"}>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <FaUser size={24} />
                     <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column", lineHeight: "1.4" }}>
                         <label 
                         className="justify-start"
-                        style={{ fontWeight: "bold" }}>Warehouse Member</label>
-                        <label>Lakukan pencatatan harian</label>
+                        style={{ fontWeight: "bold" }}>ONLINE HYARIHATTO</label>
+                        <label>Catatan digital Hyarihatto</label>
                     </div>
                 </div>
             </button>
@@ -77,29 +77,15 @@ const MainHome = () => {
                     <FaUser size={24} />
                     <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column", lineHeight: "1.4" }}>
                         <label className="justify-start"
-                        style={{fontWeight:'bold'}}>Group Leader</label>
-                        <label>Lihat laporan dan buat penanggulangan</label>
+                        style={{fontWeight:'bold'}}>VOICE MEMBER</label>
+                        <label>Laporan keluhan dan kejadian</label>
                     </div>
                 </div>
             </button>
 
-              <button 
-              data-aos="fade-up"
-              data-aos-delay="400"
-              className="button-panduan"
-               onClick={() => window.location.href = "/panduan"}>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <FaUser size={24} />
-                    <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column", lineHeight: "1.4" }}>
-                        <label className="justify-start"
-                        style={{fontWeight:'bold'}}>Panduan</label>
-                        <label>Petunjuk pengisian catatan bagi Membe</label>
-                    </div>
-                </div>
-            </button>
+              
         </div>
     </section>
   );
 };
 
-export default MainHome;

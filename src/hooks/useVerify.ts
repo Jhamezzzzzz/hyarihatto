@@ -9,6 +9,15 @@ import axiosInstance from '../utils/AxiosInstance'
 
 const MySwal = withReactContent(swal)
 
+interface DecodedToken {
+  name: string;
+  roleName: string;
+  anotherWarehouseId: number;
+  exp: number; 
+  isWarehouse: number;
+  img: string;
+}
+
 const useVerify = () => {
   const [name, setName] = useState('')
   const [roleName, setRoleName] = useState('')
@@ -26,9 +35,8 @@ const useVerify = () => {
   const refreshToken = async () => {
     try {
       const response = await axiosTWIIS.get('/token')
-      console.log("RESPONS TOKEN :", response)
       setToken(response.data.accessToken)
-      const decoded = jwtDecode(response.data.accessToken)
+      const decoded: DecodedToken = jwtDecode(response.data.accessToken)
       setName(decoded.name)
       setRoleName(decoded.roleName)
       setWarehouseId(decoded.anotherWarehouseId)
@@ -56,7 +64,7 @@ const useVerify = () => {
           const response = await axiosTWIIS.get('/token')
           config.headers.Authorization = `Bearer ${response.data.accessToken}`
           setToken(response.data.accessToken)
-          const decoded = jwtDecode(response.data.accessToken)
+          const decoded: DecodedToken = jwtDecode(response.data.accessToken)
           setName(decoded.name)
           setRoleName(decoded.roleName)
           setWarehouseId(decoded.anotherWarehouseId)

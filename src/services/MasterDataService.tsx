@@ -38,7 +38,7 @@ const useMasterDataService = () => {
         try {
             const response = await axiosJWT.get(`${api}?page=${page}&limit=${limit}&q=${q}`, {
                 headers: {
-                    Authorization: `Bearer cok${token}`,
+                    Authorization: `Bearer ${token}`,
                 },
             })
             return response

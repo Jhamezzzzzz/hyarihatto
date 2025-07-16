@@ -103,7 +103,7 @@ export default function BarSummary({ filter }: Filters) {
 
     tooltip: {
       x: {
-        show: false,
+        formatter: (val: string | number) => `Tanggal ${val} ${monthName}`,
       },
       y: {
         formatter: (val: number) => `${val}`,
@@ -112,7 +112,7 @@ export default function BarSummary({ filter }: Filters) {
   };
   const series = [
     {
-      name: `Tanggal ${dates}`,
+      name: `Score`,
       data: [9, 0, 0, 16, 4, 0, 0, 0, 0, 0, 5, 0, 4, 0, 0, 5, 4, 0, 0, 0, 0, 0, 9, 0, 0, 0, 12, 0],
     },
   ];

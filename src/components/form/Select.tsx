@@ -92,7 +92,7 @@ const Select: React.FC<SelectProps> = ({
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         disabled={isDisable}
-        className={`${error && errorClass} disabled:cursor-not-allowed disabled:bg-gray-100 h-11 w-full cursor-pointer appearance-none rounded-lg border bg-white px-4 py-2.5 text-left text-sm shadow-theme-xs focus:border-primary1-300 focus:outline-hidden focus:ring-3 focus:ring-primary1/30 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 ${selectedLabel ? "text-gray-800 dark:text-white/90" : "text-gray-400 dark:text-gray-400"}`}
+        className={`${error && errorClass}  disabled:cursor-not-allowed disabled:bg-gray-100 h-11 w-full cursor-pointer appearance-none rounded-lg border bg-white px-4 py-2.5 text-left text-sm shadow-theme-xs focus:border-primary1-300 focus:outline-hidden focus:ring-3 focus:ring-primary1/30 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 ${selectedLabel ? "text-gray-800 dark:text-white/90" : "text-gray-400 dark:text-gray-400"}`}
       >
         {selectedLabel || (showPlaceholder ? placeholder : "")}
         <span className={`absolute right-3 top-3 transition-all duration-200 ${isOpen && "rotate-180"}`}>
@@ -112,7 +112,7 @@ const Select: React.FC<SelectProps> = ({
                 onChange={handleSearchChange}
                 autoFocus
                 placeholder={placeholderInput}
-                className="w-full rounded border border-gray-300 px-2 py-1 text-sm text-gray-700 focus:border-primary1-300 focus:ring-2 focus:ring-primary1/30 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                className="w-full dark:placeholder:text-gray-400 rounded border border-gray-300 px-2 py-1 text-sm text-gray-700 focus:border-primary1-300 focus:ring-2 focus:ring-primary1/30 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
               />
             </div>
           )}

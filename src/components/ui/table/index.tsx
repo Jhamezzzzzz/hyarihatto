@@ -38,7 +38,7 @@ const Table: React.FC<TableProps> = ({ children, className }) => {
 
 // TableHeader Component
 const TableHeader: React.FC<TableHeaderProps> = ({ children, className }) => {
-  return <thead className={`${className} bg-gray-50 text- font-bold`}>{children}</thead>;
+  return <thead className={`${className} bg-gray-50 dark:bg-gray-900 font-[550]`}>{children}</thead>;
 };
 
 // TableBody Component
@@ -58,7 +58,7 @@ const TableCell: React.FC<TableCellProps> = ({
   className,
 }) => {
   const CellTag = isHeader ? "th" : "td";
-  return <CellTag className={` ${className} py-3 px-2 border-b-1`}>{children}</CellTag>;
+  return <CellTag className={` ${className} py-3 px-2 border-b-1 dark:text-gray-400 dark:border-gray-700`}>{children}</CellTag>;
 };
 
 export { Table, TableHeader, TableBody, TableRow, TableCell };

@@ -5,8 +5,11 @@ import DatePicker from '../../components/form/date-picker'
 import { Card, CardContent } from '../../components/ui/card/card'
 import BarSummary from '../../components/charts/bar/BarSummary'
 import { useState } from 'react'
+import PageMeta from '../../components/common/PageMeta'
 
 const HyarihattoSummary = () => {
+  <PageMeta title='Hyarihatto' description=''/>
+
   const [filter, setFilter] = useState({
     date: new Date().toLocaleDateString('id-ID', {
       month: "long",
@@ -26,7 +29,7 @@ const HyarihattoSummary = () => {
               placeholder='Semua member'
               options={[]} 
               onChange={()=>{}}
-              className='bg-white'
+              className='min-w-[200px]'
             />
           </div>
           <div>
@@ -35,7 +38,7 @@ const HyarihattoSummary = () => {
               placeholder='Semua shift'
               options={[]} 
               onChange={()=>{}}
-              className='bg-white'
+              className='min-w-[200px]'
             />
           </div>
         </div>
@@ -46,8 +49,9 @@ const HyarihattoSummary = () => {
               placeholder='Semua periode' 
               className='bg-white'
               defaultDate={filter.date}
-              mode='single'
-              dateFormat='m-Y'
+              dateFormat="Y-m"
+              mode="month"
+              
             />
         </div>
       </div>

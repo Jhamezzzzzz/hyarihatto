@@ -3,18 +3,13 @@ import { Link, useLocation } from "react-router";
 
 // Assume these icons are imported from an icon library
 import {
- 
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
- 
-  PieChartIcon,
-
   TableIcon,
-
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import { FaBalanceScale, FaBookReader, FaChartBar, FaClipboardCheck, FaUserInjured } from "react-icons/fa";
+import { FaBalanceScale, FaBookReader, FaChartBar, FaUserInjured } from "react-icons/fa";
 
 
 type NavItem = {

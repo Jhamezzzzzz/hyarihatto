@@ -56,7 +56,7 @@ export default function MainUser() {
             data-aos="fade-up"
             data-aos-delay="0"
             className="button-user"
-            onClick={() => window.location.href = "/quest-user"}>
+            onClick={() => window.location.href = "/homepage/choice-voice/questhyarihatto"}>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <FaUser size={24} />
                     <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column", lineHeight: "1.4" }}>
@@ -72,7 +72,7 @@ export default function MainUser() {
             data-aos="fade-up"
             className="button-leader"
             data-aos-delay="200"
-            onClick={() => window.location.href = "/signin"}>
+            onClick={() => window.location.href = "/homepage/choice-voice/questvoice"}>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <FaUser size={24} />
                     <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column", lineHeight: "1.4" }}>

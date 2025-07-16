@@ -19,6 +19,7 @@ import ScoreRank from "./pages/Master/ScoreRank";
 import Homepage from "./pages/MainPages/MainHome"
 // import QuestUser from "./pages/QuestUser/QuestUserTest"
 import QuestUserTest from "./pages/QuestUser/QuestUserTest"
+import QuestUserVoice from "./pages/QuestUser/QuestUserVoice"
 import ChoiceUser from "./pages/MainPages/MainUser"
 
 export default function App() {
@@ -56,7 +57,8 @@ export default function App() {
       
           <Route path="/signin" element={<SignInLead />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/questuser" element={<QuestUserTest />} />
+          <Route path="/homepage/choice-voice/questhyarihatto" element={<QuestUserTest />} />
+          <Route path="/homepage/choice-voice/questvoice" element={<QuestUserVoice />} />
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>

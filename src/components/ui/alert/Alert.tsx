@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import React from "react";
 
 interface AlertProps {
   variant: "success" | "error" | "warning" | "info"; // Alert type
@@ -7,6 +8,7 @@ interface AlertProps {
   showLink?: boolean; // Whether to show the "Learn More" link
   linkHref?: string; // Link URL
   linkText?: string; // Link text
+  onClose: () => void
 }
 
 const Alert: React.FC<AlertProps> = ({
@@ -16,6 +18,7 @@ const Alert: React.FC<AlertProps> = ({
   showLink = false,
   linkHref = "#",
   linkText = "Learn more",
+  onClose
 }) => {
   // Tailwind classes for each variant
   const variantClasses = {
@@ -113,8 +116,11 @@ const Alert: React.FC<AlertProps> = ({
 
   return (
     <div
-      className={`rounded-xl border p-4 ${variantClasses[variant].container}`}
+      className={`rounded-xl border p-4 ${variantClasses[variant].container} relative`}
     >
+      <button onClick={onClose} className="absolute top-2 right-4 text-lg">
+        x
+      </button>
       <div className="flex items-start gap-3">
         <div className={`-mt-0.5 ${variantClasses[variant].icon}`}>
           {icons[variant]}

@@ -21,6 +21,7 @@ import Homepage from "./pages/MainPages/MainHome"
 import QuestUserTest from "./pages/QuestUser/QuestUserTest"
 import QuestUserVoice from "./pages/QuestUser/QuestUserVoice"
 import ChoiceUser from "./pages/MainPages/MainUser"
+import PanduanHyat from "./pages/Panduan/PanduanHyat"
 
 export default function App() {
   return (
@@ -59,6 +60,7 @@ export default function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/homepage/choice-voice/questhyarihatto" element={<QuestUserTest />} />
           <Route path="/homepage/choice-voice/questvoice" element={<QuestUserVoice />} />
+          <Route path="/homepage/panduan" element={<PanduanHyat />} />
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>

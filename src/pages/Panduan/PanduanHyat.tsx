@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 
-const Panduan =() => {
+export default function PamduanHyat() {
 const navigate = useNavigate();
 
 
@@ -56,7 +56,7 @@ const handleBack = () => {
  )
 
  }
- export default Panduan;
+
 
  
  

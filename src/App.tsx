@@ -30,7 +30,7 @@ export default function App() {
         <Routes>
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
-            <Route  path="/" element={<Home />} />
+            <Route  path="/home" element={<Home />} />
             <Route path="/:id" element={<DetailPage />} />
 
             {/* Hyarihatto */}
@@ -48,17 +48,18 @@ export default function App() {
             <Route path="/master/level-pencegah-bahaya" element={<HazardLevel />} />
             <Route path="/master/frekuensi-kerja" element={<WorkFrequency />} />
             <Route path="/master/score-rank" element={<ScoreRank />} />
-            
           </Route>
 
           {/* Auth Layout */}
-          <Route index path="/homepage" element={<Homepage />} />
-          <Route path="/homepage/choice-voice" element={<ChoiceUser />} />
-      
+          <Route index path="/" element={<Homepage />} />
           <Route path="/signin" element={<SignInLead />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/homepage/choice-voice/questhyarihatto" element={<QuestUserTest />} />
-          <Route path="/homepage/choice-voice/questvoice" element={<QuestUserVoice />} />
+      
+          {/* Member */}
+          <Route path="/member" element={<ChoiceUser />} />
+          <Route path="/member/hyarihatto" element={<QuestUserTest />} />
+          <Route path="/member/voice-member" element={<QuestUserVoice />} />
+
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />
         </Routes>

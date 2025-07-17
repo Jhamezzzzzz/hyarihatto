@@ -4,6 +4,8 @@ import WaveBackground from '../../components/image/Wave-Background-Hyat.png'
 import { useNavigate } from "react-router-dom";
 import JapanBackground from '../../components/image/Hijau-Hyarihatto.png'
 import DatePicker from 'react-datepicker'
+import "react-datepicker/dist/react-datepicker.css";
+import { FaCalendarAlt } from "react-icons/fa"; // atau font-awesome kalau kamu pakai
 // import JapanBackground from '../../components/image/Biru Hyarihatto.png'
 
 const pilihanCatatan = [
@@ -52,6 +54,7 @@ type FormCheckBox = {
 };
 
 const QuestUserTest: React.FC = () => {
+    const datePickerRef = useRef<any>(null);
     const [showCameraModal, setShowCameraModal] = useState<boolean>(false);
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -68,28 +71,24 @@ const QuestUserTest: React.FC = () => {
         name: "",
         noreg: '',
         shift: "",
-        date: null,
+        date: new Date(),
         time: '',
         line: '',
         location: '',
     });
-    const [formCheckBox, setFormCheckBox] = useState<FormCheckBox>({
-        jenis: [],
-        sumber: [],
-        terluka: [],
-        sebab: [],
-        kategori: [],
+    const [formCheckBox, setFormCheckBox] = useState({
+        jenis: "",
+        sumber: "",
+        terluka: "",
+        sebab: "",
+        kategori: "",
         });
 
     const [selectedLevelKecelakaan, setSelectedLevelKecelakaan] = useState<string>('');
     const [selectedFrekuensiKerja, setSelectedFrekuensiKerja] = useState<string>('');
     const [selectedPencegahBahaya, setSelectedPencegahBahaya] = useState<string>('');
 
-        const [formDate, setFormDate] = useState({
-            date: new Date(),
-            // field lain
-        })
-
+        
         const handleDateChange = (date: Date | null) => {
             setFormData(prev => ({
                 ...prev,
@@ -146,19 +145,7 @@ const QuestUserTest: React.FC = () => {
       const handleRemoveImage = (index: number) => {
     setPreviewImage((prev) => prev.filter((_, i) => i !== index));
   };
-    const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof FormCheckBox) => {
-        const { value, checked } = e.target;
-        setFormCheckBox((prev) => {
-          const updated = checked
-            ? [...prev[field], value]
-            : prev[field].filter((v) => v !== value);
-    
-          return {
-            ...prev,
-            [field]: updated,
-          };
-        });
-      };
+ 
 
        const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
          if (!e.target.files) return;
@@ -221,12 +208,13 @@ const QuestUserTest: React.FC = () => {
     (formData as any).condition &&
     (formData as any).hope;
 
-  const isFormatComplete3 =
-    formCheckBox.jenis.length > 0 &&
-    formCheckBox.sumber.length > 0 &&
-    formCheckBox.terluka.length > 0 &&
-    formCheckBox.sebab.length > 0 &&
-    formCheckBox.kategori.length > 0;
+const isFormatComplete3 =
+  formCheckBox.jenis &&
+  formCheckBox.sumber &&
+  formCheckBox.terluka &&
+  formCheckBox.sebab &&
+  formCheckBox.kategori;
+
 
   const isFormatComplete4 =
     selectedTingkatCatatan !== "" &&
@@ -363,16 +351,28 @@ const QuestUserTest: React.FC = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                         Tanggal:<span className="text-red-500">*</span>
                     </label>
-                    <DatePicker
+
+                    <div className="relative w-full">
+                        <DatePicker
+                        ref={datePickerRef}
                         selected={formData.date}
                         onChange={handleDateChange}
                         dateFormat="yyyy-MM-dd"
-                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                        wrapperClassName="w-full" // 👈 tambahkan ini
                         showMonthDropdown
                         showYearDropdown
                         dropdownMode="select"
                         placeholderText="Pilih tanggal"
-                    />
+                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200 pr-10"
+                        />
+                        {/* Icon kalender */}
+                        <div
+                        onClick={() => datePickerRef.current.setFocus()} // buka datepicker saat klik ikon
+                        className="absolute inset-y-0 right-3 flex items-center text-gray-500 cursor-pointer"
+                        >
+                        <FaCalendarAlt className="h-5 w-5" />
+                        </div>
+                    </div>
                     </div>
                 <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -381,7 +381,7 @@ const QuestUserTest: React.FC = () => {
                 <input
                     type="time"
                     name="time"
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
                     value={formData.time}
                     onChange={handleChange}
                     disabled={!formData.date}
@@ -395,7 +395,7 @@ const QuestUserTest: React.FC = () => {
                 <input
                     type="text"
                     name="line"
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
                     placeholder="Contoh: Assembly 1"
                     value={formData.line}
                     onChange={handleChange}
@@ -410,7 +410,7 @@ const QuestUserTest: React.FC = () => {
                 <input
                     type="text"
                     name="location"
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
                     placeholder="Contoh: Area 3"
                     value={formData.location}
                     onChange={handleChange}
@@ -428,7 +428,7 @@ const QuestUserTest: React.FC = () => {
                 <button
                     className={`px-4 py-2 rounded transition ${
                     isFormatComplete1
-                        ? "bg-blue-600 hover:bg-blue-700 text-white"
+                        ? "bg-green-600 hover:bg-green-700 text-white"
                         : "bg-gray-300 text-gray-500 cursor-not-allowed"
                     }`}
                     onClick={handleNext}
@@ -463,7 +463,7 @@ const QuestUserTest: React.FC = () => {
             <div className="mb-4">{buttonStep}</div>
 
             <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
-            <div className="bg-blue-500 text-white text-center py-3">
+            <div className="bg-green-500 text-white text-center py-3">
                 <h5 className="text-lg font-semibold">Catatan</h5>
             </div>
 
@@ -474,7 +474,7 @@ const QuestUserTest: React.FC = () => {
                 </label>
                 <textarea
                     name="do"
-                    className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={formData.do}
                     onChange={handleChange}
                 />
@@ -486,7 +486,7 @@ const QuestUserTest: React.FC = () => {
                 </label>
                 <textarea
                     name="danger"
-                    className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={formData.danger}
                     onChange={handleChange}
                     disabled={!formData.do}
@@ -499,7 +499,7 @@ const QuestUserTest: React.FC = () => {
                 </label>
                 <textarea
                     name="condition"
-                    className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={formData.condition}
                     onChange={handleChange}
                     disabled={!formData.danger}
@@ -515,7 +515,7 @@ const QuestUserTest: React.FC = () => {
                 </label>
                 <textarea
                     name="hope"
-                    className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-green-400"
                     value={formData.hope}
                     onChange={handleChange}
                     disabled={!formData.condition}
@@ -532,7 +532,7 @@ const QuestUserTest: React.FC = () => {
                 <button
                     className={`px-4 py-2 rounded transition ${
                     isFormatComplete2
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        ? 'bg-green-600 hover:bg-green-700 text-white'
                         : 'bg-gray-300 text-gray-500 cursor-not-allowed'
                     }`}
                     onClick={handleNext}
@@ -566,7 +566,7 @@ const QuestUserTest: React.FC = () => {
                 <div className="mb-4">{buttonStep}</div>
 
                 <div className="w-full max-w-3xl bg-white shadow rounded-lg">
-                <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
+                <div className="bg-green-500 text-white px-4 py-2 text-center rounded-t-lg">
                     <h5 className="font-semibold text-lg">Tingkat Catatan</h5>
                 </div>
                 <div className="p-4 space-y-6">
@@ -575,7 +575,7 @@ const QuestUserTest: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* Jenis */}
                     <div className="bg-white shadow rounded-lg">
-                        <div className="bg-blue-100 px-3 py-2 text-center rounded-t-lg">
+                        <div className="bg-green-100 px-3 py-2 text-center rounded-t-lg">
                         <h5 className="font-medium">Jenis <span className="text-red-500">*</span></h5>
                         </div>
                         <div className="p-3 space-y-2">
@@ -585,8 +585,8 @@ const QuestUserTest: React.FC = () => {
                                 type="checkbox"
                                 name="jenis"
                                 value={val}
-                                checked={formCheckBox.jenis.includes(val)}
-                                onChange={(e) => handleCheckboxChange(e, "jenis")}
+                                checked={formCheckBox.jenis === (val)}
+                                onChange={() =>setFormCheckBox({ ...formCheckBox, jenis: val })}
                                 className="accent-blue-600"
                             />
                             <span className="capitalize">{val}</span>
@@ -597,18 +597,18 @@ const QuestUserTest: React.FC = () => {
 
                     {/* Sumber */}
                     <div className="bg-white shadow rounded-lg">
-                        <div className="bg-blue-100 px-3 py-2 text-center rounded-t-lg">
+                        <div className="bg-green-100 px-3 py-2 text-center rounded-t-lg">
                         <h5 className="font-medium">Sumber & Akibat <span className="text-red-500">*</span></h5>
                         </div>
                         <div className="p-3 space-y-2">
                         {["pengalaman", "praduga", "direct", "ergo"].map((val) => (
                             <label key={val} className="flex items-center space-x-2">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 name="sumber"
                                 value={val}
-                                checked={formCheckBox.sumber.includes(val)}
-                                onChange={(e) => handleCheckboxChange(e, "sumber")}
+                                checked={formCheckBox.sumber === (val)}
+                                onChange={() => setFormCheckBox({ ...formCheckBox, sumber: val})}
                                 className="accent-blue-600"
                             />
                             <span className="capitalize">{val === "ergo" ? "Ergo (PAK)" : val}</span>
@@ -622,18 +622,18 @@ const QuestUserTest: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {/* Terluka */}
                     <div className="bg-white shadow rounded-lg">
-                        <div className="bg-blue-100 px-3 py-2 text-center rounded-t-lg">
+                        <div className="bg-green-100 px-3 py-2 text-center rounded-t-lg">
                         <h5 className="font-medium">Terluka <span className="text-red-500">*</span></h5>
                         </div>
                         <div className="p-3 space-y-2">
                         {["kepala", "tangan", "kaki", "badan"].map((val) => (
                             <label key={val} className="flex items-center space-x-2">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 name="terluka"
                                 value={val}
-                                checked={formCheckBox.terluka.includes(val)}
-                                onChange={(e) => handleCheckboxChange(e, "terluka")}
+                                checked={formCheckBox.terluka === (val)}
+                                onChange={() => setFormCheckBox({...formCheckBox, terluka: val})}
                                 className="accent-blue-600"
                             />
                             <span className="capitalize">{val}</span>
@@ -644,7 +644,7 @@ const QuestUserTest: React.FC = () => {
 
                     {/* Sebab */}
                     <div className="bg-white shadow rounded-lg">
-                        <div className="bg-blue-100 px-3 py-2 text-center rounded-t-lg">
+                        <div className="bg-green-100 px-3 py-2 text-center rounded-t-lg">
                         <h5 className="font-medium">Sebab <span className="text-red-500">*</span></h5>
                         </div>
                         <div className="p-3 space-y-2">
@@ -656,11 +656,11 @@ const QuestUserTest: React.FC = () => {
                         ].map(({ val, label }) => (
                             <label key={val} className="flex items-center space-x-2">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 name="sebab"
                                 value={val}
-                                checked={formCheckBox.sebab.includes(val)}
-                                onChange={(e) => handleCheckboxChange(e, "sebab")}
+                                checked={formCheckBox.sebab === (val)}
+                                onChange={() => setFormCheckBox({...formCheckBox, sebab: val})}
                                 className="accent-blue-600"
                             />
                             <span>{label}</span>
@@ -671,18 +671,18 @@ const QuestUserTest: React.FC = () => {
 
                     {/* Kategori */}
                     <div className="bg-white shadow rounded-lg">
-                        <div className="bg-blue-100 px-3 py-2 text-center rounded-t-lg">
+                        <div className="bg-green-100 px-3 py-2 text-center rounded-t-lg">
                         <h5 className="font-medium">Kategori <span className="text-red-500">*</span></h5>
                         </div>
                         <div className="p-3 space-y-2">
                         {["human", "machine", "workplace"].map((val) => (
                             <label key={val} className="flex items-center space-x-2">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 name="kategori"
                                 value={val}
-                                checked={formCheckBox.kategori.includes(val)}
-                                onChange={(e) => handleCheckboxChange(e, "kategori")}
+                                checked={formCheckBox.kategori === (val)}
+                                onChange={() => setFormCheckBox({...formCheckBox, kategori: val})}
                                 className="accent-blue-600"
                             />
                             <span className="capitalize">{val}</span>
@@ -702,7 +702,8 @@ const QuestUserTest: React.FC = () => {
                     </button>
                     <button
                         className={`px-4 py-2 rounded ${
-                        isFormatComplete3 ? 'bg-blue-600 hover:bg-blue-700 text-white' : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        isFormatComplete3 ? 'bg-green-600 hover:bg-green-700 text-white' : 
+                        'bg-gray-300 text-gray-500 cursor-not-allowed'
                         }`}
                         onClick={handleNext}
                         disabled={!isFormatComplete3}
@@ -728,7 +729,7 @@ const QuestUserTest: React.FC = () => {
                 <div className="mb-4">{buttonStep}</div>
 
                 <div className="w-full max-w-3xl bg-white shadow rounded-lg">
-                <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
+                <div className="bg-green-400 text-white px-4 py-2 text-center rounded-t-lg">
                     <h5 className="text-lg font-semibold">Bukti Kejadian</h5>
                 </div>
 
@@ -820,7 +821,7 @@ const QuestUserTest: React.FC = () => {
                             Batal
                             </button>
                             <button
-                            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+                            className="bg-green-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
                             onClick={handleCaptureImage}
                             >
                             Simpan Gambar
@@ -841,7 +842,7 @@ const QuestUserTest: React.FC = () => {
                     <button
                         className={`px-4 py-2 rounded ${
                         previewImage.length > 0
-                            ? "bg-blue-600 hover:bg-blue-700 text-white"
+                            ? "bg-green-600 hover:bg-green-700 text-white"
                             : "bg-gray-300 text-gray-500 cursor-not-allowed"
                         }`}
                         onClick={handleNext}
@@ -855,86 +856,98 @@ const QuestUserTest: React.FC = () => {
             </div>
         )}
           {step === 6 && (
-        <div className="page-center" >
-            <div style={{marginTop:'10px',marginBottom:'20px',textAlign:'center'}}>
-                <h2 className="title-bigger-1">HYARIHATTO</h2>
-                <h6>“Mari ber-Hyarihatto untuk mencegah kecelakaan menimpa kita”</h6>
+       <div className="flex flex-col items-center px-4">
+            {/* Header */}
+            <div className="mt-2 mb-5 text-center">
+                <h2 className="text-3xl font-bold text-green-700">HYARIHATTO</h2>
+                <h6 className="text-gray-600 mt-1">“Mari ber-Hyarihatto untuk mencegah kecelakaan menimpa kita”</h6>
             </div>
-           <div className="d-flex justify-content-center mb-4">
-                {buttonStep}
-            </div>
-          <div className="card shadow" style={{ width: '100%', maxWidth: '700px' }}>
-            <div className="card-header text-center">
-                <h5 className="mb-0">Tingkat Catatan</h5>
-            </div>
-           <div className="card-body">
-              <p className="mb-3">Silakan pilih salah satu:</p>
 
-              {pilihanCatatan.map((item, index) => {
-                const isChecked = selectedTingkatCatatan === item;
+            {/* Step Button */}
+            <div className="mb-4 flex justify-center">{buttonStep}</div>
 
-                return (
-                  <div key={index}>
-                    <div
-                      className="d-flex justify-content-between align-items-center px-3 py-2 mb-2"
-                      style={{
-                        border: isChecked ? "2px solid #0d6efd" : "1px solid #dee2e6",
-                        borderRadius: "8px",
-                        backgroundColor: isChecked ? "rgba(13, 110, 253, 0.1)" : "white",
-                        transition: "all 0.3s",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => setSelectedTingkatCatatan(item)}
-                    >
-                      <label
-                        htmlFor={`tingkat-${index}`}
-                        style={{ marginBottom: 0, cursor: "pointer", flex: 1 }}
-                      >
-                        {item}
-                      </label>
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="tingkatCatatan"
-                        id={`tingkat-${index}`}
-                        value={item}
-                        checked={isChecked}
-                        onChange={() => setSelectedTingkatCatatan(item)}
-                      />
-                    </div>
+            {/* Card */}
+            <div className="w-full max-w-2xl bg-white shadow-md rounded-lg overflow-hidden">
+                {/* Header Card */}
+                <div className="bg-green-500 text-white px-4 py-3 text-center">
+                <h5 className="text-lg font-semibold m-0">Tingkat Catatan</h5>
+                </div>
 
-                    {/* ✅ Tambahkan input jika "Lainnya" dipilih */}
-                    {item === "Lainnya" && isChecked && (
-                      <div className="mb-3 px-3">
+                {/* Body */}
+                <div className="p-4">
+                <p className="mb-4 text-gray-700">Silakan pilih salah satu:</p>
+
+                {pilihanCatatan.map((item, index) => {
+                    const isChecked = selectedTingkatCatatan === item;
+
+                    return (
+                    <div key={index} className="mb-2">
+                        <div
+                        className={`flex justify-between items-center px-4 py-2 
+                            rounded-md cursor-pointer transition border ${
+                            isChecked
+                            ? "border-green-600 bg-green-50"
+                            : "border-gray-300 bg-white"
+                        }`}
+                        onClick={() => setSelectedTingkatCatatan(item)}
+                        >
+                        <label
+                            htmlFor={`tingkat-${index}`}
+                            className="flex-1 text-gray-800 cursor-pointer"
+                        >
+                            {item}
+                        </label>
                         <input
-                          type="text"
-                          className="form-control"
-                          placeholder="Masukkan deskripsi lainnya..."
-                          value={inputLainnya}
-                          onChange={(e) => setInputLainnya(e.target.value)}
+                            type="radio"
+                            name="tingkatCatatan"
+                            id={`tingkat-${index}`}
+                            value={item}
+                            checked={isChecked}
+                            onChange={() => setSelectedTingkatCatatan(item)}
+                            className="form-radio text-green-600 focus:ring-0"
                         />
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-            {/* //////////////////////Button End//////////////////////////// */}
-            <div className="text-end">
-                <button className="btn btn-primary" onClick={handleBack} style={{ marginRight: "10px" }}>
-                Sebelumnya
-              </button>
-              <button 
-                className={`btn me-2 ${isFormatComplete3 ? "btn-primary" : "btn-secondary"}`} 
-                onClick={handleNext}
-                disabled={!isFormatComplete4}
-              >
-                Selanjutnya
-              </button>
+                        </div>
 
+                        {/* Input jika Lainnya */}
+                        {item === "Lainnya" && isChecked && (
+                        <div className="mt-2 px-4">
+                            <input
+                            type="text"
+                            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                            placeholder="Masukkan deskripsi lainnya..."
+                            value={inputLainnya}
+                            onChange={(e) => setInputLainnya(e.target.value)}
+                            />
+                        </div>
+                        )}
+                    </div>
+                    );
+                })}
+                </div>
+
+                {/* Buttons */}
+                <div className="flex justify-end gap-2 px-4 py-3 border-t bg-gray-50">
+                <button
+                    className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded-md transition"
+                    onClick={handleBack}
+                >
+                    Sebelumnya
+                </button>
+                <button
+                    className={`px-4 py-2 rounded-md text-white transition ${
+                    isFormatComplete3
+                        ? "bg-blue-600 hover:bg-blue-700"
+                        : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                    onClick={handleNext}
+                    disabled={!isFormatComplete4}
+                >
+                    Selanjutnya
+                </button>
+                </div>
             </div>
-          </div>
-        </div>
+            </div>
+
       )}
 
            {step === 7 && (

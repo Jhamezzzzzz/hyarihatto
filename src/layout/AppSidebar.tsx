@@ -9,7 +9,7 @@ import {
   TableIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import { FaBalanceScale, FaBookReader, FaChartBar, FaUserInjured } from "react-icons/fa";
+import { FaBalanceScale, FaBookReader, FaChartBar, FaDiagnoses, FaPeopleCarry, FaUserInjured } from "react-icons/fa";
 
 
 type NavItem = {
@@ -23,7 +23,7 @@ const navItems: NavItem[] = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
-     path: "/",
+     path: "/home",
   },
 ];
 
@@ -70,12 +70,12 @@ const masterItems: NavItem[] = [
     path: "/master/level-tipe-kecelakaan",
   },
   {
-    icon: <TableIcon />,
+    icon: <FaDiagnoses />,
     name: "Level Pencegah Bahaya",
     path: "/master/level-pencegah-bahaya"
   },
   {
-    icon: <TableIcon />,
+    icon: <FaPeopleCarry />,
     name: "Frekuensi Kerja",
     path: "/master/frekuensi-kerja"
   },
@@ -304,7 +304,7 @@ const AppSidebar: React.FC = () => {
           !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
         }`}
       >
-        <Link to="/">
+        <Link to="/home">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <img

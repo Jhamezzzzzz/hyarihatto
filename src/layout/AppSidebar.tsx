@@ -14,6 +14,7 @@ import {
 
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
+import { FaBalanceScale, FaBookReader, FaChartBar, FaClipboardCheck, FaUserInjured } from "react-icons/fa";
 
 
 type NavItem = {
@@ -33,12 +34,12 @@ const navItems: NavItem[] = [
 
 const hyarihattoItems: NavItem[] = [
   {
-    icon: <PieChartIcon />,
+    icon: <FaChartBar />,
     name: "Summary",
     path: "/hyarihatto/summary",
   },
   {
-    icon: <PieChartIcon />,
+    icon: <FaBookReader/>,
     name: "Review",
     path: "/hyarihatto/review",
   },
@@ -51,12 +52,12 @@ const hyarihattoItems: NavItem[] = [
 
 const voiceMemberItems: NavItem[] = [
   {
-    icon: <PieChartIcon />,
+    icon: <FaChartBar />,
     name: "Summary",
     path: "/voice-member/summary",
   },
   {
-    icon: <PieChartIcon />,
+    icon: <FaBookReader />,
     name: "Review",
     path: "/voice-member/review",
   },
@@ -69,7 +70,7 @@ const voiceMemberItems: NavItem[] = [
 
 const masterItems: NavItem[] = [
   {
-    icon: <PieChartIcon />,
+    icon: <FaUserInjured />,
     name: "Level Kecelakaan",
     path: "/master/level-tipe-kecelakaan",
   },
@@ -84,7 +85,7 @@ const masterItems: NavItem[] = [
     path: "/master/frekuensi-kerja"
   },
   {
-    icon: <TableIcon />,
+    icon: <FaBalanceScale />,
     name: "Score Rank",
     path: "/master/score-rank"
   },

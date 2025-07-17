@@ -13,6 +13,7 @@ import Form from '../../components/form/Form'
 import Label from '../../components/form/Label'
 import NoDataOrLoading from '../../components/ui/table/NoDataOrLoading'
 import Pagination from '../../components/ui/table/Pagination'
+import { useDebounce } from '../../hooks/useDebonce'
 
 interface MasterDataProps{
   id?: number;
@@ -71,6 +72,7 @@ const HazardLevel = () => {
     totalPage: 1
   })
   const [searchQ, setSearchQ] = useState<string>("")
+  const debouncedQ = useDebounce(searchQ, 500);
 
   const fetchDataMaster = async() => {
     try {
@@ -85,6 +87,12 @@ const HazardLevel = () => {
       })
     } catch (error) {
       console.error(error)
+      setDataMaster([])
+      setPagination({
+        currentPage: 0,
+        totalPage: 0,
+        limitPerPage: 0
+      })
     } finally{
       setLoading({ ...loading, fetch: false})
     }
@@ -92,7 +100,7 @@ const HazardLevel = () => {
 
   useEffect(()=>{
     fetchDataMaster()
-  }, [pagination.currentPage, pagination.limitPerPage, searchQ])
+  }, [pagination.currentPage, pagination.limitPerPage, debouncedQ])
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value})

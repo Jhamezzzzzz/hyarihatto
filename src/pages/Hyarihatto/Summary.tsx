@@ -58,29 +58,29 @@ const HyarihattoSummary = () => {
 
       {/* Chart */}
       <Card className='mt-4'>
-        <p className=' pb-3'>Dika</p>
+        <p className='dark:text-white pb-3'>Dika</p>
         <CardContent>
           <div className='flex h-full'>
-            <div className='border-1 w-full'>
+            <div className='border-1 w-full dark:border-gray-700'>
               <BarSummary filter={filter}/>
             </div>
 
-            <div className='w-[200px]  flex flex-col h-auto'>
-              <div className='border-1 text-center flex flex-col h-1/2'>
+            <div className='w-[200px]  flex flex-col h-auto dark:text-gray-400'>
+              <div className='border-1 dark:border-gray-700 text-center flex flex-col h-1/2'>
                 Total Hyarihatto
-                <h1 className='text-[40px]'>9</h1>
+                <h1 className='text-[40px] dark:text-white'>9</h1>
               </div>
 
               <div className='flex justify-center h-1/2'>
-                <div className='border-1 w-full flex flex-col items-center'>
+                <div className='border-1 dark:border-gray-700 w-full flex flex-col items-center'>
                   Selesai
                   <div className=' bg-primary1 w-[30px] h-[5px]'></div>
-                  <h1 className='text-[40px]'>7</h1>
+                  <h1 className='text-[40px] dark:text-white'>7</h1>
                 </div>
-                <div className='border-1 w-full flex flex-col items-center'>
+                <div className='border-1 dark:border-gray-700 w-full flex flex-col items-center'>
                   Pending
                   <div className='bg-yellow-400 w-[30px] h-[5px]'></div>
-                  <h1 className='text-[40px]'>2</h1>
+                  <h1 className='text-[40px] dark:text-white'>2</h1>
                 </div>
               </div>
 
@@ -91,29 +91,29 @@ const HyarihattoSummary = () => {
      
       {/* Chart */}
       <Card className='mt-4'>
-        <p className=' pb-3'>Jumantoro</p>
+        <p className=' pb-3 dark:text-white'>Jumantoro</p>
         <CardContent>
           <div className='flex h-full'>
-            <div className='border-1 w-full'>
+            <div className='border-1 w-full dark:border-gray-700'>
               <BarSummary filter={filter}/>
             </div>
 
-            <div className='w-[200px]  flex flex-col h-auto'>
-              <div className='border-1 text-center flex flex-col h-1/2'>
+            <div className='w-[200px]  flex flex-col h-auto dark:text-gray-400'>
+              <div className='border-1 dark:border-gray-700 text-center flex flex-col h-1/2'>
                 Total Hyarihatto
-                <h1 className='text-[40px]'>9</h1>
+                <h1 className='text-[40px] dark:text-white'>9</h1>
               </div>
 
               <div className='flex justify-center h-1/2'>
-                <div className='border-1 w-full flex flex-col items-center'>
+                <div className='border-1 dark:border-gray-700 w-full flex flex-col items-center'>
                   Selesai
                   <div className=' bg-primary1 w-[30px] h-[5px]'></div>
-                  <h1 className='text-[40px]'>7</h1>
+                  <h1 className='text-[40px] dark:text-white'>7</h1>
                 </div>
-                <div className='border-1 w-full flex flex-col items-center'>
+                <div className='border-1 dark:border-gray-700 w-full flex flex-col items-center'>
                   Pending
                   <div className='bg-yellow-400 w-[30px] h-[5px]'></div>
-                  <h1 className='text-[40px]'>2</h1>
+                  <h1 className='text-[40px] dark:text-white'>2</h1>
                 </div>
               </div>
 

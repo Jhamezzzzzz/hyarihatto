@@ -445,7 +445,12 @@ layer(base);
 .flatpickr-day.prevMonthDay {
   @apply !text-gray-400;
 }
-
+.flatpickr-monthSelect-month{
+  @apply dark:text-white dark:hover:bg-gray-400 hover:bg-gray-400
+}
+.flatpickr-monthSelect-month.selected{
+  @apply dark:bg-brand-700  bg-brand-500! border-gray-400!
+}
 .flatpickr-months > .flatpickr-month {
   background: none !important;
 }

@@ -582,7 +582,7 @@ const isFormatComplete3 =
                         {["reguler", "lowfreak", "irregular", "abnormal"].map((val) => (
                             <label key={val} className="flex items-center space-x-2">
                             <input
-                                type="checkbox"
+                                type="radio"
                                 name="jenis"
                                 value={val}
                                 checked={formCheckBox.jenis === (val)}

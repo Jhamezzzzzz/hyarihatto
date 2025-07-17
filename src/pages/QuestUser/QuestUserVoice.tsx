@@ -150,7 +150,7 @@ const QuestUserTest: React.FC = () => {
 
   
   const handleBackMainPage = () => {
-    navigate("/homepage/choice-voice"); // atau "/dashboard", "/user", dst
+    navigate("/member"); // atau "/dashboard", "/user", dst
   };
   
 
@@ -170,7 +170,7 @@ const QuestUserTest: React.FC = () => {
     <div>
       {step === 1 && (   
         <div
-        className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center"
+        className="min-h-screen flex items-center justify-center p-3  bg-no-repeat bg-cover bg-center"
         style={{ backgroundImage: `url(${WaveBackground})` }}
         >
            

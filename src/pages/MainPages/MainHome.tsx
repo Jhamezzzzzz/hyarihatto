@@ -55,7 +55,7 @@ export default function MainHome() {
           data-aos="fade-up"
           data-aos-delay="0"
           className="button-user"
-          onClick={() => (window.location.href = "/homepage/choice-voice")}
+          onClick={() => (window.location.href = "/member")}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
             <FaUser size={24} />

@@ -1,6 +1,9 @@
 import React, { useState,useRef} from 'react';
 import { FaCamera, FaImage,FaTimes  } from 'react-icons/fa';
-import WaveBackground from '../../components/image/Wave-Background.png'
+import WaveBackground from '../../components/image/Wave-Background-Hyat.png'
+import { useNavigate } from "react-router-dom";
+import JapanBackground from '../../components/image/Hijau-Hyarihatto.png'
+import DatePicker from 'react-datepicker'
 // import JapanBackground from '../../components/image/Biru Hyarihatto.png'
 
 const pilihanCatatan = [
@@ -24,7 +27,7 @@ type FormData = {
   name: string;
   noreg: string;
   shift: string;
-  date: string;
+  date: Date | null;
   time: string;
   line: string;
   location: string;
@@ -60,11 +63,12 @@ const QuestUserTest: React.FC = () => {
     const galleryInputRef = useRef<HTMLInputElement | null>(null);
     const [inputLainnya, setInputLainnya] = useState<string>("");
     const [selectedLevel, setSelectedLevel] = useState<string>("");
+    const navigate = useNavigate();
     const [formData, setFormData] = useState<FormData>({
         name: "",
-        noreg: "",
+        noreg: '',
         shift: "",
-        date: '',
+        date: null,
         time: '',
         line: '',
         location: '',
@@ -81,14 +85,24 @@ const QuestUserTest: React.FC = () => {
     const [selectedFrekuensiKerja, setSelectedFrekuensiKerja] = useState<string>('');
     const [selectedPencegahBahaya, setSelectedPencegahBahaya] = useState<string>('');
 
+        const [formDate, setFormDate] = useState({
+            date: new Date(),
+            // field lain
+        })
 
-    const handleNext = () => {
-        if (formData.name && formData.noreg && formData.shift) {
-        setStep((prevStep) => prevStep + 1);
-        } else {
-        alert('Please fill in all required fields.');
-        }
-    };
+        const handleDateChange = (date: Date | null) => {
+            setFormData(prev => ({
+                ...prev,
+                date: date
+            }));
+            };
+        const handleNext = () => {
+            if (formData.name && formData.noreg && formData.shift) {
+            setStep((prevStep) => prevStep + 1);
+            } else {
+            alert('Please fill in all required fields.');
+            }
+        };
     const buttonStep = (
         <div className="flex justify-center items-center gap-2 mb-4">
             {[2, 3, 4, 5, 6, 7].map((s, index) => {
@@ -99,8 +113,8 @@ const QuestUserTest: React.FC = () => {
                 <React.Fragment key={s}>
                 <button
                     className={`w-10 h-10 rounded-full font-semibold border transition-all duration-200
-                    ${isActive ? 'bg-blue-600 text-white' : 
-                        isPassed ? 'border-blue-600 text-blue-600 hover:bg-blue-100' : 
+                    ${isActive ? 'bg-green-600 text-white' : 
+                        isPassed ? 'border-green-600 text-green-600 hover:bg-blue-100' : 
                         'border-gray-300 text-gray-400 cursor-not-allowed'}`}
                     onClick={() => {
                     if (s <= step) setStep(s);
@@ -184,6 +198,9 @@ const QuestUserTest: React.FC = () => {
         handleCloseCamera();
         }
     };
+      const handleBackMainPage = () => {
+    navigate("/member"); // atau "/dashboard", "/user", dst
+        };
 
     const handleCloseCamera = () => {
         stream?.getTracks().forEach((track) => track.stop());
@@ -228,8 +245,26 @@ const QuestUserTest: React.FC = () => {
         className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center"
         style={{ backgroundImage: `url(${WaveBackground})` }}
         >
-          <div className="w-full max-w-lg">
-            <div className="mb-8 text-center">
+            <button
+            onClick={handleBackMainPage}
+            className="absolute top-4 left-4 inline-flex items-center px-5 py-2.5 
+            bg-gradient-to-r from-green-400 to-green-600 text-white text-sm 
+            font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300
+             hover:from-green-600 hover:to-green-800"
+            >
+            <svg
+                className="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+            >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Kembali
+            </button>
+          <div className="w-full max-w-2xl">
+            <div className="mb-2 text-center">
               <h2 className="text-3xl font-extrabold text-gray-900 mb-2">HYARIHATTO</h2>
               <p className="text-lg text-gray-600">“Mari ber-Hyarihatto untuk mencegah kecelakaan menimpa kita”</p>
             </div>
@@ -259,7 +294,7 @@ const QuestUserTest: React.FC = () => {
                   </label>
                   <input
                     id="noreg"
-                    type="text"
+                    type="number"
                     name="noreg"
                     className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                     placeholder="Nomor Registrasi"
@@ -288,7 +323,7 @@ const QuestUserTest: React.FC = () => {
 
               <div className="mt-8 text-right">
                 <button
-                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                   onClick={handleNext}
                   disabled={!formData.name || !formData.noreg || !formData.shift}
                 >
@@ -300,7 +335,15 @@ const QuestUserTest: React.FC = () => {
         </div>
       )}
       {step === 2 && (
-        <div className="flex flex-col items-center px-4">
+        <div className="relative min-h-screen flex flex-col items-center justify-start px-2 py-6">
+             <div
+            className="absolute inset-0 bg-cover bg-center z-0"
+            style={{
+            backgroundImage: `url(${JapanBackground})`,
+            opacity: 0.6, // ganti sesuai keinginan
+            }}
+        />
+             <div className="relative z-10 w-full max-w-2xl">
             <div className="text-center mt-4 mb-6">
             <h2 className="text-2xl font-bold text-primary">HYARIHATTO</h2>
             <h5 className="text-gray-600 italic text-sm mt-1">
@@ -311,24 +354,26 @@ const QuestUserTest: React.FC = () => {
             <div className="mb-4">{buttonStep}</div>
 
             <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
-            <div className="bg-blue-500 text-white text-center py-3">
+            <div className="bg-green-600 text-white text-center py-3">
                 <h5 className="text-lg font-semibold">Waktu & Lokasi</h5>
             </div>
 
             <div className="p-6 space-y-4">
-                <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Tanggal:<span className="text-red-500">*</span>
-                </label>
-                <input
-                    type="date"
-                    name="date"
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                    value={formData.date}
-                    onChange={handleChange}
-                />
-                </div>
-
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Tanggal:<span className="text-red-500">*</span>
+                    </label>
+                    <DatePicker
+                        selected={formData.date}
+                        onChange={handleDateChange}
+                        dateFormat="yyyy-MM-dd"
+                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                        showMonthDropdown
+                        showYearDropdown
+                        dropdownMode="select"
+                        placeholderText="Pilih tanggal"
+                    />
+                    </div>
                 <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                     Waktu:<span className="text-red-500">*</span>
@@ -394,11 +439,20 @@ const QuestUserTest: React.FC = () => {
                 </div>
             </div>
             </div>
+            </div>
         </div>
         )}
 
        {step === 3 && (
-        <div className="flex flex-col items-center px-4">
+         <div className="relative min-h-screen flex flex-col items-center justify-start px-2 py-6">
+             <div
+            className="absolute inset-0 bg-cover bg-center z-0"
+            style={{
+            backgroundImage: `url(${JapanBackground})`,
+            opacity: 0.6, // ganti sesuai keinginan
+            }}
+        />
+             <div className="relative z-10 w-full max-w-2xl">
             <div className="text-center mt-4 mb-6">
             <h2 className="text-2xl font-bold text-primary">HYARIHATTO</h2>
             <h6 className="text-gray-600 italic text-sm mt-1">
@@ -489,10 +543,19 @@ const QuestUserTest: React.FC = () => {
                 </div>
             </div>
             </div>
+            </div>
         </div>
         )}
         {step === 4 && (
-            <div className="flex flex-col items-center px-4">
+               <div className="relative min-h-screen flex flex-col items-center justify-start px-2 py-6">
+                <div
+                className="absolute inset-0 bg-cover bg-center z-0"
+                style={{
+                backgroundImage: `url(${JapanBackground})`,
+                opacity: 0.6, // ganti sesuai keinginan
+                }}
+                />
+             <div className="relative z-10 w-full max-w-2xl">
                 <div className="my-5 text-center">
                 <h2 className="text-2xl font-bold">HYARIHATTO</h2>
                 <h6 className="text-sm text-gray-600">
@@ -649,6 +712,7 @@ const QuestUserTest: React.FC = () => {
                     </div>
                 </div>
                 </div>
+            </div>
             </div>
             )}
               {/* Langkah 5: Bukti Kejadian (Upload Gambar) */}

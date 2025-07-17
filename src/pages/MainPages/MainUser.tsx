@@ -4,16 +4,39 @@ import "../../css/home.css"; // ✅ pastikan file CSS ini ada
 import { motion } from 'framer-motion';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { useNavigate } from "react-router";
 
 
 export default function MainUser() {
+  const navigate = useNavigate();
     useEffect(() => {
   AOS.init({ duration: 1000 });
 }, []);
+  
+  const handleBackMainPage = () => {
+    navigate("/"); // atau "/dashboard", "/user", dst
+  };
 
   return (
     <section className='home'>
-
+      <button
+            onClick={handleBackMainPage}
+            className="absolute top-4 left-4 inline-flex items-center px-5 py-2.5 
+            bg-gradient-to-r from-green-400 to-gray-400 text-white text-sm 
+            font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300
+             hover:from-gray-500 hover:to-green-800"
+            >
+            <svg
+                className="w-5 h-5 mr-2"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                viewBox="0 0 24 24"
+            >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Kembali
+        </button>
         <div className='hyarihato'>
              <motion.p
                 className="title-little-1"
@@ -56,7 +79,7 @@ export default function MainUser() {
             data-aos="fade-up"
             data-aos-delay="0"
             className="button-user"
-            onClick={() => window.location.href = "/homepage/choice-voice/questhyarihatto"}>
+            onClick={() => window.location.href = "/member/hyarihatto"}>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <FaUser size={24} />
                     <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column", lineHeight: "1.4" }}>
@@ -72,7 +95,7 @@ export default function MainUser() {
             data-aos="fade-up"
             className="button-leader"
             data-aos-delay="200"
-            onClick={() => window.location.href = "/homepage/choice-voice/questvoice"}>
+            onClick={() => window.location.href = "/member/voice-member"}>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                     <FaUser size={24} />
                     <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column", lineHeight: "1.4" }}>

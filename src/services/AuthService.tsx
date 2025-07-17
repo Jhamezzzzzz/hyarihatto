@@ -4,6 +4,7 @@ import axiosTWIIS from '../utils/AxiosTWIIS';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 import { AxiosError, AxiosResponse } from 'axios';
+import useShowAlert from '../hooks/useShowAlert';
 
 const MySwal = withReactContent(Swal);
 
@@ -18,16 +19,18 @@ type ResetPasswordPayload = {
 
 const useAuthService = () => {
   const navigate = useNavigate();
+  const {alertSuccess,alertError}=useShowAlert()
 
   const handleError = (error: AxiosError<any>, message: string): never => {
     console.error(message, error);
-    MySwal.fire('Error', `${error.response?.data?.message || 'Unknown error'}`, 'error');
+    alertError(error.response?.data.message)
     throw new Error(`${message} ${error.message}`);
   };
 
   const login = async (username: string, password: string): Promise<LoginResponse> => {
     try {
       const response = await axiosTWIIS.post('/login', { username, password });
+      alertSuccess(response?.data.message)
       return response;
     } catch (error: unknown) {
       const err = error as AxiosError<any>;

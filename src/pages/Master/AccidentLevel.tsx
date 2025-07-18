@@ -74,7 +74,7 @@ const AccidentLevel = () => {
     totalPage: 1
   })
   const [searchQ, setSearchQ] = useState<string>("")
-  const debouncedQ = useDebounce(searchQ, 500);
+  const debouncedQ = useDebounce(searchQ, 1000);
 
   const fetchDataMaster = async() => {
     try {
@@ -239,6 +239,10 @@ const AccidentLevel = () => {
             </div>
             <Table className='mt-10'>
               <TableHeader>
+                <TableRow>
+                  <TableCell className='col-span-5'>Tanggal</TableCell>
+                  <TableCell className='col-span-12'>Waktu</TableCell>
+                </TableRow>
                 <TableRow>
                   <TableCell>No</TableCell>
                   <TableCell>Rank</TableCell>

@@ -78,8 +78,8 @@ export default function SignInLead (){
 
   return (
 <div className="login-page ">
-    <div style={{ zIndex: 1, maxWidth: '900px', width: '100%' }}>
- <div className="w-full max-w-5xl bg-white bg-opacity-60 backdrop-blur-md shadow-xl rounded-3xl flex flex-col md:flex-row overflow-hidden z-10">
+    <div style={{ zIndex: 1, maxWidth: '900px', width: '750px' }}>
+ <div className="w-full max-w-4xl bg-white bg-opacity-60 backdrop-blur-md shadow-xl rounded-3xl flex flex-col md:flex-row overflow-hidden z-10">
         {/* KIRI */}
         <div className="w-full md:w-1/2 p-8 flex flex-col justify-center items-center text-center bg-white/70">
           <div>

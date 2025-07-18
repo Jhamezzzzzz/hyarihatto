@@ -21,11 +21,30 @@ const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#a4de6c"];
 
 export default function DashboardCharts() {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      {/* Pie Chart */}
+    <div className="grid grid-cols-12 gap-4 ">
+       <div className="col-span-8">
+           {/* Bar Chart */}
+      
       <Card>
         <CardContent className="h-80">
-          <h2 className="text-lg font-semibold mb-4">Distribusi Orang per Area (Pie Chart)</h2>
+          <h2 className="text-lg font-semibold mb-4">Kejadian Tiap Lokasi</h2>
+          <ResponsiveContainer width="100%" height="90%">
+            <BarChart data={barData}>
+              <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="jumlah" fill="#82ca9d" />
+            </BarChart>
+          </ResponsiveContainer>
+        </CardContent>
+      </Card>
+      </div>
+
+      <div className="col-span-4">
+       {/* Pie Chart */}
+      <Card>
+        <CardContent className="h-80">
+          <h2 className="text-lg font-semibold mb-4">Persentase Lokasi Kejadian</h2>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -47,20 +66,7 @@ export default function DashboardCharts() {
         </CardContent>
       </Card>
 
-      {/* Bar Chart */}
-      <Card>
-        <CardContent className="h-80">
-          <h2 className="text-lg font-semibold mb-4">Jumlah Orang per Area (Bar Chart)</h2>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={barData}>
-              <XAxis dataKey="name" tick={{ fontSize: 12 }} />
-              <YAxis />
-              <Tooltip />
-              <Bar dataKey="jumlah" fill="#82ca9d" />
-            </BarChart>
-          </ResponsiveContainer>
-        </CardContent>
-      </Card>
+      </div>
     </div>
   );
 }

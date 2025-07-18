@@ -11,7 +11,7 @@ export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const { name, roleName, imgProfile } = useVerify()
   const { logout } = useAuthService()
-  const { alertSuccess, alertError } = useShowAlert()
+  const { alertSuccess } = useShowAlert()
   const navigate = useNavigate()
 
   function toggleDropdown() {
@@ -30,7 +30,6 @@ export default function UserDropdown() {
       
     } catch (error) {
       console.error(error)
-      alertError(error.message)
     }
   }
 
@@ -104,7 +103,7 @@ export default function UserDropdown() {
               fill=""
             />
           </svg>
-          Sign out
+          Keluar
         </Button>
       </Dropdown>
     </div>

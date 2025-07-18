@@ -7,14 +7,17 @@ import App from "./App.tsx";
 import { AppWrapper } from "./components/common/PageMeta.tsx";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
 import { AlertProvider } from "./context/AlertContext.tsx";
+import { FormDataProvider } from "./context/FormHyarihattoContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider>
       <AlertProvider>
-        <AppWrapper>
-          <App />
-        </AppWrapper>
+        <FormDataProvider>
+          <AppWrapper>
+            <App />
+          </AppWrapper>
+        </FormDataProvider>
       </AlertProvider>
     </ThemeProvider>
   </StrictMode>,

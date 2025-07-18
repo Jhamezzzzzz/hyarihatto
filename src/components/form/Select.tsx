@@ -11,7 +11,8 @@ interface Option {
 interface SelectProps {
   options: Option[];
   placeholder?: string;
-  onChange: (value: string) => void;
+  name?: string;
+  onChange: (name: string, value: string) => void;
   className?: string;
   defaultValue?: string;
   showPlaceholder?: boolean;
@@ -27,6 +28,7 @@ const Select: React.FC<SelectProps> = ({
   options,
   placeholder = "Select an option",
   onChange,
+  name = "",
   className = "",
   defaultValue = "",
   showPlaceholder = true,
@@ -76,9 +78,9 @@ const Select: React.FC<SelectProps> = ({
     }
   }
 
-  const handleSelect = (option: Option) => {
+  const handleSelect = (name: string, option: Option) => {
     setSelectedLabel(option.label);
-    onChange(option.value);
+    onChange(name, option.value);
     setIsOpen(false);
     setSearch(""); // Reset search after selection
   };
@@ -118,7 +120,7 @@ const Select: React.FC<SelectProps> = ({
           )}
 
           {/* Options */}
-          <ul className="max-h-60 overflow-auto">
+          <ul id={name} className="max-h-60 overflow-auto">
             {isLoading ? (
               <div className="flex justify-center py-2">
                 <Spinner />
@@ -127,7 +129,7 @@ const Select: React.FC<SelectProps> = ({
               filteredOptions.map((option) => (
                 <li
                   key={option.value}
-                  onClick={() => handleSelect(option)}
+                  onClick={() => handleSelect(name, option)}
                   className={`px-4 py-2 cursor-pointer ${
                     selectedLabel === option.label ? "bg-primary1-50" : ""
                   } hover:bg-primary1-50/[0.5] dark:hover:bg-brand-800/30 text-gray-700 dark:text-gray-200`}

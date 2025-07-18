@@ -4,11 +4,12 @@ interface TextareaProps {
   placeholder?: string; // Placeholder text
   rows?: number; // Number of rows
   value?: string; // Current value
-  onChange?: (value: string) => void; // Change handler
+  onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void; // Change handler
   className?: string; // Additional CSS classes
   disabled?: boolean; // Disabled state
   error?: boolean; // Error state
   hint?: string; // Hint text to display
+  name?: string; // Name of target
 }
 
 const TextArea: React.FC<TextareaProps> = ({
@@ -20,10 +21,11 @@ const TextArea: React.FC<TextareaProps> = ({
   disabled = false, // Disabled state
   error = false, // Error state
   hint = "", // Default hint text
+  name
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (onChange) {
-      onChange(e.target.value);
+      onChange(e);
     }
   };
 
@@ -40,6 +42,7 @@ const TextArea: React.FC<TextareaProps> = ({
   return (
     <div className="relative">
       <textarea
+        name={name}
         placeholder={placeholder}
         rows={rows}
         value={value}

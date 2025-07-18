@@ -49,6 +49,7 @@ export default function DatePicker({
     const flatPickr = flatpickr(`#${id}`, {
       mode: isMonthMode ? "single" : mode || "single",
       static: true,
+      time_24hr: true,
       monthSelectorType: isMonthMode ? "static" : "dropdown",
       dateFormat: dateFormat || "Y-m-d",
       defaultDate,

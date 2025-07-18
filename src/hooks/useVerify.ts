@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react'
 import { jwtDecode } from 'jwt-decode'
 import { useNavigate } from 'react-router-dom'
-// import axiosInstance from '../utils/AxiosInstance'
 import axiosTWIIS from '../utils/AxiosTWIIS'
-import swal from 'sweetalert2'
-import withReactContent from 'sweetalert2-react-content'
 import axiosInstance from '../utils/AxiosInstance'
-
-const MySwal = withReactContent(swal)
+import useShowAlert from './useShowAlert'
 
 interface DecodedToken {
   name: string;
@@ -27,6 +23,7 @@ const useVerify = () => {
   const [isWarehouse, setIsWarehouse] = useState(0)
   const [imgProfile, setImgProfile] = useState('')
   const navigate = useNavigate()
+  const { alertError } = useShowAlert()
 
   useEffect(() => {
     refreshToken()
@@ -45,11 +42,7 @@ const useVerify = () => {
       setImgProfile(decoded.img)
     } catch (error) {
       console.error('Error refreshing token:', error)
-      MySwal.fire({
-        icon: 'error',
-        title: 'Oops...',
-        text: 'Token Expired',
-      })
+      alertError("Token expired! Please try to login again!")
       navigate('/signin')
     }
   }
@@ -73,11 +66,7 @@ const useVerify = () => {
           setImgProfile(decoded.img)
         } catch (error) {
           console.error('Error refreshing token in interceptor:', error)
-          MySwal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Token Expired',
-          })
+          alertError("Token expired! Please try to login again!")
           navigate('/signin')
         }
       } else {

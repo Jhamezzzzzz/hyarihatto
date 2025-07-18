@@ -18,10 +18,17 @@ import WorkFrequency from "./pages/Master/WorkFrequency";
 import ScoreRank from "./pages/Master/ScoreRank";
 import Homepage from "./pages/MainPages/MainHome"
 // import QuestUser from "./pages/QuestUser/QuestUserTest"
-import QuestUserTest from "./pages/QuestUser/QuestUserTest"
+// import QuestUserTest from "./pages/QuestUser/QuestUserTest"
 import QuestUserVoice from "./pages/QuestUser/QuestUserVoice"
 import ChoiceUser from "./pages/MainPages/MainUser"
 import PanduanHyat from "./pages/Panduan/PanduanHyat"
+import IdentityFormHyarihatto from "./pages/Forms/Hyarihatto/Identity";
+import Step1FormHyarihatto from "./pages/Forms/Hyarihatto/Step1";
+import Step2FormHyarihatto from "./pages/Forms/Hyarihatto/Step2";
+import Step3FormHyarihatto from "./pages/Forms/Hyarihatto/Step3";
+import Step4FormHyarihatto from "./pages/Forms/Hyarihatto/Step4";
+import Step5FormHyarihatto from "./pages/Forms/Hyarihatto/Step5";
+import Step6FormHyarihatto from "./pages/Forms/Hyarihatto/Step6";
 
 export default function App() {
   return (
@@ -58,9 +65,18 @@ export default function App() {
       
           {/* Member */}
           <Route path="/member" element={<ChoiceUser />} />
-          <Route path="/member/hyarihatto" element={<QuestUserTest />} />
+          {/* <Route path="/member/hyarihatto" element={<QuestUserTest />} /> */}
           <Route path="/member/voice-member" element={<QuestUserVoice />} />
-          
+
+          {/* Member Form Hyarihatto */}
+          <Route path="/member/hyarihatto" element={<IdentityFormHyarihatto />} />,
+          <Route path="/member/hyarihatto/1" element={<Step1FormHyarihatto />} />,
+          <Route path="/member/hyarihatto/2" element={<Step2FormHyarihatto />} />,
+          <Route path="/member/hyarihatto/3" element={<Step3FormHyarihatto />} />,
+          <Route path="/member/hyarihatto/4" element={<Step4FormHyarihatto />} />,
+          <Route path="/member/hyarihatto/5" element={<Step5FormHyarihatto />} />,
+          <Route path="/member/hyarihatto/6" element={<Step6FormHyarihatto />} />,
+
           <Route path="/panduan" element={<PanduanHyat />} />
           {/* Fallback Route */}
           <Route path="*" element={<NotFound />} />

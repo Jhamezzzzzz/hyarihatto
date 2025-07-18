@@ -1,0 +1,272 @@
+import Template from "./Template";
+import ButtonNavigation from "./ButtonNavigation";
+import { useFormData } from "../../../context/FormHyarihattoContext";
+import { useEffect, useState } from "react";
+import usePublicDataService from "../../../services/PublicService";
+import RadioGroupV2 from "../../../components/form/input/RadioGroupV2";
+
+interface ResponseLevel {
+  id: number;
+  option: string;
+  score: number;
+  rank?: string;
+  minScore?: number;
+  maxScore?: number
+}
+
+const Step6FormHyarihatto = () => {
+  const { ButtonPrevious, ButtonNext } = ButtonNavigation();
+  const [loading, setLoading] = useState(true)
+  const { formData, updateFormData } = useFormData();
+  const [optionsAccidentLevel, setOptionsAccidentLevel] = useState([]);
+  const [optionsHazardControlLevel, setOptionsHazardControlLevel] = useState([]);
+  const [optionsWorkingFrequency, setOptionsWorkingFrequency] = useState([]);
+  const [scoreRanks, setScoreRanks] = useState([])
+
+  
+  const [finalScoreRank, setFinalScoreRank] = useState({
+    score: Number(localStorage.getItem('finalScore')) || 0,
+    rank: localStorage.getItem("finalRank") || ""
+  })
+
+  const { getOptionMaster, calculateFinalScoreRank } = usePublicDataService();
+
+  const fetchAllOptions = async () => {
+    try {
+        setLoading(true)
+      const responseAccident = await getOptionMaster("accident-levels");
+      const options1 = responseAccident?.data.data.map(
+        (item: ResponseLevel) => {
+          return {
+            id: item.id,
+            option: item.option,
+            score: item.score,
+            rank: item.rank,
+          };
+        }
+      );
+      setOptionsAccidentLevel(options1);
+
+      const responseHazard = await getOptionMaster("hazard-control-levels");
+      const options2 = responseHazard?.data.data.map((item: ResponseLevel) => {
+        return {
+          id: item.id,
+          option: item.option,
+          score: item.score,
+        };
+      });
+      setOptionsHazardControlLevel(options2)
+
+      const responseWorkFreq = await getOptionMaster("working-frequencies");
+      const options3 = responseWorkFreq?.data.data.map((item: ResponseLevel) => {
+        return {
+          id: item.id,
+          option: item.option,
+          score: item.score,
+        };
+      });
+      setOptionsWorkingFrequency(options3)
+
+      const responseScoreRank = await getOptionMaster("score-ranks")
+      const scores = responseScoreRank?.data.data.map((item: ResponseLevel) => {
+        return {
+          id: item.id,
+          option: item.option,
+          minScore: item.minScore,
+          maxScore: item.maxScore,
+          rank: item.rank,
+        };
+      });
+      setScoreRanks(scores)
+
+    } catch (error) {
+      console.error(error);
+    } finally{
+        setLoading(false)
+    }
+  };
+
+  useEffect(() => {
+    fetchAllOptions();
+  }, []);
+
+  const handleChangeRadio = (option: string, group: "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation", name: string) => {
+    console.log({
+        group,
+        name,
+        option
+    })
+    updateFormData(group, name, option)
+  }
+
+  const getFinalScoreRank = async() => {
+    try {
+        const response = await calculateFinalScoreRank({
+            accidentLevelId: formData.hazardEvaluation.accidentLevelId, 
+            hazardControlLevelId: formData.hazardEvaluation.hazardControlLevelId,
+            workingFrequencyId: formData.hazardEvaluation.workingFrequencyId
+        })
+        console.log('response final score: ', response)
+        const responseData = response?.data.data
+        setFinalScoreRank({
+            score: responseData.totalScore,
+            rank: responseData.rank
+        })
+        localStorage.setItem("finalScore", responseData.totalScore)
+        localStorage.setItem("finalRank", responseData.rank)
+    } catch (error) {
+        console.error(error)        
+    }
+  }
+
+  useEffect(()=>{
+    if(formData.hazardEvaluation.accidentLevelId !== null && formData.hazardEvaluation.hazardControlLevelId !== null && formData.hazardEvaluation.workingFrequencyId !== null){
+        getFinalScoreRank()
+    }
+  }, [formData.hazardEvaluation])
+
+  useEffect(()=>{
+    console.log("formData: ", formData)
+  }, [])
+
+  return (
+    <div>
+      <Template showStep step={6}>
+        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
+          <div className="bg-green-600 text-white text-center py-3">
+            <h5 className="text-lg font-semibold">
+              Pengisian Hyarihatto Score dan Rank
+            </h5>
+          </div>
+
+          <div className="p-6 space-y-4">
+            {/* Card Score dan Rank */}
+            <div className="bg-white shadow rounded-lg">
+              <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
+                <h5 className="text-lg font-semibold">
+                  Silakan pilih satu pada ketiga level berikut 
+                </h5>
+              </div>
+              <div className="p-4 space-y-4">
+                {/* Level Kecelakaan */}
+                <div className="bg-white shadow rounded-lg">
+                  <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
+                    <h5 className="text-base font-semibold">
+                      Level Kecelakaan <span className="text-red-500">*</span>
+                    </h5>
+                  </div>
+                  <div className="p-4">
+                    <RadioGroupV2
+                        options={optionsAccidentLevel}
+                        onChange={(option)=>handleChangeRadio(option, "hazardEvaluation", "accidentLevelId")}
+                        group="hazardEvaluation"
+                        name="accidentLevelId"
+                        value={formData.hazardEvaluation.accidentLevelId?.toString() || ""}
+                    />
+                  </div>
+                </div>
+
+                {/* Frekuensi & Pencegah */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Frekuensi Kerja */}
+                  <div className="bg-white shadow rounded-lg">
+                    <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
+                      <h5 className="text-base font-semibold">
+                        Frekuensi Kerja <span className="text-red-500">*</span>
+                      </h5>
+                    </div>
+                    <div className="p-4">
+                      <RadioGroupV2
+                        options={optionsWorkingFrequency}
+                        onChange={(option)=>handleChangeRadio(option, "hazardEvaluation", "workingFrequencyId")}
+                        group="hazardEvaluation"
+                        name="workingFrequencyId"
+                        value={formData.hazardEvaluation.workingFrequencyId?.toString() || ""}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Pencegah Bahaya */}
+                  <div className="bg-white shadow rounded-lg">
+                    <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
+                      <h5 className="text-base font-semibold">
+                        Level Pencegah Bahaya{" "}
+                        <span className="text-red-500">*</span>
+                      </h5>
+                    </div>
+                    <div className="p-4">
+                      <RadioGroupV2
+                        options={optionsHazardControlLevel}
+                        onChange={(option)=>handleChangeRadio(option, "hazardEvaluation", "hazardControlLevelId")}
+                        group="hazardEvaluation"
+                        name="hazardControlLevelId"
+                        value={formData.hazardEvaluation.hazardControlLevelId?.toString() || ""}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Panduan dan Total Nilai */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Panduan */}
+              <div className="bg-white shadow rounded-lg">
+                <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
+                  <h5 className="text-base font-semibold">Panduan Nilai</h5>
+                </div>
+                <div className="p-3 text-sm">
+                  <table className="w-full text-left">
+                    <thead>
+                      <tr>
+                        <th className="px-2 py-1">SCORE</th>
+                        <th className="px-2 py-1">RANK</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="px-2 py-1">19 - 25</td>
+                        <td className="px-2 py-1">A</td>
+                      </tr>
+                      <tr>
+                        <td className="px-2 py-1">10 - 18</td>
+                        <td className="px-2 py-1">B</td>
+                      </tr>
+                      <tr>
+                        <td className="px-2 py-1">6 - 9</td>
+                        <td className="px-2 py-1">C</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Total Nilai */}
+              <div className="bg-white shadow rounded-lg">
+                <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
+                  <h5 className="text-base font-semibold">Total Nilai</h5>
+                </div>
+                <div className="flex divide-x divide-gray-200">
+                  <div className="flex-1 p-4 text-center">
+                    <p className="text-sm text-gray-600 mb-1">SCORE</p>
+                    <h2 className="text-2xl font-bold">{finalScoreRank.score || "-"}</h2>
+                  </div>
+                  <div className="flex-1 p-4 text-center">
+                    <p className="text-sm text-gray-600 mb-1">RANK</p>
+                    <h2 className="text-2xl font-bold">{finalScoreRank.rank || "-"}</h2>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end gap-4">
+              {ButtonPrevious(5)}
+              {ButtonNext(6)}
+            </div>
+          </div>
+        </div>
+      </Template>
+    </div>
+  );
+};
+
+export default Step6FormHyarihatto;

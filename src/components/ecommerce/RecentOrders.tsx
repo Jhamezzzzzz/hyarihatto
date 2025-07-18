@@ -8,6 +8,7 @@ import {
 } from "../ui/table";
 import Badge from "../ui/badge/Badge";
 import { useNavigate } from 'react-router-dom';
+import Input from '../../components/form/input/InputField'
 
 // Define the TypeScript interface for the table rows
 interface Product {
@@ -79,70 +80,67 @@ const navigate = useNavigate();
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            DAFTAR INPUT HYARIHATTO
+            Catatan Hyarihatto Member
           </h3>
         </div>
 
         <div className="flex items-center gap-3">
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-           
-            Filter
-          </button>
-          <button className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-theme-sm font-medium text-gray-700 shadow-theme-xs hover:bg-gray-50 hover:text-gray-800 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03] dark:hover:text-gray-200">
-            See all
-          </button>
+           <Input
+                placeholder='Cari '
+                // onChange={(e)=>setSearchQ(e.target.value)}
+              />
         </div>
       </div>
       <div className="max-w-full overflow-x-auto">
         <Table>
           {/* Table Header */}
-          <TableHeader className="border-gray-100 dark:border-gray-800 border-y">
+          <TableHeader className="border-green-200 bg-green-200 dark:border-green-800  text-gray-900">
             <TableRow>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-900"
               >
                 Tanggal
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-900"
               >
                Waktu
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-900"
               >
                 Nama
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-900"
               >
                 No Reg
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-900"
               >
                 Shift
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-900"
               >
                 Score
               </TableCell>
                <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-900"
               >
                 Rank
               </TableCell>
                <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-900"
               >
                 Countermeasuered
               </TableCell>

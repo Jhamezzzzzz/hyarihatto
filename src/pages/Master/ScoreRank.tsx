@@ -29,6 +29,12 @@ interface MasterDataProps{
     name?: string;
   }
 }
+
+interface ErrorForm{
+  rank: string;
+  minScore: string;
+  maxScore: string;
+}
 interface Loading{
   fetch: boolean;
   submit: boolean;
@@ -60,6 +66,11 @@ const ScoreRank = () => {
     rank: "",
     minScore: 0,
     maxScore: 0,
+  })
+  const [errors, setErrors] = useState<Partial<ErrorForm>>({
+    rank: "",
+    minScore: "",
+    maxScore: ""
   })
   const [showModal, setShowModal] = useState<ShowModal>({
     type: "add",
@@ -122,9 +133,28 @@ const ScoreRank = () => {
     return changedFields
   }
 
+  const validateForms = () => {
+    const newErrors: Partial<ErrorForm> = {}
+    if(!form.rank){
+      newErrors.rank = "Rank tidak boleh kosong!"
+    }
+    if(!form.minScore){
+      newErrors.minScore = "Nilai minimum tidak boleh kosong!"
+    }
+    if(!form.maxScore){
+      newErrors.maxScore = "Nilai maksimum tidak boleh kosong!"
+    }
+    setErrors({ ...errors, ...newErrors})
+    return Object.keys(newErrors).length === 0
+  }
+
   const handleSubmit = async(type: "add" | "update" | "delete") => {
     try {
       setLoading({ ...loading, submit: true})
+      const formValid = validateForms()
+      if(!formValid){
+        return
+      }
       const changedFields: Partial<MasterDataProps> = checkChangedFields()
       const response = type==="add" ? await postMasterData(api, form) : type==="update" ? await updateMasterDataById(api, idData, changedFields) : type==="delete" ? await deleteMasterDataById(api, idData) : []
       console.log("response submit:", response)
@@ -182,6 +212,8 @@ const ScoreRank = () => {
                   name='rank'
                   onChange={handleChangeInput}
                   value={form.rank}
+                  hint={errors?.rank}
+                  error={errors?.rank !== ""}
                 />
               </div>
              
@@ -192,6 +224,8 @@ const ScoreRank = () => {
                   name='minScore'
                   onChange={handleChangeInput}
                   value={form.minScore}
+                  hint={errors?.minScore}
+                  error={errors?.minScore !== ""}
                 />
               </div>
 
@@ -202,6 +236,8 @@ const ScoreRank = () => {
                   name='maxScore'
                   onChange={handleChangeInput}
                   value={form.maxScore}
+                  hint={errors?.maxScore}
+                  error={errors?.maxScore !== ""}
                 />
               </div>
 

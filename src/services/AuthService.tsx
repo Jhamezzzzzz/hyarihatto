@@ -1,12 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useNavigate } from 'react-router-dom';
 import axiosTWIIS from '../utils/AxiosTWIIS';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
 import { AxiosError, AxiosResponse } from 'axios';
 import useShowAlert from '../hooks/useShowAlert';
 
-const MySwal = withReactContent(Swal);
 
 // Tipe untuk respons backend
 type LoginResponse = AxiosResponse<any>; // Ubah 'any' sesuai bentuk response API-mu
@@ -23,14 +20,18 @@ const useAuthService = () => {
 
   const handleError = (error: AxiosError<any>, message: string): never => {
     console.error(message, error);
-    alertError(error.response?.data.message)
+    if(error?.response){
+      alertError(error.response?.data.message)
+    }else{
+      alertError(error.message)
+    }
     throw new Error(`${message} ${error.message}`);
   };
 
   const login = async (username: string, password: string): Promise<LoginResponse> => {
     try {
       const response = await axiosTWIIS.post('/login', { username, password });
-      alertSuccess(response?.data.message)
+      alertSuccess("Selamat Datang!")
       return response;
     } catch (error: unknown) {
       const err = error as AxiosError<any>;

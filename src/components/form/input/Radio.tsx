@@ -26,7 +26,7 @@ const Radio: React.FC<RadioProps> = ({
         disabled
           ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
           : "text-gray-700 dark:text-gray-400"
-      } ${checked ? "border-brand-500" : "border-transparent"} ${className}`}
+      } ${checked ? "border-brand-500 bg-brand-50" : "border-transparent"} ${className}`}
     >
       {label}
 

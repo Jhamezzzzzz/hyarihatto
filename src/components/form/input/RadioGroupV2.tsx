@@ -44,14 +44,14 @@ export default function RadioGroupV2({
           {options.length > 0 && options.map((opt: Options, index: number)=>{
             const isSelected = Number(value) === opt.id || Number(selectedValue) === opt.id
               return(
-                <label htmlFor={name+opt.id+"Radio"+index+1} key={index} className={`flex justify-between border-2 ${isSelected ? " border-brand-500" : "border-transparent"} p-2 rounded-full`}>
+                <label htmlFor={name+opt.id+"Radio"+index+1} key={index} className={`flex justify-between border-2 ${isSelected ? " border-brand-500 bg-brand-50" : "border-transparent"} p-2 rounded-full`}>
                   <div className="flex gap-5">
                     {opt.rank && (
-                      <label>
+                      <label htmlFor={name+opt.id+"Radio"+index+1}>
                         {opt.rank}
                       </label>
                     )}
-                    <label>
+                    <label htmlFor={name+opt.id+"Radio"+index+1}>
                       {opt.option}
                     </label>
                   </div>

@@ -27,6 +27,8 @@ type PropsType = {
   dateFormat?: string;
   disabled?: boolean;
   className?: string;
+  hint?: string;
+  success?: boolean
 };
 
 export default function DatePicker({
@@ -36,10 +38,12 @@ export default function DatePicker({
   label,
   defaultDate,
   placeholder,
-  error,
+  error = false,
   dateFormat,
   disabled,
-  className
+  className,
+  hint,
+  success = false
 }: PropsType) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   useEffect(() => {
@@ -92,6 +96,19 @@ export default function DatePicker({
           <CalenderIcon className="size-6" />
         </span>
       </div>
+       {hint && (
+        <p
+          className={`mt-1.5 text-xs ${
+            error
+              ? "text-error-500"
+              : success
+              ? "text-success-500"
+              : "text-gray-500"
+          }`}
+        >
+          {hint}
+        </p>
+      )}
     </div>
   );
 }

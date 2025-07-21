@@ -2,13 +2,16 @@ import Template from "./Template";
 import ButtonNavigation from "./ButtonNavigation";
 import TextArea from "../../../components/form/input/TextArea";
 import { useFormData } from "../../../context/FormHyarihattoContext";
+import { useFormErrors } from "../../../context/FormErrorContext";
 
 const Step2FormHyarihatto = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
   const { formData, updateFormData } = useFormData();
+  const { errors, updateError } = useFormErrors()
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target
+    updateError("hazardAssessment", name, undefined)
     updateFormData("hazardAssessment", name, value)
   }
 
@@ -31,6 +34,8 @@ const Step2FormHyarihatto = () => {
                 className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
                 value={formData.hazardAssessment.currentActivity}
                 onChange={handleChangeInput}
+                hint={errors.hazardAssessment?.currentActivity}
+                error={errors?.hazardAssessment?.currentActivity !== undefined}
               />
             </div>
 
@@ -44,6 +49,8 @@ const Step2FormHyarihatto = () => {
                 className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
                 value={formData.hazardAssessment.potentialHazard}
                 onChange={handleChangeInput}
+                hint={errors.hazardAssessment?.potentialHazard}
+                error={errors?.hazardAssessment?.potentialHazard !== undefined}
               />
             </div>
 
@@ -53,20 +60,32 @@ const Step2FormHyarihatto = () => {
                 <span className="text-red-500">*</span>
               </label>
               <TextArea
-                name="expectedCondition"
+                name="hazardReason"
                 className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={formData.hazardAssessment.expectedCondition}
+                value={formData.hazardAssessment.hazardReason}
                 onChange={handleChangeInput}
+                hint={errors.hazardAssessment?.hazardReason}
+                error={errors?.hazardAssessment?.hazardReason !== undefined}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <p className="block text-sm font-medium text-gray-700 mb-1">
                 Seharusnya kondisinya bagaimana?{" "}
-                <span className="text-red-500">*</span>
-              </label>
+              </p>
               <label className="block text-sm text-gray-500 mb-1">
-                Tuliskan Harapan / Usulan perbaikan Anda
+                a. Harapan yang diinginkan <span className="text-red-500">*</span>
+              </label>
+              <TextArea
+                name="expectedCondition"
+                className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
+                value={formData.hazardAssessment.expectedCondition}
+                onChange={handleChangeInput}
+                hint={errors.hazardAssessment?.expectedCondition}
+                error={errors?.hazardAssessment?.expectedCondition !== undefined}
+              />
+              <label className="block text-sm text-gray-500 mb-1">
+                b. Usulan yang diinginkan
               </label>
               <TextArea
                 name="improvementSuggestion"

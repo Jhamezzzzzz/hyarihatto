@@ -4,14 +4,17 @@ import Input from "../../../components/form/input/InputField";
 import ButtonNavigation from "./ButtonNavigation";
 import { useFormData } from "../../../context/FormHyarihattoContext";
 import { useState } from "react";
+import { useFormErrors } from "../../../context/FormErrorContext";
 
 const Step1FormHyarihatto = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
    const { formData, updateFormData } = useFormData();
+   const { errors, updateError } = useFormErrors()
    const [formattedDate, setFormattedDate] = useState(localStorage.getItem("formattedDate") || "")
 
    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
+    updateError("submissions", name, undefined)
     updateFormData("submissions", name, value)
    }
 
@@ -23,6 +26,7 @@ const Step1FormHyarihatto = () => {
             year: "numeric",
         }).replace(/ /g, '-');
 
+         updateError("submissions", "incidentDate", undefined)
         updateFormData("submissions", "incidentDate", dateString)
         setFormattedDate(formattedDate)
         localStorage.setItem("formattedDate", formattedDate)
@@ -30,6 +34,7 @@ const Step1FormHyarihatto = () => {
 
   const handleChangeTime = (date: Date[]) => {
         const stringTime = date[0].toLocaleTimeString("id-ID").replace(".", ":").slice(0, 5)
+         updateError("submissions", "incidentTime", undefined)
         updateFormData("submissions", "incidentTime", stringTime)
     }
   
@@ -52,6 +57,8 @@ const Step1FormHyarihatto = () => {
                 onChange={handleChangeDate}
                 dateFormat="d-M-Y"
                 className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                hint={errors.submissions?.incidentDate}
+                error={errors?.submissions?.incidentDate !== undefined}
               />
             </div>
             <div>
@@ -64,6 +71,8 @@ const Step1FormHyarihatto = () => {
                 dateFormat="H:i"
                 defaultDate={formData.submissions.incidentTime}
                 onChange={handleChangeTime}
+                hint={errors.submissions?.incidentTime}
+                error={errors?.submissions?.incidentTime !== undefined}
               />
             </div>
             <div>
@@ -77,6 +86,8 @@ const Step1FormHyarihatto = () => {
                 placeholder="Contoh: Assembly 1"
                 value={formData.submissions.workProcess}
                 onChange={handleChangeInput}
+                hint={errors.submissions?.workProcess}
+                error={errors?.submissions?.workProcess !== undefined}
               />
             </div>
 
@@ -91,6 +102,8 @@ const Step1FormHyarihatto = () => {
                 placeholder="Contoh: Area 3"
                 value={formData.submissions.location}
                 onChange={handleChangeInput}
+                hint={errors.submissions?.location}
+                error={errors.submissions?.location !== undefined}
               />
             </div>
             <div className="flex justify-end gap-4">

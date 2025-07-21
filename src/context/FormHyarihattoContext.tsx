@@ -9,6 +9,7 @@ type FormData = {
   time: string;
   line: string;
   location: string;
+  image: string;
 
   submissions: {
     userId: number | null;
@@ -48,7 +49,7 @@ type FormData = {
 interface FormDataContextType {
   formData: FormData;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
-  updateFormData: (section: keyof Pick<FormData, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation">, key: string, value: string | number | null) => void;
+  updateFormData: (section: keyof Pick<FormData, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation"> | null, key: string, value: string | number | null) => void;
 }
 
 // 3. Create context
@@ -64,6 +65,7 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
     time: "",
     line: "",
     location: "",
+    image: localStorage.getItem("image") || "",
 
     submissions: {
       userId: Number(localStorage.getItem("submissions.userId")) || null,
@@ -94,31 +96,42 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
 
     hazardEvaluation: {
       accidentLevelId: Number(localStorage.getItem("hazardEvaluation.accidentLevelId")) || null,
-      hazardControlLevelId: Number(localStorage.getItem("hazardEvaluation.hazardControlId")) || null,
+      hazardControlLevelId: Number(localStorage.getItem("hazardEvaluation.hazardControlLevelId")) || null,
       workingFrequencyId: Number(localStorage.getItem("hazardEvaluation.workingFrequencyId")) || null,
     },
   });
 
   // 5. Helper to update nested formData and localStorage
   const updateFormData = (
-    section: keyof Pick<FormData, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation">,
+    section: keyof Pick<FormData, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation"> | null,
     key: string,
     value: string | number | null
   ) => {
-    setFormData((prev) => {
-      const updatedSection = {
-        ...prev[section],
-        [key]: value,
-      };
-
-      const updatedFormData = {
-        ...prev,
-        [section]: updatedSection,
-      };
-
-      localStorage.setItem(`${section}.${key}`, String(value));
-      return updatedFormData;
-    });
+    if(section === null){
+      setFormData((prev) => {
+        const updatedSection = {
+          ...prev,
+          [key]: value,
+        };
+        localStorage.setItem(`${key}`, String(value));
+        return updatedSection;
+      });
+    }else{
+      setFormData((prev) => {
+        const updatedSection = {
+          ...prev[section],
+          [key]: value,
+        };
+  
+        const updatedFormData = {
+          ...prev,
+          [section]: updatedSection,
+        };
+  
+        localStorage.setItem(`${section}.${key}`, String(value));
+        return updatedFormData;
+      });
+    }
   };
 
   return (

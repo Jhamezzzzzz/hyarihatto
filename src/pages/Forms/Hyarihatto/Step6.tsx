@@ -4,6 +4,8 @@ import { useFormData } from "../../../context/FormHyarihattoContext";
 import { useEffect, useState } from "react";
 import usePublicDataService from "../../../services/PublicService";
 import RadioGroupV2 from "../../../components/form/input/RadioGroupV2";
+import Spinner from "../../../components/ui/spinner";
+import { useFormErrors } from "../../../context/FormErrorContext";
 
 interface ResponseLevel {
   id: number;
@@ -15,9 +17,10 @@ interface ResponseLevel {
 }
 
 const Step6FormHyarihatto = () => {
-  const { ButtonPrevious, ButtonNext } = ButtonNavigation();
+  const { ButtonPrevious, ButtonSubmit } = ButtonNavigation();
   const [loading, setLoading] = useState(true)
   const { formData, updateFormData } = useFormData();
+  const { errors, updateError } = useFormErrors()
   const [optionsAccidentLevel, setOptionsAccidentLevel] = useState([]);
   const [optionsHazardControlLevel, setOptionsHazardControlLevel] = useState([]);
   const [optionsWorkingFrequency, setOptionsWorkingFrequency] = useState([]);
@@ -91,11 +94,7 @@ const Step6FormHyarihatto = () => {
   }, []);
 
   const handleChangeRadio = (option: string, group: "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation", name: string) => {
-    console.log({
-        group,
-        name,
-        option
-    })
+    updateError(group, name, undefined)
     updateFormData(group, name, option)
   }
 
@@ -106,7 +105,6 @@ const Step6FormHyarihatto = () => {
             hazardControlLevelId: formData.hazardEvaluation.hazardControlLevelId,
             workingFrequencyId: formData.hazardEvaluation.workingFrequencyId
         })
-        console.log('response final score: ', response)
         const responseData = response?.data.data
         setFinalScoreRank({
             score: responseData.totalScore,
@@ -124,10 +122,6 @@ const Step6FormHyarihatto = () => {
         getFinalScoreRank()
     }
   }, [formData.hazardEvaluation])
-
-  useEffect(()=>{
-    console.log("formData: ", formData)
-  }, [])
 
   return (
     <div>
@@ -162,7 +156,15 @@ const Step6FormHyarihatto = () => {
                         group="hazardEvaluation"
                         name="accidentLevelId"
                         value={formData.hazardEvaluation.accidentLevelId?.toString() || ""}
+                        hint={errors?.hazardEvaluation?.accidentLevelId}
+                        error={errors?.hazardEvaluation?.accidentLevelId !== undefined}
                     />
+                    { loading && (
+                      <div className="flex items-center justify-center gap-2 py-14">
+                        Memuat pilihan
+                        <Spinner/>
+                      </div>  
+                    )}
                   </div>
                 </div>
 
@@ -182,7 +184,15 @@ const Step6FormHyarihatto = () => {
                         group="hazardEvaluation"
                         name="workingFrequencyId"
                         value={formData.hazardEvaluation.workingFrequencyId?.toString() || ""}
+                        hint={errors?.hazardEvaluation?.workingFrequencyId}
+                        error={errors?.hazardEvaluation?.workingFrequencyId !== undefined}
                       />
+                      { loading && (
+                      <div className="flex items-center justify-center gap-2 py-18">
+                        Memuat pilihan
+                        <Spinner/>
+                      </div>  
+                    )}
                     </div>
                   </div>
 
@@ -201,7 +211,15 @@ const Step6FormHyarihatto = () => {
                         group="hazardEvaluation"
                         name="hazardControlLevelId"
                         value={formData.hazardEvaluation.hazardControlLevelId?.toString() || ""}
+                        hint={errors?.hazardEvaluation?.hazardControlLevelId}
+                        error={errors?.hazardEvaluation?.hazardControlLevelId !== undefined}
                       />
+                      { loading && (
+                        <div className="flex items-center justify-center gap-2 py-18">
+                          Memuat pilihan
+                          <Spinner/>
+                        </div>  
+                      )}
                     </div>
                   </div>
                 </div>
@@ -224,20 +242,22 @@ const Step6FormHyarihatto = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td className="px-2 py-1">19 - 25</td>
-                        <td className="px-2 py-1">A</td>
-                      </tr>
-                      <tr>
-                        <td className="px-2 py-1">10 - 18</td>
-                        <td className="px-2 py-1">B</td>
-                      </tr>
-                      <tr>
-                        <td className="px-2 py-1">6 - 9</td>
-                        <td className="px-2 py-1">C</td>
-                      </tr>
+                      { scoreRanks.map((item: ResponseLevel, index: number)=>{
+                        return(
+                          <tr key={index}>
+                            <td className="px-2 py-1">{item.minScore} - {item.maxScore}</td>
+                            <td className="px-2 py-1">{item.rank}</td>
+                          </tr>
+                        )
+                      })}
                     </tbody>
                   </table>
+                  { loading && (
+                    <div className="flex items-center justify-center gap-2 py-18">
+                      Memuat pilihan
+                      <Spinner/>
+                    </div>  
+                  )}
                 </div>
               </div>
 
@@ -260,7 +280,7 @@ const Step6FormHyarihatto = () => {
             </div>
             <div className="flex justify-end gap-4">
               {ButtonPrevious(5)}
-              {ButtonNext(6)}
+              {ButtonSubmit()}
             </div>
           </div>
         </div>

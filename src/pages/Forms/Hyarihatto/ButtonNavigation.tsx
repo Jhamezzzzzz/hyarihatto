@@ -7,7 +7,7 @@ import StaticOptions from '../../../utils/StaticOptions';
 const ButtonNavigation = () => {
     const navigate = useNavigate()
     const { errorMessageObject } = StaticOptions()
-    const { formData } = useFormData()
+    const { formData, clearAllLocal } = useFormData()
     const { updateError, clearAllErrors } = useFormErrors()
     const { postFormSubmissions } = usePublicDataService()
 
@@ -104,7 +104,6 @@ const ButtonNavigation = () => {
         )
     }
     const ButtonNext = (toStep: string | number) => {
-        console.log(toStep)
         const handleNavigate = () => {
             if(!isError(Number(toStep)-1)){
                 navigate(`/member/hyarihatto/${toStep}`)
@@ -129,35 +128,42 @@ const ButtonNavigation = () => {
 
     const ButtonSubmit = () => {
         const handleSubmit = async() => {
-            if(step6NotComplete){
-                setErrorForm(6)
-                return
-            }
-            const base64ToFile = (base64: string, filename: string, mimeType: string): File => {
-                const arr = base64.split(",");
-                const mime = mimeType || arr[0].match(/:(.*?);/)?.[1] || "image/png";
-                const bstr = atob(arr[1]);
-                let n = bstr.length;
-                const u8arr = new Uint8Array(n);
-                while (n--) {
-                    u8arr[n] = bstr.charCodeAt(n);
+            try {
+                if(step6NotComplete){
+                    setErrorForm(6)
+                    return
                 }
-                return new File([u8arr], filename, { type: mime });
-            };
-            const base64ImageLocal = localStorage.getItem("image") || ""
-            const base64ImageFileNameLocal = localStorage.getItem("imageFileName") || ""
-            const fileImage = base64ToFile(base64ImageLocal, base64ImageFileNameLocal, "image/png")
-
-            const newFormData = new FormData()
-            const fieldData = {
-                submission: formData.submissions,
-                hazardAssessment: formData.hazardAssessment,
-                hazardReport: formData.hazardReport,
-                hazardEvaluation: formData.hazardEvaluation,
+                const base64ToFile = (base64: string, filename: string, mimeType: string): File => {
+                    const arr = base64.split(",");
+                    const mime = mimeType || arr[0].match(/:(.*?);/)?.[1] || "image/png";
+                    const bstr = atob(arr[1]);
+                    let n = bstr.length;
+                    const u8arr = new Uint8Array(n);
+                    while (n--) {
+                        u8arr[n] = bstr.charCodeAt(n);
+                    }
+                    return new File([u8arr], filename, { type: mime });
+                };
+                const base64ImageLocal = localStorage.getItem("image") || ""
+                const base64ImageFileNameLocal = localStorage.getItem("imageFileName") || ""
+                const fileImage = base64ToFile(base64ImageLocal, base64ImageFileNameLocal, "image/png")
+    
+                const newFormData = new FormData()
+                const fieldData = {
+                    submission: formData.submissions,
+                    hazardAssessment: formData.hazardAssessment,
+                    hazardReport: formData.hazardReport,
+                    hazardEvaluation: formData.hazardEvaluation,
+                }
+                newFormData.append("data", JSON.stringify(fieldData))
+                newFormData.append("image", fileImage)
+                await postFormSubmissions(newFormData)
+                clearAllLocal()
+                navigate('/member/hyarihatto/submitted')
+            } catch (error) {
+                console.error(error)
             }
-            newFormData.append("data", JSON.stringify(fieldData))
-            newFormData.append("image", fileImage)
-            await postFormSubmissions(newFormData)
+
         }
 
         return (

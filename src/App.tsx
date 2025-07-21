@@ -29,6 +29,7 @@ import Step3FormHyarihatto from "./pages/Forms/Hyarihatto/Step3";
 import Step4FormHyarihatto from "./pages/Forms/Hyarihatto/Step4";
 import Step5FormHyarihatto from "./pages/Forms/Hyarihatto/Step5";
 import Step6FormHyarihatto from "./pages/Forms/Hyarihatto/Step6";
+import Finish from "./pages/Forms/Hyarihatto/Finish";
 
 export default function App() {
   return (
@@ -76,6 +77,7 @@ export default function App() {
           <Route path="/member/hyarihatto/4" element={<Step4FormHyarihatto />} />,
           <Route path="/member/hyarihatto/5" element={<Step5FormHyarihatto />} />,
           <Route path="/member/hyarihatto/6" element={<Step6FormHyarihatto />} />,
+          <Route path="/member/hyarihatto/submitted" element={<Finish />} />,
 
           <Route path="/panduan" element={<PanduanHyat />} />
           {/* Fallback Route */}

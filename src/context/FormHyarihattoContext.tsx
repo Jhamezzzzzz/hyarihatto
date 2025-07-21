@@ -50,6 +50,7 @@ interface FormDataContextType {
   formData: FormData;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
   updateFormData: (section: keyof Pick<FormData, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation"> | null, key: string, value: string | number | null) => void;
+  clearAllLocal: () => void
 }
 
 // 3. Create context
@@ -134,8 +135,35 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const clearAllLocal = () => {
+    localStorage.setItem('name', "")
+    localStorage.setItem('noreg', "")
+    localStorage.setItem('formattedDate', "")
+    localStorage.setItem('iamge', "")
+    localStorage.setItem('submissions.userId', "")
+    localStorage.setItem('submissions.shift', "")
+    localStorage.setItem('submissions.incidentDate', "")
+    localStorage.setItem('submissions.incidentTime', "")
+    localStorage.setItem('submissions.workProcess', "")
+    localStorage.setItem('submissions.location', "")
+    localStorage.setItem('hazardAssessment.currentActivity', "")
+    localStorage.setItem('hazardAssessment.potentialHazard', "")
+    localStorage.setItem('hazardAssessment.hazardReason', "")
+    localStorage.setItem('hazardAssessment.expectedCondition', "")
+    localStorage.setItem('hazardAssessment.improvementSuggestion', "")
+    localStorage.setItem('hazardReport.pattern', "")
+    localStorage.setItem('hazardReport.source', "")
+    localStorage.setItem('hazardReport.injured', "")
+    localStorage.setItem('hazardReport.cause', "")
+    localStorage.setItem('hazardReport.category', "")
+    localStorage.setItem('hazardReport.accidentType', "")
+    localStorage.setItem('hazardEvaluation.accidentLevelId', "")
+    localStorage.setItem('hazardEvaluation.hazardControlLevelId', "")
+    localStorage.setItem('hazardEvaluation.workingFrequencyId', "")
+  }
+
   return (
-    <FormDataContext.Provider value={{ formData, setFormData, updateFormData }}>
+    <FormDataContext.Provider value={{ formData, setFormData, updateFormData, clearAllLocal }}>
       {children}
     </FormDataContext.Provider>
   );

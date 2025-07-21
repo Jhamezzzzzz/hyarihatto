@@ -8,15 +8,18 @@ import { AppWrapper } from "./components/common/PageMeta.tsx";
 import { ThemeProvider } from "./context/ThemeContext.tsx";
 import { AlertProvider } from "./context/AlertContext.tsx";
 import { FormDataProvider } from "./context/FormHyarihattoContext.tsx";
+import { FormErrorsProvider } from "./context/FormErrorContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider>
       <AlertProvider>
         <FormDataProvider>
-          <AppWrapper>
-            <App />
-          </AppWrapper>
+          <FormErrorsProvider>
+            <AppWrapper>
+              <App />
+            </AppWrapper>
+          </FormErrorsProvider>
         </FormDataProvider>
       </AlertProvider>
     </ThemeProvider>

@@ -61,7 +61,7 @@ const IdentityFormHyarihatto: React.FC = () => {
             <ol className="list-none p-0 inline-flex items-center space-x-1">
               <li>
                 <a
-                  href="/home"
+                  href="/"
                   className="text-brand-600 hover:underline font-medium"
                 >
                   Home
@@ -70,7 +70,7 @@ const IdentityFormHyarihatto: React.FC = () => {
               <li>
                 <span className="mx-2">{">"}</span>
                 <a
-                  href="/warehouse-member"
+                  href="/member"
                   className="text-brand-600 hover:underline font-medium"
                 >
                   Warehouse Member

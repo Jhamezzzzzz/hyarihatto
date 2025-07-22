@@ -19,7 +19,7 @@ const StaticOptions = () => {
     ]
 
     const optionsHyarihattoHazardType = [
-        "Reguler", 
+        "Regular", 
         "Low Frek", 
         "Irregular", 
         "Abnormal"

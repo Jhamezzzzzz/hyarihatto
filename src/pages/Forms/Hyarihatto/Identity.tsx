@@ -11,48 +11,80 @@ import { useFormErrors } from "../../../context/FormErrorContext";
 
 const IdentityFormHyarihatto: React.FC = () => {
   const { ButtonNext } = ButtonNavigation();
-  const { formData, updateFormData } = useFormData()
-  const { errors, updateError } = useFormErrors()
+  const { formData, updateFormData } = useFormData();
+  const { errors, updateError } = useFormErrors();
   // const [noreg, setNoreg] = useState(localStorage.getItem("noreg") || "")
-  
-  const [name, setName] = useState(localStorage.getItem("name") || "")
-  const debouncedNoreg = useDebounce(formData.noreg, 1000)
-  const { getUserByNoreg } = usePublicDataService()
-  const { optionsShift } = StaticOptions()
+
+  const [name, setName] = useState(localStorage.getItem("name") || "");
+  const debouncedNoreg = useDebounce(formData.noreg, 1000);
+  const { getUserByNoreg } = usePublicDataService();
+  const { optionsShift } = StaticOptions();
 
   const handleChangeNoreg = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target
+    const { value } = e.target;
 
-    updateError("submissions", "userId", undefined)
-    updateFormData(null, "noreg", value)
-  }
+    updateError("submissions", "userId", undefined);
+    updateFormData(null, "noreg", value);
+  };
 
-  const fetchUserByNoreg = async() => {
+  const fetchUserByNoreg = async () => {
     try {
-      setName("Loading")
-      const response = await getUserByNoreg(formData.noreg)
-      setName(response?.data?.name)
-      localStorage.setItem("name", response?.data?.name)
-      updateFormData("submissions", "userId", response?.data?.id)
+      setName("Loading");
+      const response = await getUserByNoreg(formData.noreg);
+      setName(response?.data?.name);
+      localStorage.setItem("name", response?.data?.name);
+      updateFormData("submissions", "userId", response?.data?.id);
     } catch (error) {
-      console.error(error)
-      setName("")
-      updateFormData("submissions", "userId", "")
-      localStorage.setItem("name", "")
-    } 
-  }
-  
-  useEffect(()=>{
-    if(formData.noreg !== "" && formData.noreg.length === 8){
-      fetchUserByNoreg()
-    }else if(formData.noreg !== ""){
-      updateError(null, "noreg", "Noreg tidak valid!")
+      console.error(error);
+      setName("");
+      updateFormData("submissions", "userId", "");
+      localStorage.setItem("name", "");
     }
-  }, [debouncedNoreg])
+  };
+
+  useEffect(() => {
+    if (formData.noreg !== "" && formData.noreg.length === 8) {
+      fetchUserByNoreg();
+    } else if (formData.noreg !== "") {
+      updateError(null, "noreg", "Noreg tidak valid!");
+    }
+  }, [debouncedNoreg]);
 
   return (
     <div>
       <Template showBack>
+        <div className="flex justify-center">
+          <nav
+            className="text-sm text-gray-600 mb-4 text-center"
+            aria-label="Breadcrumb"
+          >
+            <ol className="list-none p-0 inline-flex items-center space-x-1">
+              <li>
+                <a
+                  href="/home"
+                  className="text-brand-600 hover:underline font-medium"
+                >
+                  Home
+                </a>
+              </li>
+              <li>
+                <span className="mx-2">{">"}</span>
+                <a
+                  href="/warehouse-member"
+                  className="text-brand-600 hover:underline font-medium"
+                >
+                  Warehouse Member
+                </a>
+              </li>
+              <li>
+                <span className="mx-2">{">"}</span>
+                <span className="text-gray-800 font-semibold">
+                  Hyarihatto
+                </span>
+              </li>
+            </ol>
+          </nav>
+        </div>
         <div className="bg-white shadow-lg rounded-lg p-6">
           <div className="border-b border-gray-200 pb-4 mb-6 text-center">
             <h5 className="text-xl font-semibold text-gray-800">
@@ -75,8 +107,8 @@ const IdentityFormHyarihatto: React.FC = () => {
                 placeholder="Nomor Registrasi"
                 value={formData.noreg}
                 onChange={handleChangeNoreg}
-                hint={ errors.submissions?.userId }
-                error={ errors.submissions?.userId !== undefined}
+                hint={errors.submissions?.userId}
+                error={errors.submissions?.userId !== undefined}
               />
             </div>
 
@@ -107,7 +139,9 @@ const IdentityFormHyarihatto: React.FC = () => {
               <Select
                 name="shift"
                 options={optionsShift}
-                onChange={(name, value)=>updateFormData("submissions", name, value)}
+                onChange={(name, value) =>
+                  updateFormData("submissions", name, value)
+                }
                 defaultValue={formData.submissions.shift}
                 hint={errors?.submissions?.shift}
                 error={errors?.submissions?.shift !== undefined}

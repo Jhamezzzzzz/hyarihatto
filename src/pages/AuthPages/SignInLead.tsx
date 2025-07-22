@@ -6,32 +6,55 @@ import imageSafety from "../../components/image/warehouse_assident_05.jpg";
 import useAuthService from "../../services/AuthService";
 import "../../css/home.css";
 import useShowAlert from "../../hooks/useShowAlert";
+import PageMeta from "../../components/common/PageMeta";
 
+interface Errors{
+  username: string;
+  password: string;
+}
 
 export default function SignInLead() {
   const [loading, setLoading] = useState<boolean>(false);
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const { alertError } = useShowAlert();
+  const [form, setForm] = useState<Errors>({
+    username: "",
+    password: ""
+  });
+  const [errors, setErrors] = useState<Errors>({
+    username: "",
+    password: ""
+  })
   const navigate = useNavigate();
   const { login } = useAuthService();
+
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setErrors({ ...errors, [name]: ""})
+    setForm({ ...form, [name]: value})
+  }
+
+  const validateForm = () => {
+    const newErrors: Partial<Errors> = {}
+    if(form.username === "" || !form.username){
+      newErrors.username = "Username tidak boleh kosong!"
+    }
+    if(form.password === "" || !form.password){
+      newErrors.password = "Password tidak boleh kosong!"
+    }
+    setErrors({ ...errors, ...newErrors})
+    return Object.keys(newErrors).length === 0
+  }
 
   const Auth = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!username || !password) {
-      alertError("Username dan password harus diisi");
-      return;
-    }
-
-    if (password.length < 6) {
-      alertError("Password harus lebih dari 6 karakter");
-      return;
+    const isValid = validateForm()
+    if(!isValid){
+      return
     }
 
     try {
       setLoading(true);
-      await login(username, password);
+      await login(form.username, form.password);
       navigate("/home");
     } catch (error) {
       console.error(error);
@@ -42,6 +65,7 @@ export default function SignInLead() {
 
   return (
     <div className="login-page ">
+      <PageMeta title="Leader Login | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <div style={{ zIndex: 1, maxWidth: "900px", width: "750px" }}>
         <button
                 onClick={()=>navigate("/")}
@@ -78,27 +102,35 @@ export default function SignInLead() {
                 <h1 className="text-2xl font-bold mb-1">Login</h1>
                 <p className="text-sm text-gray-500">Sign In to your account</p>
               </div>
-              <div className="flex items-center border border-gray-300 rounded px-3 py-2">
-                <FontAwesomeIcon icon={faUser} className="text-gray-400 mr-2" />
-                <input
-                  type="text"
-                  placeholder="Username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  className="w-full outline-none bg-transparent"
-                  autoComplete="username"
-                />
+              <div>
+                <div className={`flex items-center border ${errors.username !== "" ? "border-error-500" :  "border-gray-300"} rounded px-3 py-2`}>
+                  <FontAwesomeIcon icon={faUser} className="text-gray-400 mr-2" />
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="Username"
+                    value={form.username}
+                    onChange={handleChangeInput}
+                    className="w-full outline-none bg-transparent"
+                    autoComplete="username"
+                  />
+                </div>
+                { errors.username !== "" && <p className="text-error-500">{errors.username}</p>}
               </div>
-              <div className="flex items-center border border-gray-300 rounded px-3 py-2">
-                <FontAwesomeIcon icon={faLock} className="text-gray-400 mr-2" />
-                <input
-                  type="password"
-                  placeholder="Password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="w-full outline-none bg-transparent"
-                  autoComplete="current-password"
-                />
+              <div>
+                <div className={`flex items-center border ${errors.password !== "" ? "border-error-500" : "border-gray-300"} rounded px-3 py-2`}>
+                  <FontAwesomeIcon icon={faLock} className="text-gray-400 mr-2" />
+                  <input
+                    type="password"
+                    name="password"
+                    placeholder="Password"
+                    value={form.password}
+                    onChange={handleChangeInput}
+                    className="w-full outline-none bg-transparent"
+                    autoComplete="current-password"
+                  />
+                </div>
+                { errors.password !== "" && <p className="text-error-500">{errors.password}</p>}
               </div>
               <button
                 type="submit"

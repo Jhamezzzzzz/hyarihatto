@@ -5,15 +5,18 @@ import { useNavigate } from "react-router";
 import { useFormData } from "../../../context/FormHyarihattoContext";
 import { useFormErrors } from "../../../context/FormErrorContext";
 import StaticOptions from "../../../utils/StaticOptions";
+import PageMeta from "../../../components/common/PageMeta";
 
 const Template = ({
   children,
   showBack,
+  backToHome,
   showStep,
   step,
 }: {
   children: ReactNode;
   showBack?: boolean;
+  backToHome?: boolean;
   showStep?: boolean;
   step?: number;
 }) => {
@@ -125,12 +128,13 @@ const Template = ({
 
   return (
     <div>
+      <PageMeta title="Form Hyarihatto | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <div
         className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center"
         style={{ backgroundImage: `url(${WaveBackground})` }}
       >
         <div className="w-full max-w-2xl">
-          <TitleFormHyarihatto showBack={showBack || false} />
+          <TitleFormHyarihatto showBack={showBack || false} backToHome={backToHome}/>
           {showStep && <div className="mb-4">{buttonStep}</div>}
           {children}
         </div>

@@ -65,7 +65,7 @@ export default function DatePicker({
       ...(isMonthMode && {
         plugins: [new MonthSelectPlugin({
           shorthand: true,
-          dateFormat: "Y-m",
+          dateFormat: dateFormat || "Y-m",
         })]
       }),
     });

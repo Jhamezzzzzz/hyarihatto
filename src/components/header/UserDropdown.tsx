@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import useVerify from "../../hooks/useVerify";
 import { FaUser } from "react-icons/fa";
 import useAuthService from "../../services/AuthService";

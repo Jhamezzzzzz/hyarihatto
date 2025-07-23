@@ -39,10 +39,45 @@ export default function BarSummary({ filter }: Filters) {
     getDates(filter.date)
   }, [filter.date])
 
-  console.log("dates: ", dates)
+  const colors = {
+    success: "#61BD98",
+    info: "#0BA5EC",
+    warning: "#DC6803",
+    error: "#D92D20"
+  }
 
   const options: ApexOptions = {
-    colors: ["#61BD98"],
+    // [9, 0, 0, 16, 4, 0, 0, 0, 0, 0, 5, 0, 4, 0, 0, 5, 4, 0, 0, 0, 0, 0, 9, 0, 0, 0, 12, 0],
+    colors: [
+      colors.success,
+      "", 
+      "", 
+      colors.success,
+      colors.success,
+      "", 
+      "", 
+      "", 
+      "", 
+      "", 
+      colors.success, 
+      "", 
+      colors.success, 
+      "",
+      "",
+      colors.error,
+      colors.info,
+      "",
+      "",
+      "",
+      "",
+      "",
+      colors.warning,
+      "",
+      "",
+      "",
+      colors.warning,
+      "",
+    ],
     chart: {
       fontFamily: "Outfit, sans-serif",
       type: "bar",
@@ -57,6 +92,13 @@ export default function BarSummary({ filter }: Filters) {
         columnWidth: "80%",
         borderRadius: 2,
         borderRadiusApplication: "end",
+        distributed: true,
+        dataLabels: {
+          total: {
+            enabled: false
+          },
+          hideOverflowingLabels: true
+        }
       },
     },
     dataLabels: {
@@ -69,6 +111,7 @@ export default function BarSummary({ filter }: Filters) {
     },
     xaxis: {
       categories: dates,
+      
       title: {
         text: `Bulan ${monthName}` 
       },
@@ -80,7 +123,7 @@ export default function BarSummary({ filter }: Filters) {
       },
     },
     legend: {
-      show: true,
+      show: false,
       position: "top",
       horizontalAlign: "left",
       fontFamily: "Outfit",
@@ -112,7 +155,7 @@ export default function BarSummary({ filter }: Filters) {
   };
   const series = [
     {
-      name: `Score`,
+      name: 'Score',
       data: [9, 0, 0, 16, 4, 0, 0, 0, 0, 0, 5, 0, 4, 0, 0, 5, 4, 0, 0, 0, 0, 0, 9, 0, 0, 0, 12, 0],
     },
   ];

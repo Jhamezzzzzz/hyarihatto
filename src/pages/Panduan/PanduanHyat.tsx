@@ -1,3 +1,4 @@
+import { Card, CardContent, CardHeader } from "../../components/ui/card/card";
 import Template from "../Forms/Hyarihatto/Template";
 
 export default function PamduanHyat() {
@@ -8,13 +9,11 @@ export default function PamduanHyat() {
           className="d-flex justify-content-center align-item-center"
           style={{ marginTop: "30px" }}
         >
-          <div className="">
-            <div className="card-header text-start">
-              <h2 className="mb-0 text-xl font-bold">
-                Petunjuk Pengisian Catatan Digital Hyarihatto
-              </h2>
-            </div>
-            <div className="card-body">
+          <Card>
+            <CardHeader>
+              <h1 className="font-semibold">Petunjuk Pengisian Catatan Online Hyarihatto</h1>
+            </CardHeader>
+            <CardContent>
               <p>1. Ini adalah bentuk digital dari Buku Catatan Hyarihatto.</p>
               <p>
                 2. Diisi oleh masing-masing pribadi dan dikomunikasikan dengan
@@ -48,8 +47,8 @@ export default function PamduanHyat() {
                 disampaikan kepada SHE Karawang (ext. 5551, 5044, 5064, 5061)
                 melalui pimpinan masing-masing.
               </p>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
       </Template>
     </div>

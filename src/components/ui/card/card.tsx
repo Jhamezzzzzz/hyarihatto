@@ -13,7 +13,7 @@ export const Card = ({ children, className = "" }: CardProps) => (
 );
 
 export const CardHeader = ({ children, className = ""}: CardProps) => (
-  <div className={`${className} border-b-1 p-4`}>
+  <div className={`${className} border-b-1 dark:border-gray-700 p-4`}>
     {children}
   </div>
 )

@@ -139,7 +139,7 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('name', "")
     localStorage.setItem('noreg', "")
     localStorage.setItem('formattedDate', "")
-    localStorage.setItem('iamge', "")
+    localStorage.setItem('image', "")
     localStorage.setItem('submissions.userId', "")
     localStorage.setItem('submissions.shift', "")
     localStorage.setItem('submissions.incidentDate', "")

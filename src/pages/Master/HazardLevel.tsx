@@ -14,6 +14,7 @@ import Label from '../../components/form/Label'
 import NoDataOrLoading from '../../components/ui/table/NoDataOrLoading'
 import Pagination from '../../components/ui/table/Pagination'
 import { useDebounce } from '../../hooks/useDebonce'
+import PageMeta from '../../components/common/PageMeta'
 
 interface MasterDataProps{
   id?: number;
@@ -247,6 +248,7 @@ const HazardLevel = () => {
   
   return (
     <div>
+      <PageMeta title="Master Level Pencegah Bahaya | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <PageBreadcrumb subPage='Master' pageTitle='Level Pencegah Bahaya'/>
       { renderModal(showModal.type) }
       <div>

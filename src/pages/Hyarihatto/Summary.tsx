@@ -16,8 +16,11 @@ const HyarihattoSummary = () => {
       year: "numeric"
     })
   })
+
+  
   return (
     <div>
+      <PageMeta title="Hyarihatto Summary | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <PageBreadcrumb subPage='Hyarihatto' pageTitle='Summary'/>
 
       {/* Filters */}

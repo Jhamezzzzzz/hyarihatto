@@ -18,6 +18,7 @@ const VoiceMemberSummary = () => {
   })
   return (
     <div>
+      <PageMeta title="Voice Member Summary | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <PageBreadcrumb subPage='Voice Member' pageTitle='Summary'/>
 
       {/* Filters */}

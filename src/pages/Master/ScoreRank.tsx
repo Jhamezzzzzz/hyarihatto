@@ -14,6 +14,7 @@ import Label from '../../components/form/Label'
 import NoDataOrLoading from '../../components/ui/table/NoDataOrLoading'
 import Pagination from '../../components/ui/table/Pagination'
 import { useDebounce } from '../../hooks/useDebonce'
+import PageMeta from '../../components/common/PageMeta'
 
 interface MasterDataProps{
   id?: number;
@@ -272,6 +273,7 @@ const ScoreRank = () => {
   
   return (
     <div>
+      <PageMeta title="Master Score Rank | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <PageBreadcrumb subPage='Master' pageTitle='Score Rank'/>
       { renderModal(showModal.type) }
       <div>

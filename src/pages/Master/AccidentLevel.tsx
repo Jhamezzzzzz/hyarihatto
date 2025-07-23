@@ -159,8 +159,15 @@ const AccidentLevel = () => {
         return
       }      
       const changedFields: Partial<MasterDataProps> = checkChangedFields()
-      const response = type==="add" ? await postMasterData(api, form) : type==="update" ? await updateMasterDataById(api, idData, changedFields) : type==="delete" ? await deleteMasterDataById(api, idData) : []
-      console.log("response submit:", response)
+      if(type==="add"){
+        await postMasterData(api, form) 
+      }
+      else if(type==="update"){
+        await updateMasterDataById(api, idData, changedFields) 
+      } 
+      else if(type==="delete"){
+         await deleteMasterDataById(api, idData)
+      }
       fetchDataMaster()
       handleCloseModal(type)
     } catch (error) {
@@ -205,7 +212,7 @@ const AccidentLevel = () => {
         className="w-full lg:w-100"
       >
         <Card>
-          <h1 className='font-bold mb-5'>{type==="add" ? "Tambah" : type==="update" ? "Ubah" : type==="delete" ? "Hapus" : ""} Level</h1>
+          <h1 className='font-bold mb-5 dark:text-gray-100'>{type==="add" ? "Tambah" : type==="update" ? "Ubah" : type==="delete" ? "Hapus" : ""} Level</h1>
           <CardContent>
             { type !== "delete" && (
             <Form onSubmit={()=>handleSubmit(type)}>
@@ -248,7 +255,7 @@ const AccidentLevel = () => {
             )}
             {type==="delete" && (
               <div>
-                <h1>Yakin ingin menghapus <span className='font-semibold'>Level {form.option}?</span></h1>
+                <h1 className='dark:text-gray-300'>Yakin ingin menghapus <span className='font-semibold'>Level {form.option}?</span></h1>
 
                 <div className='flex justify-end gap-4 pt-4'>
                   <Button size='sm' onClick={()=>handleCloseModal(type)} variant='outline'>Batal</Button>
@@ -278,10 +285,6 @@ const AccidentLevel = () => {
             </div>
             <Table className='mt-10'>
               <TableHeader>
-                <TableRow>
-                  <TableCell className='col-span-5'>Tanggal</TableCell>
-                  <TableCell className='col-span-12'>Waktu</TableCell>
-                </TableRow>
                 <TableRow>
                   <TableCell>No</TableCell>
                   <TableCell>Rank</TableCell>

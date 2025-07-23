@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import imageSafety from "../../components/image/warehouse_assident_05.jpg";
 import useAuthService from "../../services/AuthService";
 import "../../css/home.css";
-import useShowAlert from "../../hooks/useShowAlert";
 import PageMeta from "../../components/common/PageMeta";
+import useVerify from "../../hooks/useVerify";
 
 interface Errors{
   username: string;
@@ -14,6 +14,7 @@ interface Errors{
 }
 
 export default function SignInLead() {
+  const { name } = useVerify()
   const [loading, setLoading] = useState<boolean>(false);
   const [form, setForm] = useState<Errors>({
     username: "",
@@ -62,6 +63,12 @@ export default function SignInLead() {
       setLoading(false);
     }
   };
+
+  useEffect(()=>{
+    if(name){
+      navigate("/home")
+    }
+  }, [name])
 
   return (
     <div className="login-page ">

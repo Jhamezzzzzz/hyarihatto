@@ -29,7 +29,6 @@ const Template = ({
   const step1NotComplete =
     !formData.submissions.incidentDate ||
     !formData.submissions.incidentTime ||
-    !formData.submissions.workProcess ||
     !formData.submissions.location;
 
   const step2NotComplete =
@@ -100,7 +99,6 @@ const Template = ({
       {[1, 2, 3, 4, 5, 6].map((s, index) => {
         const isActive = currentStep === s;
         const isPassed = !isError(s);
-        // const canNavigate = validateStep(currentStep);
 
         return (
           <React.Fragment key={s}>

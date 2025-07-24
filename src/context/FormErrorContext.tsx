@@ -13,6 +13,7 @@ type FormErrors = {
 
   submissions?: {
     userId?: string;
+    sectionId?: string;
     type?: string;
     shift?: string;
     incidentDate?: string;
@@ -74,6 +75,7 @@ export const FormErrorsProvider = ({ children }: { children: ReactNode }) => {
 
     submissions: {
       userId: undefined,
+      sectionId: undefined,
       type: undefined,
       shift: undefined,
       incidentDate: undefined,

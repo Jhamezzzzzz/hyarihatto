@@ -61,7 +61,7 @@ const StaticOptions = () => {
         "E - Tersetrum",
         "F - Terbakar",
         "a - Keracunan",
-        "b - Habis O2",
+        "a - Habis O2",
         "Terpeleset",
         "Tergores",
         "Terlilit",
@@ -72,6 +72,7 @@ const StaticOptions = () => {
     
     const errorMessageObject: ErrorMessageObject = {
         userId: "Noreg",
+        sectionId: "Section",
         shift: "Shift",
         incidentDate: "Tanggal",
         incidentTime: "Waktu",

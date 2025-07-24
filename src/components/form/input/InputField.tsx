@@ -16,6 +16,7 @@ interface InputProps {
   success?: boolean;
   error?: boolean;
   hint?: string;
+  endIcon?: React.ReactNode;
 }
 
 const Input: FC<InputProps> = ({
@@ -33,7 +34,9 @@ const Input: FC<InputProps> = ({
   success = false,
   error = false,
   hint,
+  endIcon
 }) => {
+
   let inputClasses = ` h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3  dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 ${className}`;
 
   if (error && disabled) {
@@ -61,8 +64,9 @@ const Input: FC<InputProps> = ({
         max={max}
         step={step}
         disabled={disabled}
-        className={inputClasses}
+        className={`${inputClasses} ${endIcon ? "pr-10" : ""}`}
       />
+      {endIcon && (<span className="absolute top-1/2 -translate-y-1/2 right-4 text-gray-300">{endIcon}</span>)}
 
       {hint && (
         <p

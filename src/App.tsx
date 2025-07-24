@@ -19,7 +19,6 @@ import ScoreRank from "./pages/Master/ScoreRank";
 import Homepage from "./pages/MainPages/MainHome"
 // import QuestUser from "./pages/QuestUser/QuestUserTest"
 // import QuestUserTest from "./pages/QuestUser/QuestUserTest"
-import QuestUserVoice from "./pages/QuestUser/QuestUserVoice"
 import ChoiceUser from "./pages/MainPages/MainUser"
 import PanduanHyat from "./pages/Panduan/PanduanHyat"
 import IdentityFormHyarihatto from "./pages/Forms/Hyarihatto/Identity";
@@ -29,6 +28,10 @@ import Step3FormHyarihatto from "./pages/Forms/Hyarihatto/Step3";
 import Step4FormHyarihatto from "./pages/Forms/Hyarihatto/Step4";
 import Step5FormHyarihatto from "./pages/Forms/Hyarihatto/Step5";
 import Step6FormHyarihatto from "./pages/Forms/Hyarihatto/Step6";
+import IdentityFormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Identity";
+import Step1FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step1Voice";
+import Step2FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step2Voice";
+import Step3FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step3Voice";
 
 export default function App() {
   return (
@@ -66,7 +69,10 @@ export default function App() {
           {/* Member */}
           <Route path="/member" element={<ChoiceUser />} />
           {/* <Route path="/member/hyarihatto" element={<QuestUserTest />} /> */}
-          <Route path="/member/voice-member" element={<QuestUserVoice />} />
+          <Route path="/member/voice-member" element={<IdentityFormVoiceMember />} />,
+          <Route path="/member/voice-member/1" element={<Step1FormVoiceMember />} />
+          <Route path="/member/voice-member/2" element={<Step2FormVoiceMember />} />
+          <Route path="/member/voice-member/3" element={<Step3FormVoiceMember />} />
 
           {/* Member Form Hyarihatto */}
           <Route path="/member/hyarihatto" element={<IdentityFormHyarihatto />} />,

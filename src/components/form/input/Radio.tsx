@@ -22,12 +22,14 @@ const Radio: React.FC<RadioProps> = ({
   return (
     <label
       htmlFor={id}
-      className={`relative flex cursor-pointer  select-none items-center gap-3 text-sm font-medium ${
+      className={`relative flex justify-between cursor-pointer  select-none items-center gap-3 text-sm font-medium border-1 rounded-full p-2 ${
         disabled
           ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
           : "text-gray-700 dark:text-gray-400"
-      } ${className}`}
+      } ${checked ? "border-brand-500 bg-brand-50" : "border-transparent"} ${className}`}
     >
+      {label}
+
       <input
         id={id}
         name={name}
@@ -55,7 +57,6 @@ const Radio: React.FC<RadioProps> = ({
           }`}
         ></span>
       </span>
-      {label}
     </label>
   );
 };

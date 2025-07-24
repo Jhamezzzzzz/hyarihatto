@@ -82,6 +82,7 @@ export default function App() {
           <Route path="/member/hyarihatto/4" element={<Step4FormHyarihatto />} />,
           <Route path="/member/hyarihatto/5" element={<Step5FormHyarihatto />} />,
           <Route path="/member/hyarihatto/6" element={<Step6FormHyarihatto />} />,
+          <Route path="/member/hyarihatto/submitted" element={<Finish />} />,
 
           <Route path="/panduan" element={<PanduanHyat />} />
           {/* Fallback Route */}

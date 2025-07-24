@@ -3,6 +3,7 @@ import ButtonNavigation from "./ButtonNavigation";
 import RadioGroup from "../../../components/form/input/RadioGroup";
 import StaticOptions from "../../../utils/StaticOptions";
 import { useFormData } from "../../../context/FormHyarihattoContext";
+import { useFormErrors } from "../../../context/FormErrorContext";
 
 type FormDataKey = {
   submissions: string
@@ -22,8 +23,10 @@ const Step3FormHyarihatto = () => {
   } = StaticOptions()
 
   const { formData, updateFormData } = useFormData()
+  const { errors, updateError } = useFormErrors()
 
   const handleChangeRadio = (option: string, group: keyof FormDataKey, name: string) => {
+    updateError(group, name, undefined)
     updateFormData(group, name, option)
   }
     
@@ -54,6 +57,8 @@ const Step3FormHyarihatto = () => {
                     group="hazardReport"
                     name="pattern"
                     value={formData.hazardReport.pattern}
+                    hint={errors.hazardReport?.pattern}
+                    error={errors?.hazardReport?.pattern !== undefined}
                   />
                 </div>
               </div>
@@ -74,6 +79,8 @@ const Step3FormHyarihatto = () => {
                     group="hazardReport"
                     name="source"
                     value={formData.hazardReport.source}
+                    hint={errors.hazardReport?.source}
+                    error={errors?.hazardReport?.source !== undefined}
                   />
                 </div>
               </div>
@@ -97,6 +104,8 @@ const Step3FormHyarihatto = () => {
                     group="hazardReport"
                     name="injured"
                     value={formData.hazardReport.injured}
+                    hint={errors.hazardReport?.injured}
+                    error={errors?.hazardReport?.injured !== undefined}
                   />
                 </div>
               </div>
@@ -117,6 +126,8 @@ const Step3FormHyarihatto = () => {
                     group="hazardReport"
                     name="cause"
                     value={formData.hazardReport.cause}
+                    hint={errors.hazardReport?.cause}
+                    error={errors?.hazardReport?.cause !== undefined}
                   />
                 </div>
               </div>
@@ -137,6 +148,8 @@ const Step3FormHyarihatto = () => {
                     group="hazardReport"
                     name="category"
                     value={formData.hazardReport.category}
+                    hint={errors.hazardReport?.category}
+                    error={errors?.hazardReport?.category !== undefined}
                   />
                 </div>
               </div>

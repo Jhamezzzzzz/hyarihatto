@@ -2,43 +2,29 @@ import Template from "./Template";
 import ButtonNavigation from "./ButtonNavigation";
 import { useRef, useState } from "react";
 import { FaCamera, FaImage, FaTimes } from "react-icons/fa";
-
-type Image = {
-  file: File | null;
-  base64: string;
-  url: string
-}
+import { useFormErrors } from "../../../context/FormErrorContext";
+import { useFormData } from "../../../context/FormHyarihattoContext";
 
 const Step4FormHyarihatto = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
+  const { errors, updateError } = useFormErrors()
+  const { formData, updateFormData } = useFormData()
   const [showCameraModal, setShowCameraModal] = useState<boolean>(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const galleryInputRef = useRef<HTMLInputElement | null>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
 
-  const [image, setImage] = useState<Image>({
-      file: null,
-      base64: localStorage.getItem('imageBase64') || "",
-      url: ""
-  })
-
-
   const handleRemoveImage = () => {
-        setImage({
-            file: null,
-            base64: "",
-            url: "" 
-        })
-        localStorage.setItem("imageBase64", "")
-        // setPreviewImage((prev) => prev.filter((_, i) => i !== index));
+        updateFormData(null, "image", "")
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
 
+        updateError(null, "image", undefined)
         const file = e.target.files[0];
-        const imageUrl = URL.createObjectURL(file);
+        // const imageUrl = URL.createObjectURL(file);
 
         
         // Convert to Base64 and store
@@ -53,13 +39,9 @@ const Step4FormHyarihatto = () => {
         const base64Image = await toBase64(file);
         
         // Show preview
-        // setPreviewImage((prev) => [...prev, { file, url: imageUrl }]);
-        setImage({ 
-            file,
-            base64: base64Image, 
-            url: imageUrl 
-        });
-        localStorage.setItem("imageBase64", base64Image);
+        updateFormData(null, "image", base64Image)
+        localStorage.setItem("imageFileName", file.name)
+
     };
 
     const handleCameraOpen = async () => {
@@ -84,7 +66,8 @@ const Step4FormHyarihatto = () => {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             ctx.drawImage(video, 0, 0);
-            const imageData = canvas.toDataURL('image/png');
+            // const imageData = canvas.toDataURL('image/png');
+            // setImage({ ...image, url: imageData})
             // setPreviewImage((prev) => [...prev, { url: imageData }]);
             handleCloseCamera();
         }
@@ -108,17 +91,21 @@ const Step4FormHyarihatto = () => {
 
           <div className="p-6 space-y-4">
             {/* Preview Image */}
-            {!image.base64 ? (
-              <div className="w-full max-w-xl h-72 bg-black rounded-lg flex items-center justify-center mx-auto mb-5">
-                <p className="text-white text-center">
-                  Silakan upload gambar kejadian
-                </p>
-              </div>
+            {!formData?.image ? (
+              <>
+                <div className={`w-full max-w-xl h-72 bg-transparent rounded-lg flex flex-col items-center justify-center mx-auto mb-5 border ${errors.image !== undefined ? "border-error-500" : "border-gray-300"}`}>
+                  <FaImage size={52} className="text-secondary1"/>
+                  <p className="text-secondary1 text-center">
+                    Silakan upload gambar kejadian
+                  </p>
+                </div>
+                { errors.image !== undefined && <p className="ml-6 text-error-500">Gambar tidak boleh kosong!</p>}
+              </>
             ) : (
               <div className="flex flex-wrap justify-center gap-4 mb-6">
-                <div className="relative w-100 h-100 rounded-lg border border-gray-300 overflow-hidden">
+                <div className={`relative w-100 h-100 rounded-lg border border-gray-300 overflow-hidden`}>
                   <img
-                    src={image?.base64}
+                    src={formData?.image}
                     alt={`img-preview`}
                     className="w-full h-full object-cover"
                   />

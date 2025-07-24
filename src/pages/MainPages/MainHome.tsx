@@ -4,6 +4,7 @@ import "../../css/home.css";
 import { motion } from 'framer-motion';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import PageMeta from "../../components/common/PageMeta";
 
 export default function MainHome() {
   useEffect(() => {
@@ -12,6 +13,7 @@ export default function MainHome() {
 
   return (
     <section className='home'>
+      <PageMeta title="Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <div className='hyarihato'>
         <motion.p
           className="title-little-1"

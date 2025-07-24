@@ -14,6 +14,7 @@ import Label from '../../components/form/Label'
 import NoDataOrLoading from '../../components/ui/table/NoDataOrLoading'
 import Pagination from '../../components/ui/table/Pagination'
 import { useDebounce } from '../../hooks/useDebonce'
+import PageMeta from '../../components/common/PageMeta'
 
 interface MasterDataProps{
   id?: number;
@@ -29,6 +30,13 @@ interface MasterDataProps{
     name?: string;
   }
 }
+
+interface ErrorForm{
+  rank: string;
+  option: string;
+  score: string;
+}
+
 interface Loading{
   fetch: boolean;
   submit: boolean;
@@ -61,6 +69,11 @@ const AccidentLevel = () => {
     option: "",
     score: 0
   })
+  const [errors, setErrors] = useState<Partial<ErrorForm>>({
+    rank: "",
+    option: "",
+    score: ""
+  })
   const [showModal, setShowModal] = useState<ShowModal>({
     type: "add",
     add: false,
@@ -75,6 +88,7 @@ const AccidentLevel = () => {
   })
   const [searchQ, setSearchQ] = useState<string>("")
   const debouncedQ = useDebounce(searchQ, 1000);
+  
 
   const fetchDataMaster = async() => {
     try {
@@ -105,6 +119,7 @@ const AccidentLevel = () => {
   }, [pagination.currentPage, pagination.limitPerPage, debouncedQ])
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setErrors({ ...errors, [e.target.name]: ""})
     setForm({ ...form, [e.target.name]: e.target.value})
   }
 
@@ -122,12 +137,38 @@ const AccidentLevel = () => {
     return changedFields
   }
 
+  const validateForms = () => {
+    const newErrors: Partial<ErrorForm> = {}
+    if(!form.rank){
+      newErrors.rank = "Rank tidak boleh kosong!"
+    }
+    if(!form.option){
+      newErrors.option = "Nama level tidak boleh kosong!"
+    }
+    if(!form.score){
+      newErrors.score = "Nilai tidak boleh kosong!"
+    }
+    setErrors({ ...errors, ...newErrors})
+    return Object.keys(newErrors).length === 0
+  }
+
   const handleSubmit = async(type: "add" | "update" | "delete") => {
     try {
       setLoading({ ...loading, submit: true})
+      const formValid = validateForms()
+      if(!formValid){
+        return
+      }      
       const changedFields: Partial<MasterDataProps> = checkChangedFields()
-      const response = type==="add" ? await postMasterData(api, form) : type==="update" ? await updateMasterDataById(api, idData, changedFields) : type==="delete" ? await deleteMasterDataById(api, idData) : []
-      console.log("response submit:", response)
+      if(type==="add"){
+        await postMasterData(api, form) 
+      }
+      else if(type==="update"){
+        await updateMasterDataById(api, idData, changedFields) 
+      } 
+      else if(type==="delete"){
+         await deleteMasterDataById(api, idData)
+      }
       fetchDataMaster()
       handleCloseModal(type)
     } catch (error) {
@@ -172,7 +213,7 @@ const AccidentLevel = () => {
         className="w-full lg:w-100"
       >
         <Card>
-          <h1 className='font-bold mb-5'>{type==="add" ? "Tambah" : type==="update" ? "Ubah" : type==="delete" ? "Hapus" : ""} Level</h1>
+          <h1 className='font-bold mb-5 dark:text-gray-100'>{type==="add" ? "Tambah" : type==="update" ? "Ubah" : type==="delete" ? "Hapus" : ""} Level</h1>
           <CardContent>
             { type !== "delete" && (
             <Form onSubmit={()=>handleSubmit(type)}>
@@ -182,6 +223,8 @@ const AccidentLevel = () => {
                   name='rank'
                   onChange={handleChangeInput}
                   value={form.rank}
+                  error={errors.rank !== ""}
+                  hint={errors.rank}
                 />
               </div>
               <div className='mb-3'>
@@ -190,6 +233,8 @@ const AccidentLevel = () => {
                   name='option'
                   onChange={handleChangeInput}
                   value={form.option}
+                  error={errors.option !== ""}
+                  hint={errors.option}
                 />
               </div>
               <div className='mb-3'>
@@ -199,6 +244,8 @@ const AccidentLevel = () => {
                   name='score'
                   onChange={handleChangeInput}
                   value={form.score}
+                  error={errors.score !== ""}
+                  hint={errors.score}
                 />
               </div>
               <div className='flex justify-end gap-4'>
@@ -209,7 +256,7 @@ const AccidentLevel = () => {
             )}
             {type==="delete" && (
               <div>
-                <h1>Yakin ingin menghapus <span className='font-semibold'>Level {form.option}?</span></h1>
+                <h1 className='dark:text-gray-300'>Yakin ingin menghapus <span className='font-semibold'>Level {form.option}?</span></h1>
 
                 <div className='flex justify-end gap-4 pt-4'>
                   <Button size='sm' onClick={()=>handleCloseModal(type)} variant='outline'>Batal</Button>
@@ -225,6 +272,7 @@ const AccidentLevel = () => {
   
   return (
     <div>
+      <PageMeta title="Master Level Kecelakaan | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <PageBreadcrumb subPage='Master' pageTitle='Level Kecelakaan'/>
       { renderModal(showModal.type) }
       <div>
@@ -239,10 +287,6 @@ const AccidentLevel = () => {
             </div>
             <Table className='mt-10'>
               <TableHeader>
-                <TableRow>
-                  <TableCell className='col-span-5'>Tanggal</TableCell>
-                  <TableCell className='col-span-12'>Waktu</TableCell>
-                </TableRow>
                 <TableRow>
                   <TableCell>No</TableCell>
                   <TableCell>Rank</TableCell>

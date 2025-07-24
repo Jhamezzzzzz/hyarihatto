@@ -15,7 +15,7 @@ interface ErrorResponse {
 }
 
 const usePublicDataService = () => {
-    const { alertError } =useShowAlert()
+    const { alertError, alertSuccess } = useShowAlert()
 
     const handleError = (typedError: unknown) => {
         const error = typedError as ErrorResponse
@@ -80,12 +80,24 @@ const usePublicDataService = () => {
         }
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const postFormSubmissions = async(body: any) => {
+        try {
+            const response = await axiosInstance.post('submissions', body)
+            alertSuccess(response?.data?.message)
+            return response
+        } catch (error) {
+            handleError(error)
+        }
+    }
+
     return {
         getPublicUsers,
         getUserByNoreg,
         getStorages,
         getOptionMaster,
-        calculateFinalScoreRank
+        calculateFinalScoreRank,
+        postFormSubmissions
     }
 }
 

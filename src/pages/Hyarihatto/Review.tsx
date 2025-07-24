@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PageBreadcrumb from '../../components/common/PageBreadCrumb'
 import useHyarihattoDataService from '../../services/HyarihattoDataService';
+import PageMeta from '../../components/common/PageMeta';
 
 interface Loading{
   fetch: boolean;
@@ -33,6 +34,7 @@ const HyarihattoReview = () => {
 
   return (
     <div>
+      <PageMeta title="Hyarihatto Review | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <PageBreadcrumb subPage='Hyarihatto' pageTitle='Review'/>
 
     </div>

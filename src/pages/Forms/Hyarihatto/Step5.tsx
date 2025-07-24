@@ -3,13 +3,16 @@ import ButtonNavigation from './ButtonNavigation'
 import RadioGroup from '../../../components/form/input/RadioGroup'
 import StaticOptions from '../../../utils/StaticOptions'
 import { useFormData } from '../../../context/FormHyarihattoContext'
+import { useFormErrors } from '../../../context/FormErrorContext'
 
 const Step5FormHyarihatto = () => {
     const { ButtonPrevious, ButtonNext } = ButtonNavigation()
     const { optionsHyarihattoAccidentType } = StaticOptions()
     const { formData, updateFormData } = useFormData()
+    const { errors, updateError } = useFormErrors()
 
     const handleChangeRadio = (option: string) => {
+        updateError("hazardReport", "accidentType", undefined)
         updateFormData("hazardReport", "accidentType", option)
     }
 
@@ -29,6 +32,8 @@ const Step5FormHyarihatto = () => {
                         group='hazardReport'
                         name='accidentType'
                         value={formData.hazardReport.accidentType}
+                        hint={errors?.hazardReport?.accidentType}
+                        error={errors?.hazardReport?.accidentType !== undefined}
                     />
                     <div className='flex justify-end gap-4'>
                         { ButtonPrevious(4) }

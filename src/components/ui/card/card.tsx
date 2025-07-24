@@ -7,13 +7,19 @@ interface CardProps {
 }
 
 export const Card = ({ children, className = "" }: CardProps) => (
-  <div className={`rounded-xl shadow-md bg-white p-4 dark:bg-gray-800 ${className}`}>
+  <div className={`rounded-xl shadow-md bg-white dark:bg-gray-800 ${className}`}>
     {children}
   </div>
 );
 
+export const CardHeader = ({ children, className = ""}: CardProps) => (
+  <div className={`${className} border-b-1 dark:border-gray-700 p-4`}>
+    {children}
+  </div>
+)
+
 export const CardContent = ({ children, className = "" }: CardProps) => (
-  <div className={`mt-2 ${className}`}>
+  <div className={`mt-2 ${className} p-4`}>
     {children}
   </div>
 );

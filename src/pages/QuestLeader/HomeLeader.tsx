@@ -9,6 +9,7 @@ import Select from '../../components/form/Select'
 import GraphLocationVoice from "../../components/common/GraphLocationVoice";
 import GraphLocationHyat from "../../components/common/GraphLocation";
 import "react-datepicker/dist/react-datepicker.css";
+import PageMeta from "../../components/common/PageMeta";
 
 export default function HomeLeader() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -17,8 +18,7 @@ export default function HomeLeader() {
 
   return (
     <>
-     
-      
+      <PageMeta title="Dashboard Leader | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
         <div className="col-span-12 space-y-6 xl:col-span-5">
           <p className="text-title-md font-bold mb-2">Hyarihatto</p>
         </div>

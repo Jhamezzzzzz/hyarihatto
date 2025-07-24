@@ -3,21 +3,28 @@ import WaveBackground from "../../../components/image/Wave-Background-Hyat.png";
 import TitleFormHyarihatto from "./Title";
 import { useNavigate } from "react-router";
 import { useFormData } from "../../../context/FormHyarihattoContext";
+import { useFormErrors } from "../../../context/FormErrorContext";
+import StaticOptions from "../../../utils/StaticOptions";
+import PageMeta from "../../../components/common/PageMeta";
 
 const Template = ({
   children,
   showBack,
+  backToHome,
   showStep,
   step,
 }: {
   children: ReactNode;
   showBack?: boolean;
+  backToHome?: boolean;
   showStep?: boolean;
   step?: number;
 }) => {
   const [currentStep, setCurrentStep] = useState(step || 0);
   const navigate = useNavigate();
+  const { errorMessageObject } = StaticOptions()
   const { formData } = useFormData();
+  const { updateError, clearAllErrors } = useFormErrors()
 
   const step1NotComplete =
     !formData.submissions.incidentDate ||
@@ -28,8 +35,8 @@ const Template = ({
   const step2NotComplete =
     !formData.hazardAssessment.currentActivity ||
     !formData.hazardAssessment.potentialHazard ||
-    !formData.hazardAssessment.expectedCondition ||
-    !formData.hazardAssessment.improvementSuggestion;
+    !formData.hazardAssessment.hazardReason ||
+    !formData.hazardAssessment.expectedCondition
 
   const step3NotComplete =
     !formData.hazardReport.pattern ||
@@ -44,31 +51,55 @@ const Template = ({
 
   const step6NotComplete =
     !formData.hazardEvaluation.accidentLevelId ||
-    !formData.hazardEvaluation.hazardControlId ||
+    !formData.hazardEvaluation.hazardControlLevelId ||
     !formData.hazardEvaluation.workingFrequencyId;
 
-  const validateStep = (step: number) => {
+  const isError = (step: number) => {
     switch (step) {
       case 1:
-        return !step1NotComplete;
+        return step1NotComplete;
       case 2:
-        return !step2NotComplete;
+        return step2NotComplete;
       case 3:
-        return !step3NotComplete;
+        return step3NotComplete;
       case 4:
-        return !step4NotComplete;
+        return step4NotComplete;
       case 5:
-        return !step5NotComplete;
+        return step5NotComplete;
       case 6:
-        return !step6NotComplete;
+        return step6NotComplete;
     }
   };
+
+  const setErrorForm = (step: number) => {
+      const requiredSections: (keyof typeof formData)[] = ["submissions", "hazardAssessment", "hazardReport", "hazardEvaluation"];
+      const sectionForm = formData[requiredSections[step-1]]
+
+      Object.entries(sectionForm).forEach(([key, value]) => {
+          const isEmpty = value === "" || value === null || value === undefined;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          updateError(requiredSections[step-1] as any, key, isEmpty ? `${errorMessageObject[key]} tidak boleh kosong!` : undefined);
+      });
+    };
+
+
+
+  const handleClickStep = (s: number) => {
+    if(!isError(currentStep) || s < currentStep){
+      setCurrentStep(s);
+      navigate(`/member/hyarihatto/${s}`);
+      clearAllErrors()
+    }else{
+      setErrorForm(currentStep)
+    }
+  }
+
 
   const buttonStep = (
     <div className="flex justify-center items-center gap-2 mb-4">
       {[1, 2, 3, 4, 5, 6].map((s, index) => {
         const isActive = currentStep === s;
-        const isPassed = validateStep(s);
+        const isPassed = !isError(s);
         // const canNavigate = validateStep(currentStep);
 
         return (
@@ -80,15 +111,9 @@ const Template = ({
                                 ? "bg-green-600 text-white"
                                 : isPassed
                                 ? "border-green-600 text-green-600 hover:bg-blue-100"
-                                : "border-gray-300 text-gray-400 cursor-not-allowed"
+                                : "border-gray-300 text-gray-400"
                             }`}
-              onClick={() => {
-                // if (s <= currentStep) {
-                console.log("CLICKED S: ", s)
-                setCurrentStep(s);
-                navigate(`/member/hyarihatto/${s}`);
-                // }
-              }}
+              onClick={()=>handleClickStep(s)}
             //   disabled={!canNavigate}
             >
               {index + 1}
@@ -103,12 +128,13 @@ const Template = ({
 
   return (
     <div>
+      <PageMeta title="Form Hyarihatto | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <div
         className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center"
         style={{ backgroundImage: `url(${WaveBackground})` }}
       >
         <div className="w-full max-w-2xl">
-          <TitleFormHyarihatto showBack={showBack || false} />
+          <TitleFormHyarihatto showBack={showBack || false} backToHome={backToHome}/>
           {showStep && <div className="mb-4">{buttonStep}</div>}
           {children}
         </div>

@@ -8,6 +8,7 @@ import { Table, TableBody, TableCell, TableHeader, TableRow } from '../../compon
 import NoDataOrLoading from '../../components/ui/table/NoDataOrLoading'
 import Pagination from '../../components/ui/table/Pagination'
 import { useNavigate } from 'react-router-dom';
+import PageMeta from '../../components/common/PageMeta'
 
 interface Product {
   id: number;
@@ -73,6 +74,7 @@ const VoiceMemberHistory = () => {
 
   return (
     <div>
+      <PageMeta title="Voice Member History | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <PageBreadcrumb subPage='Voice Member' pageTitle='History'/>
 
       {/* Filters */}

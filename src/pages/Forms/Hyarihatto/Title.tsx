@@ -1,15 +1,19 @@
-import React from 'react'
 import { useNavigate } from 'react-router';
 
 type TitleFormHyarihatto = {
     showBack: boolean;
+    backToHome?: boolean;
 }
 
-const TitleFormHyarihatto = ({ showBack }: TitleFormHyarihatto) => {
+const TitleFormHyarihatto = ({ showBack, backToHome }: TitleFormHyarihatto) => {
     const navigate = useNavigate()
     
     const handleBackMainPage = () => {
-        navigate("/member"); // atau "/dashboard", "/user", dst
+        if(backToHome){
+            navigate("/")
+        }else{
+            navigate("/member"); // atau "/dashboard", "/user", dst
+        }
     };
 
     return (

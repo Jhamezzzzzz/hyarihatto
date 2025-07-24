@@ -21,7 +21,8 @@ interface SelectProps {
   isDisable?: boolean;
   showSearch?: boolean;
   placeholderInput?: string;
-  onSearchChange?: (queryValue: string) => void
+  onSearchChange?: (queryValue: string) => void;
+  hint?: string;
 }
 
 const Select: React.FC<SelectProps> = ({
@@ -37,7 +38,8 @@ const Select: React.FC<SelectProps> = ({
   isDisable,
   showSearch,
   placeholderInput,
-  onSearchChange
+  onSearchChange,
+  hint
 }) => {
   const [selectedLabel, setSelectedLabel] = useState<string>("");
   const [isOpen, setIsOpen] = useState(false);
@@ -101,6 +103,18 @@ const Select: React.FC<SelectProps> = ({
           <FaChevronDown />
         </span>
       </button>
+
+      {hint && (
+        <p
+          className={`mt-1.5 text-xs ${
+            error
+              ? "text-error-500"
+              : "text-gray-500"
+          }`}
+        >
+          {hint}
+        </p>
+      )}
 
       {/* Dropdown */}
       {isOpen && (

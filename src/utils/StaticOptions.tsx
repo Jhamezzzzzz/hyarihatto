@@ -1,3 +1,6 @@
+interface ErrorMessageObject{
+    [key: string]: string
+}
 
 const StaticOptions = () => {
     const optionsShift = [
@@ -16,8 +19,8 @@ const StaticOptions = () => {
     ]
 
     const optionsHyarihattoHazardType = [
-        "Reguler", 
-        "Lowfreak", 
+        "Regular", 
+        "Low Frek", 
         "Irregular", 
         "Abnormal"
     ]
@@ -25,21 +28,22 @@ const StaticOptions = () => {
     const optionsHyarihattoHazardSource = [
         "Pengalaman", 
         "Praduga", 
-        "Direct", 
-        "Ergo"
+        "Direct acc.", 
+        "Ergo (PAK)"
     ]
 
     const optionsHyarihattoHazardInjured = [
         "Kepala", 
         "Tangan", 
         "Kaki", 
-        "Badan"
+        "Badan",
+        "Lainnya"
     ]
 
     const optionsHyarihattoHazardCause = [
-        "Lalai/Lengah",
+        "Lalai / Lengah",
         "Tergesa-gesa",
-        "Tdk Terampil",
+        "Tdk terampil",
         "Lelah",
     ]
 
@@ -50,22 +54,44 @@ const StaticOptions = () => {
     ]
 
     const optionsHyarihattoAccidentType = [
-        "Terjepit",
-        "Tertimpa",
-        "Tertabrak",
-        "Terjatuh",
-        "Tersetrum",
-        "Terbakar",
-        "Keracunan",
-        "Habis O2",
+        "A - Terjepit",
+        "B - Tertimpa",
+        "C - Tertabrak",
+        "D - Terjatuh",
+        "E - Tersetrum",
+        "F - Terbakar",
+        "a - Keracunan",
+        "b - Habis O2",
         "Terpeleset",
         "Tergores",
         "Terlilit",
         "Terbentur",
-        "Masuk Mata",
+        "Masuk mata",
         "Lainnya"
     ]
     
+    const errorMessageObject: ErrorMessageObject = {
+        userId: "Noreg",
+        shift: "Shift",
+        incidentDate: "Tanggal",
+        incidentTime: "Waktu",
+        workProcess: "Line/Process",
+        location: "Lokasi",
+        currentActivity: "Temuan kejadian",
+        potentialHazard: "Potensi bahaya",
+        hazardReason: "Alasan berbahaya",
+        expectedCondition: "Harapan",
+        pattern: "Jenis",
+        source: "Sumber & akibat",
+        injured: "Terluka",
+        cause: "Sebab",
+        category: "Kategori",
+        accidentType: "Tipe kecelakaan",
+        accidentLevelId: "Level kecelakaan",
+        hazardControlLevelId: "Frekuensi kerja",
+        workingFrequencyId: "Level pencegah bahaya",
+
+    }
 
     return{
         optionsShift,
@@ -74,7 +100,8 @@ const StaticOptions = () => {
         optionsHyarihattoHazardInjured,
         optionsHyarihattoHazardCause,
         optionsHyarihattoHazardCategory,
-        optionsHyarihattoAccidentType
+        optionsHyarihattoAccidentType,
+        errorMessageObject
     }
 }
 

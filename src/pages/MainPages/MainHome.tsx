@@ -99,7 +99,7 @@ export default function MainHome() {
               <label className="justify-start" style={{ fontWeight: "bold" }}>
                 Panduan
               </label>
-              <label>Petunjuk pengisian catatan bagi Membe</label>
+              <label>Petunjuk pengisian catatan bagi Member</label>
             </div>
           </div>
         </button>

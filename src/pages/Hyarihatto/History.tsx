@@ -6,7 +6,6 @@ import Select from '../../components/form/Select'
 import { Card, CardContent } from '../../components/ui/card/card'
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '../../components/ui/table'
 import NoDataOrLoading from '../../components/ui/table/NoDataOrLoading'
-import Pagination from '../../components/ui/table/Pagination'
 import { useNavigate } from 'react-router-dom'
 import PageMeta from '../../components/common/PageMeta'
 
@@ -67,7 +66,7 @@ const tableData: Product[] = [
 
 
 const HyarihattoHistory = () => {
-  const [loading, setLoading] = useState({
+  const [loading] = useState({
     fetch: false,
     submit: false
   })

@@ -46,7 +46,7 @@ const QuestUserTest: React.FC = () => {
         line: '',
         location: '',
     });
-
+console.log("currentStep", currentStep)
 
     const handleNext = () => {
         if (formData.name && formData.noreg && formData.shift) {

@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from "react";
+
 
 export type DetailCatatan = {
   id: number;

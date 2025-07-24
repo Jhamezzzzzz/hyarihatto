@@ -84,7 +84,7 @@ const Step4FormHyarihatto = () => {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             ctx.drawImage(video, 0, 0);
-            const imageData = canvas.toDataURL('image/png');
+            // const imageData = canvas.toDataURL('image/png');
             // setPreviewImage((prev) => [...prev, { url: imageData }]);
             handleCloseCamera();
         }

@@ -32,6 +32,7 @@ import IdentityFormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Id
 import Step1FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step1Voice";
 import Step2FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step2Voice";
 import Step3FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step3Voice";
+import Finish from "./pages/Forms/Hyarihatto/Finish";
 
 export default function App() {
   return (

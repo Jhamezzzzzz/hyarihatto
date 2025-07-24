@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import PageBreadcrumb from '../../components/common/PageBreadCrumb'
 import useHyarihattoDataService from '../../services/HyarihattoDataService';
 import PageMeta from '../../components/common/PageMeta';
@@ -14,7 +14,6 @@ const HyarihattoReview = () => {
     submit: false
   })
   const { getSubmissionForReviews } = useHyarihattoDataService()
-  const [dataSubmissions, setDataSubmissions] = useState([])
 
   const fetchSubmissions = async() => {
     try {

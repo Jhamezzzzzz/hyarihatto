@@ -91,11 +91,11 @@ export default function SignInLead() {
             </button>
         <div className="w-full max-w-4xl bg-white bg-opacity-60 backdrop-blur-md shadow-xl rounded-3xl flex flex-col md:flex-row overflow-hidden z-10">
           {/* KIRI */}
-          <div className="w-full md:w-1/2 p-8 flex flex-col justify-center items-center text-center bg-white/70">
+          <div className="w-full md:w-1/2 p-8 flex flex-col justif-start items-center text-start bg-white/70">
             <div>
               <h1 className="text-3xl font-bold mb-2">Hello!</h1>
-              <h6 className="text-lg text-gray-600">Welcome To</h6>
-              <h5 className="text-xl font-semibold text-blue-600 mb-4">
+              <h6 className="text-lg text-gray-600 px-3">Welcome To</h6>
+              <h5 className="text-2xl font-semibold text-green-600 mb-4 text-center">
                 Dashboard Leader
               </h5>
               <img src={imageSafety} alt="Safety" className="w-4/5 mx-auto" />
@@ -104,9 +104,9 @@ export default function SignInLead() {
 
           {/* KANAN */}
           <div className="w-full md:w-1/2 p-8 flex items-center bg-white/80">
-            <form onSubmit={Auth} className="w-full space-y-6">
+            <form onSubmit={Auth} className="w-full space-y-7">
               <div>
-                <h1 className="text-2xl font-bold mb-1">Login</h1>
+                <p className="text-4xl font-bold mb-1">Login</p>
                 <p className="text-sm text-gray-500">Sign In to your account</p>
               </div>
               <div>
@@ -141,7 +141,7 @@ export default function SignInLead() {
               </div>
               <button
                 type="submit"
-                className={`w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition 
+                className={`w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition 
                 ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
                 disabled={loading}
               >

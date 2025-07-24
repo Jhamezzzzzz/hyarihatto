@@ -1,4 +1,4 @@
-import React,{ useState } from "react";
+
 import EcommerceMetrics from "../../components/ecommerce/EcommerceMetrics";
 import VoiceMetrics from "../../components/ecommerce/VoiceMetrics";
 import RecentOrders from "../../components/ecommerce/RecentOrders";
@@ -12,9 +12,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import PageMeta from "../../components/common/PageMeta";
 
 export default function HomeLeader() {
-  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const lokasiOptions = ["Area A", "Area B", "Area C"];
-  const plantOptions = ["Plant 1", "Plant 2", "Plant 3"];
 
   return (
     <>

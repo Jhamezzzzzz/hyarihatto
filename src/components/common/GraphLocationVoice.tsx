@@ -57,9 +57,12 @@ export default function DashboardCharts() {
                 fill="#8884d8"
                 label
               >
-                {pieData.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                ))}
+                {pieData.map((entry, index) =>{
+                  console.log(entry, index);
+                  return (
+                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  );
+                })}
               </Pie>
             </PieChart>
           </ResponsiveContainer>

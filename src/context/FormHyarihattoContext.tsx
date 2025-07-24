@@ -5,6 +5,8 @@ type FormData = {
   name: string;
   noreg: string;
   shift: string;
+  lineName: string;
+  sectionName: string;
   formattedDate: string;
   time: string;
   line: string;
@@ -13,11 +15,12 @@ type FormData = {
 
   submissions: {
     userId: number | null;
+    lineId: number | null;
+    sectionId: number | null;
     type: string;
     shift: string;
     incidentDate: string;
     incidentTime: string;
-    workProcess: string;
     location: string;
   };
 
@@ -61,6 +64,8 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
   const [formData, setFormData] = useState<FormData>({
     name: localStorage.getItem("name") || "",
     noreg: localStorage.getItem("noreg") || "",
+    lineName: localStorage.getItem("lineName") || "",
+    sectionName: localStorage.getItem("sectionName") || "",
     shift: localStorage.getItem("submissions.shift") || "",
     formattedDate: localStorage.getItem("formattedDate") || "",
     time: "",
@@ -70,11 +75,12 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
 
     submissions: {
       userId: Number(localStorage.getItem("submissions.userId")) || null,
+      lineId: Number(localStorage.getItem("submissions.lineId")) || null,
+      sectionId: Number(localStorage.getItem("submissions.sectionId")) || null,
       type: "hyarihatto",
       shift: localStorage.getItem("submissions.shift") || "",
       incidentDate: localStorage.getItem("submissions.incidentDate") || "",
       incidentTime: localStorage.getItem("submissions.incidentTime") || "",
-      workProcess: localStorage.getItem("submissions.workProcess") || "",
       location: localStorage.getItem("submissions.location") || "",
     },
 
@@ -136,15 +142,18 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const clearAllLocal = () => {
-    localStorage.setItem('name', "")
     localStorage.setItem('noreg', "")
+    localStorage.setItem('name', "")
+    localStorage.setItem('line', "")
+    localStorage.setItem('section', "")
     localStorage.setItem('formattedDate', "")
     localStorage.setItem('image', "")
     localStorage.setItem('submissions.userId', "")
+    localStorage.setItem('submissions.lineId', "")
+    localStorage.setItem('submissions.sectionId', "")
     localStorage.setItem('submissions.shift', "")
     localStorage.setItem('submissions.incidentDate', "")
     localStorage.setItem('submissions.incidentTime', "")
-    localStorage.setItem('submissions.workProcess', "")
     localStorage.setItem('submissions.location', "")
     localStorage.setItem('hazardAssessment.currentActivity', "")
     localStorage.setItem('hazardAssessment.potentialHazard', "")

@@ -13,12 +13,12 @@ const ButtonNavigation = () => {
 
     const identityNotComplete = 
         !formData.submissions.userId || 
+        !formData.submissions.sectionId || 
         !formData.submissions.shift
 
     const step1NotComplete =
         !formData.submissions.incidentDate ||
         !formData.submissions.incidentTime ||
-        !formData.submissions.workProcess ||
         !formData.submissions.location;
 
     const step2NotComplete =
@@ -74,8 +74,13 @@ const ButtonNavigation = () => {
         Object.entries(sectionForm).forEach(([key, value]) => {
             const isEmpty = value === "" || value === null || value === undefined;
             const message = errorMessageObject[key] 
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            updateError(requiredSections[step] as any, key, isEmpty ? `${message} tidak boleh kosong!` : undefined);
+            if(key.includes('Id')){
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                updateError(requiredSections[step] as any, key, isEmpty ? `${message} tidak terdaftar!` : undefined);
+            }else{
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                updateError(requiredSections[step] as any, key, isEmpty ? `${message} tidak boleh kosong!` : undefined);
+            }
         });
       };
 

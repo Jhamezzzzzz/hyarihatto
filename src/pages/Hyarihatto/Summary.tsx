@@ -9,6 +9,7 @@ import PageMeta from '../../components/common/PageMeta'
 import Badge from '../../components/ui/badge/Badge'
 import Input from '../../components/form/input/InputField'
 import StaticOptions from '../../utils/StaticOptions'
+import { FaSearch } from 'react-icons/fa'
 
 const HyarihattoSummary = () => {
   const [filter, setFilter] = useState({
@@ -63,6 +64,7 @@ const HyarihattoSummary = () => {
               className='bg-white dark:placeholder:text-gray-100!'
               onChange={handleChangeInput}
               value={filter.search}
+              endIcon={<FaSearch/>}
             />
           </div>
           <div>

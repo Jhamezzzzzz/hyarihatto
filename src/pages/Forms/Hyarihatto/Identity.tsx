@@ -13,9 +13,10 @@ const IdentityFormHyarihatto: React.FC = () => {
   const { ButtonNext } = ButtonNavigation();
   const { formData, updateFormData } = useFormData();
   const { errors, updateError } = useFormErrors();
-  // const [noreg, setNoreg] = useState(localStorage.getItem("noreg") || "")
 
   const [name, setName] = useState(localStorage.getItem("name") || "");
+  const [line, setLine] = useState(localStorage.getItem("line") || "");
+  const [section, setSection] = useState(localStorage.getItem("section") || "");
   const debouncedNoreg = useDebounce(formData.noreg, 1000);
   const { getUserByNoreg } = usePublicDataService();
   const { optionsShift } = StaticOptions();
@@ -24,27 +25,59 @@ const IdentityFormHyarihatto: React.FC = () => {
     const { value } = e.target;
 
     updateError("submissions", "userId", undefined);
+    updateError("submissions", "sectionId", undefined);
     updateFormData(null, "noreg", value);
   };
 
-  const fetchUserByNoreg = async () => {
+  const handleChangeSelect = (name: string, value: string) => {
+    updateError("submissions", name, undefined)
+    updateFormData("submissions", name, value)
+  }
+
+  const fetchUserLineSection = async () => {
     try {
       setName("Loading");
+      setLine("Loading");
+      setSection("Loading");
       const response = await getUserByNoreg(formData.noreg);
-      setName(response?.data?.name);
-      localStorage.setItem("name", response?.data?.name);
-      updateFormData("submissions", "userId", response?.data?.id);
+      console.log("response noreg: ", response)
+
+      const data = response?.data
+      setName(data?.name);
+      setSection(data?.Organization?.Section?.sectionName)
+      localStorage.setItem("name", data?.name);
+      localStorage.setItem("section", data?.Organization?.Section?.sectionName);
+      updateFormData("submissions", "userId", data?.id);
+      updateFormData("submissions", "sectionId", data?.Organization?.sectionId);
+
+      // Line
+      if(!data?.Organization?.Line){
+        setLine("-")
+        localStorage.setItem("line", "-");
+        updateFormData("submissions", "lineId", null);
+      }else{
+        setLine(data?.Organization?.Line?.lineName)
+        localStorage.setItem("line", data?.Organization?.Line?.lineName);
+        updateFormData("submissions", "lineId", data?.Organization?.lineId);
+      }
     } catch (error) {
       console.error(error);
       setName("");
+      setLine("");
+      setSection("");
       updateFormData("submissions", "userId", "");
+      updateFormData("submissions", "lineId", "");
+      updateFormData("submissions", "sectionId", "");
       localStorage.setItem("name", "");
+      localStorage.setItem("line", "");
+      localStorage.setItem("section", "");
     }
   };
+  
 
   useEffect(() => {
     if (formData.noreg !== "" && formData.noreg.length === 8) {
-      fetchUserByNoreg();
+      fetchUserLineSection();
     } else if (formData.noreg !== "") {
       updateError(null, "noreg", "Noreg tidak valid!");
     }
@@ -103,7 +136,6 @@ const IdentityFormHyarihatto: React.FC = () => {
                 id="noreg"
                 type="text"
                 name="noreg"
-                // className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                 placeholder="Nomor Registrasi"
                 value={formData.noreg}
                 onChange={handleChangeNoreg}
@@ -130,6 +162,34 @@ const IdentityFormHyarihatto: React.FC = () => {
               />
             </div>
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Line
+              </label>
+              <Input
+                disabled
+                type="text"
+                name="line"
+                className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="Nama line"
+                value={line}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Section<span className="text-red-500">*</span>
+              </label>
+              <Input
+                disabled
+                type="text"
+                name="section"
+                className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                placeholder="Nama section"
+                value={section}
+                hint={errors.submissions?.sectionId}
+                error={errors?.submissions?.sectionId !== undefined}
+              />
+            </div>
+            <div>
               <label
                 htmlFor="shift"
                 className="block text-sm font-medium text-gray-700 mb-1"
@@ -139,9 +199,7 @@ const IdentityFormHyarihatto: React.FC = () => {
               <Select
                 name="shift"
                 options={optionsShift}
-                onChange={(name, value) =>
-                  updateFormData("submissions", name, value)
-                }
+                onChange={handleChangeSelect}
                 defaultValue={formData.submissions.shift}
                 hint={errors?.submissions?.shift}
                 error={errors?.submissions?.shift !== undefined}

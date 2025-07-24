@@ -41,8 +41,8 @@ const Step1FormHyarihatto = () => {
   return (
     <div>
       <Template showStep step={1}>
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
-          <div className="bg-green-600 text-white text-center py-3">
+        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl">
+          <div className="bg-green-600 text-white text-center py-3 rounded-t-xl">
             <h5 className="text-lg font-semibold">Waktu & Lokasi</h5>
           </div>
 
@@ -75,22 +75,6 @@ const Step1FormHyarihatto = () => {
                 error={errors?.submissions?.incidentTime !== undefined}
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Line/Process:<span className="text-red-500">*</span>
-              </label>
-              <Input
-                type="text"
-                name="workProcess"
-                className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Contoh: Assembly 1"
-                value={formData.submissions.workProcess}
-                onChange={handleChangeInput}
-                hint={errors.submissions?.workProcess}
-                error={errors?.submissions?.workProcess !== undefined}
-              />
-            </div>
-
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Lokasi:<span className="text-red-500">*</span>

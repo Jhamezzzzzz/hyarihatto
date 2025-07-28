@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { FaUser } from "react-icons/fa"; // ✅ pakai ikon Font Awesome
+import { FaBook,FaEnvelopeOpenText} from "react-icons/fa"; // ✅ pakai ikon Font Awesome
 import "../../css/home.css"; // ✅ pastikan file CSS ini ada
 import { motion } from "framer-motion";
 import AOS from "aos";
@@ -86,7 +86,7 @@ export default function MainUser() {
           onClick={() => (window.location.href = "/member/hyarihatto")}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <FaUser size={24} />
+            <FaBook size={24} />
             <div
               style={{
                 display: "flex",
@@ -110,7 +110,7 @@ export default function MainUser() {
           onClick={() => (window.location.href = "/member/voice-member")}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <FaUser size={24} />
+            <FaEnvelopeOpenText size={24} />
             <div
               style={{
                 display: "flex",

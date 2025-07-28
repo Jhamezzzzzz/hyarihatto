@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { FaUser } from "react-icons/fa"; // FaTrash tidak dipakai, bisa dihapus jika tidak perlu
+import { FaUser ,FaUsers,FaUserTie,FaRegClipboard} from "react-icons/fa"; // FaTrash tidak dipakai, bisa dihapus jika tidak perlu
 import "../../css/home.css";
 import { motion } from 'framer-motion';
 import AOS from 'aos';
@@ -60,7 +60,7 @@ export default function MainHome() {
           onClick={() => (window.location.href = "/member")}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <FaUser size={24} />
+            <FaUsers size={24} />
             <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column", lineHeight: "1.4" }}>
               <label className="justify-start" style={{ fontWeight: "bold" }}>
                 Warehouse Member
@@ -77,7 +77,7 @@ export default function MainHome() {
           onClick={() => (window.location.href = "/signin")}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <FaUser size={24} />
+            <FaUserTie size={24} />
             <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column", lineHeight: "1.4" }}>
               <label className="justify-start" style={{ fontWeight: "bold" }}>
                 Group Leader
@@ -94,7 +94,7 @@ export default function MainHome() {
           onClick={() => (window.location.href = "/panduan")}
         >
           <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-            <FaUser size={24} />
+            <FaRegClipboard size={24} />
             <div style={{ display: "flex", alignItems: "flex-start", flexDirection: "column", lineHeight: "1.4" }}>
               <label className="justify-start" style={{ fontWeight: "bold" }}>
                 Panduan

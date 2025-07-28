@@ -1,5 +1,5 @@
 import VoiceMetrics from "../../components/ecommerce/VoiceMetrics";
-import RecentOrders from "../../components/ecommerce/RecentOrders";
+import RecentOrders from "../../components/dashboard/RecentOrders";
 import RecentVoice from "../../components/ecommerce/RecentVoice";
 import DatePicker from "../../components/form/date-picker";
 import Label from "../../components/form/Label";
@@ -18,19 +18,19 @@ export default function HomeLeader() {
         description="Online sistem sebagai digitalisasi buku catatan Hyarihatto"
       />
 
-      <div className="col-span-12 space-y-6 xl:col-span-5">
+      <div className="col-span-12 space-y-6 xl:col-span-5 flex items-end justify-between mb-6">
         <p className="text-title-md font-bold mb-2">Hyarihatto</p>
-      </div>
-      {/* ///filter/// */}
-      <div className="flex gap-4">
-        <div>
-          <Label>Periode</Label>
-          <DatePicker
-            id="period"
-            mode="month"
-            placeholder="Semua periode"
-            className="bg-white"
-          />
+        {/* ///filter/// */}
+        <div className="flex gap-4">
+          <div className="flex items-center gap-4">
+            <Label>Filter </Label>
+            <DatePicker
+              id="period"
+              mode="month"
+              placeholder="Semua periode"
+              className="bg-white"
+            />
+          </div>
         </div>
       </div>
 

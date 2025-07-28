@@ -18,7 +18,6 @@ const useHyarihattoDataService = () => {
 
     const handleError = (typedError: unknown) => {
         const error = typedError as ErrorResponse
-        console.log("ERROR: ", error)
         if(error.response){
             if(Array.isArray(error?.response?.data?.errors)){
                 error?.response?.data?.errors?.forEach(element => {
@@ -58,11 +57,24 @@ const useHyarihattoDataService = () => {
         }
     }
 
+    const getDashboardStatusReport = async(period: string) => {
+        try {
+            const response = await axiosJWT.get(`dashboard/report-stats?period=${period}&type=hyarihatto`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            handleError(error)
+        }
+    }
     
 
     return{
         getSubmissionForReviews,
-        postSubmission
+        postSubmission,
+        getDashboardStatusReport
     }
   
 }

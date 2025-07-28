@@ -1,34 +1,85 @@
+import { useEffect, useState } from "react";
+import useHyarihattoDataService from "../../services/HyarihattoDataService";
+import Spinner from "../ui/spinner";
+
+interface DataStatusReport{
+  total: number
+  0?: {
+    total: number,
+    count: number
+  }
+  1?: {
+    total: number,
+    count: number
+  }
+  2?: {
+    total: number,
+    count: number
+  }
+  3?: {
+    total: number,
+    count: number
+  }
+}
+
 export default function Metrics() {
-  const dummyMetrics = [
+  const [loading, setLoading] = useState({
+    statusReport: true
+  })
+  const [filter, setFilter] = useState({
+    period: new Date().toLocaleDateString('en-CA').slice(0, 7)
+  })
+  const [dataStatusReport, setDataStatusReport] = useState<DataStatusReport>([])
+  const { getDashboardStatusReport } = useHyarihattoDataService()
+
+  const fetchDashboardStatusReport = async() => {
+    try {
+      const response = await getDashboardStatusReport(filter.period)
+      const data = response?.data?.data
+      console.log("RESPONSE Data: ", data)
+      setDataStatusReport(data)
+    } catch (error) {
+      console.error(error)
+    } finally{
+      setLoading({ ...loading, statusReport: false})
+    }
+  }
+
+  useEffect(()=>{
+    fetchDashboardStatusReport()
+  }, [])
+
+  const dataMetrics = [
     {
       title: "Total",
       caption: "Jumlah catatan yang dibuat oleh Member",
-      number: 4,
+      number: dataStatusReport?.total || 0,
     },
     {
       title: "Diajukan",
       caption: "Jumlah yang perlu direview oleh Leader",
-      number: 1,
+      number: dataStatusReport?.[0]?.count || 0,
     },
     {
       title: "Dijadwalkan",
       caption: "Jumlah yang sudah dijadwalkan",
-      number: 1,
+      number: dataStatusReport?.[1]?.count || 0,
     },
     {
       title: "Terselesaikan",
       caption: "Jumlah yang sudah terselesaikan",
-      number: 2,
+      number: dataStatusReport?.[2]?.count || 0,
     },
     {
       title: "Ditolak",
       caption: "Jumlah yang ditolak oleh Leader",
-      number: 1,
+      number: dataStatusReport?.[3]?.count || 0,
     },
   ];
+
   return (
     <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-5 md:gap-4">
-      { dummyMetrics.map((item, index)=>{
+      { dataMetrics.map((item, index)=>{
         return(
           <div key={index} className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
             <div className="grid grid-cols-12 items-center">
@@ -47,7 +98,7 @@ export default function Metrics() {
               </div>
               <div className="col-span-1">
                 <h4 className="font-bold text-gray-800 text-4xl dark:text-white/90">
-                  {item.number}
+                  { !loading.statusReport ? item.number : <Spinner/>}
                 </h4>
               </div>
             </div>
@@ -56,78 +107,7 @@ export default function Metrics() {
         )
       })}
 
-      {/* <!-- Rank A--> */}
-      {/* <div className="rounded-2xl border border-red-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="grid grid-cols-12 items-center">
-          <div className="col-span-11">
-            <span className="text-2xl text-red-500 dark:text-gray-400">
-              RANK A
-            </span>
-            <div>
-              <span
-                style={{ fontSize: "11px" }}
-                className="mt-2 text-gray-600 dark:text-white/90"
-              >
-                Jumlah Hyarihatto dengan score 19 - 25
-              </span>
-            </div>
-          </div>
-          <div className="col-span-1">
-            <h4 className="font-bold text-gray-800 text-4xl dark:text-white/90">
-              0
-            </h4>
-          </div>
-        </div>
-      </div> */}
-
-      {/* <!-- Rank B--> */}
-
-      {/* <div className="rounded-2xl border border-orange-400 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="grid grid-cols-12 items-center">
-          <div className="col-span-11">
-            <span className="text-2xl text-orange-500 dark:text-gray-400">
-              RANK B
-            </span>
-            <div>
-              <span
-                style={{ fontSize: "11px" }}
-                className="mt-2 text-gray-600 dark:text-white/90"
-              >
-                Jumlah Hyarihatto dengan score 10 - 18
-              </span>
-            </div>
-          </div>
-          <div className="col-span-1">
-            <h4 className="font-bold text-gray-800 text-4xl dark:text-white/90">
-              1
-            </h4>
-          </div>
-        </div>
-      </div> */}
-
-      {/* <!-- Rank C--> */}
-      {/* <div className="rounded-2xl border border-yellow-400 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-        <div className="grid grid-cols-12 items-center">
-          <div className="col-span-11">
-            <span className="text-2xl text-yellow-600 dark:text-gray-400">
-              Rank C
-            </span>
-            <div>
-              <span
-                style={{ fontSize: "11px" }}
-                className="mt-2 text-gray-600 dark:text-white/90"
-              >
-                Jumlah Hyarihatto dengan score 6 - 9
-              </span>
-            </div>
-          </div>
-          <div className="col-span-1">
-            <h4 className="font-bold text-gray-800 text-4xl dark:text-white/90">
-              3
-            </h4>
-          </div>
-        </div>
-      </div> */}
+      
       {/* <!-- Metric Item End --> */}
     </div>
   );

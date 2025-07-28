@@ -1,6 +1,8 @@
 import { PieChart, Pie, Cell, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from "recharts";
 import { PieSectorData } from "recharts/types/polar/Pie";
 import { GeometrySector } from "recharts/types/util/types";
+import useHyarihattoDataService from "../../services/HyarihattoDataService";
+import { useEffect, useState } from "react";
 
 const colors = (value: number, total: number) => {
   if(value/total <= 0.25){
@@ -33,6 +35,31 @@ const barData = [
 // const COLORS = ["#8884d8", "#82ca9d", "#ffc658", "#ff7f50", "#a4de6c"];
 
 export default function GraphLocationHyat() {
+  const [loading, setLoading] = useState({
+    fetch: true
+  })
+  const { getDashboardBarChart } = useHyarihattoDataService()
+  const [dataBarChart, setDataBarChart] = useState([])
+  const [filter, setFilter] = useState({
+    period: new Date().toLocaleDateString('en-CA').slice(0, 7)
+  })
+
+  const fetchDashboardBarChart = async() => {
+    try {
+      const response = await getDashboardBarChart(filter.period)
+      console.log('response bar: ', response)
+      setDataBarChart(response?.data?.data)
+    } catch (error) {
+      console.error(error)
+    } finally{
+      setLoading({ ...loading, fetch: false})
+    }
+  }
+
+  useEffect(()=>{
+    fetchDashboardBarChart()
+  }, [])
+
   return (
     <div className="grid grid-cols-12 gap-4 ">
        <div className="col-span-8">

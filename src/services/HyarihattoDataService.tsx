@@ -69,12 +69,26 @@ const useHyarihattoDataService = () => {
             handleError(error)
         }
     }
+
+    const getDashboardBarChart = async(period: string) => {
+        try {
+            const response = await axiosJWT.get(`dashboard/potential-hazard-line?type=hyarihatto&period=${period}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            handleError(error)
+        }
+    }
     
 
     return{
         getSubmissionForReviews,
         postSubmission,
-        getDashboardStatusReport
+        getDashboardStatusReport,
+        getDashboardBarChart
     }
   
 }

@@ -44,19 +44,27 @@ const Step4FormHyarihatto = () => {
 
     };
 
-    const handleCameraOpen = async () => {
-        try {
-        setShowCameraModal(true);
-        const mediaStream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: "environment" }
-        });
-        setStream(mediaStream);
-        } catch (err) {
-        console.error("Gagal membuka kamera:", err);
-        alert("Tidak bisa mengakses kamera. Pastikan akses kamera diizinkan dan gunakan HTTPS atau localhost.");
-        }
-    };
+ const handleCameraOpen = async () => {
+  try {
+    const mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" }, // atau "user" untuk kamera depan
+      audio: false
+    });
 
+    setStream(mediaStream);
+    setShowCameraModal(true); // Tampilkan modal setelah dapat stream
+
+    // Tunggu hingga videoRef sudah ter-render
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.srcObject = mediaStream;
+      }
+    }, 100);
+  } catch (err) {
+    console.error("Gagal membuka kamera:", err);
+    alert("Tidak bisa mengakses kamera. Pastikan akses kamera diizinkan dan gunakan HTTPS atau localhost.");
+  }
+};
     const handleCaptureImage = () => {
         const video = videoRef.current;
         const canvas = canvasRef.current;
@@ -66,9 +74,9 @@ const Step4FormHyarihatto = () => {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             ctx.drawImage(video, 0, 0);
-            // const imageData = canvas.toDataURL('image/png');
-            // setImage({ ...image, url: imageData})
-            // setPreviewImage((prev) => [...prev, { url: imageData }]);
+            const imageData = canvas.toDataURL('image/png');
+            updateFormData(null, "image", imageData);
+
             handleCloseCamera();
         }
     };
@@ -148,7 +156,7 @@ const Step4FormHyarihatto = () => {
 
             {/* Modal Kamera */}
             {showCameraModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+              <div className="fixed inset-0 bg-opacity-40 backdrop-blur-sm z-25 flex items-center justify-center">
                 <div className="bg-white w-full max-w-3xl rounded-lg shadow-lg overflow-hidden">
                   <div className="flex justify-between items-center px-4 py-3 border-b">
                     <h5 className="text-lg font-medium">Ambil Foto</h5>
@@ -165,7 +173,7 @@ const Step4FormHyarihatto = () => {
                       autoPlay
                       playsInline
                       muted
-                      className="w-full max-h-96 bg-black rounded-md"
+                      className="w-full max-h-90 rounded-md"
                     />
                     <canvas ref={canvasRef} className="hidden" />
                   </div>

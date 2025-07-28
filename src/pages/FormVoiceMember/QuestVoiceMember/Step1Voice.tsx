@@ -66,19 +66,7 @@ const Step1FormHyarihatto = () => {
                 onChange={handleChangeTime}
               />
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Line/Process:<span className="text-red-500">*</span>
-              </label>
-              <Input
-                type="text"
-                name="workProcess"
-                className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                placeholder="Contoh: Assembly 1"
-                value={formData.submissions.workProcess}
-                onChange={handleChangeInput}
-              />
-            </div>
+          
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">

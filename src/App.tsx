@@ -5,7 +5,8 @@ import NotFound from "./pages/OtherPage/NotFound";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/QuestLeader/HomeLeader";
-import DetailPage from './pages/Dashboard/DetailPage';
+import DetailHyarihatto from './pages/Dashboard/DetailHyarihatto';
+import DetailVoice from './pages/Dashboard/DetailVoice';
 import HyarihattoSummary from "./pages/Hyarihatto/Summary";
 import HyarihattoReview from "./pages/Hyarihatto/Review";
 import HyarihattoHistory from "./pages/Hyarihatto/History";
@@ -43,7 +44,8 @@ export default function App() {
           {/* Dashboard Layout */}
           <Route element={<AppLayout />}>
             <Route  path="/home" element={<Home />} />
-            <Route path="/:id" element={<DetailPage />} />
+            <Route path="/hyarihatto/:id" element={<DetailHyarihatto />} />
+            <Route path="/voice-member/:id" element={<DetailVoice />} />
 
             {/* Hyarihatto */}
             <Route path="/hyarihatto/summary" element={<HyarihattoSummary />} />

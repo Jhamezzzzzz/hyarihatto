@@ -19,10 +19,9 @@ const TemplateVoiceMember = ({
   const navigate = useNavigate();
   const { formData } = useFormData();
 
-  const step1NotComplete =
+const step1NotComplete =
     !formData.submissions.incidentDate ||
     !formData.submissions.incidentTime ||
-    !formData.submissions.workProcess ||
     !formData.submissions.location;
 
   const step2NotComplete =

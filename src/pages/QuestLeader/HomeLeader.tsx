@@ -1,5 +1,5 @@
 import VoiceMetrics from "../../components/ecommerce/VoiceMetrics";
-import RecentOrders from "../../components/dashboard/RecentOrders";
+import RecentOrders from "../../components/dashboard/ListSubmissions";
 import RecentVoice from "../../components/ecommerce/RecentVoice";
 import DatePicker from "../../components/form/date-picker";
 import Label from "../../components/form/Label";

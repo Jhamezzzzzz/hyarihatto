@@ -52,14 +52,12 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
     }
   };
 
-
-
-  const transformDataForStackedBarChart = (rawData, targetMonth = '', targetYear) => {
+  const transformDataForStackedBarChart = (rawData: ResponseChart[], targetMonth = '', targetYear: number) => {
     const transformedData = {};
     // Collect all unique line names from the raw data
     const allLineNames = Array.from(new Set(rawData.map(item => item.line.lineName)));
 
-    let monthsToDisplay = [];
+    const monthsToDisplay = [];
 
     // Step 1: Conditionally generate months based on targetMonth
     if (targetMonth && targetMonth !== '') {
@@ -201,7 +199,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
               </p>
               ):(
                 <BarChart data={dataBarChart}>
-                  <Legend/>
+                  <Legend verticalAlign="top"/>
                   <XAxis
                     padding={{ right: 0 }}
                     label={{
@@ -253,7 +251,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                 </p>
               ):(
                 <PieChart>
-                  <Legend/>
+                  <Legend verticalAlign="top" />
                   <Pie
                     data={dataPieChart}
                     dataKey="count"

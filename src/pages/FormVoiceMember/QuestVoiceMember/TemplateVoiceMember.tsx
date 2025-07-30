@@ -49,7 +49,7 @@ const step1NotComplete =
 
   const buttonStep = (
     <div className="flex justify-center items-center gap-2 mb-4">
-      {[1, 2, 3, 4].map((s, index) => {
+      {[1, 2, 3].map((s, index) => {
         const isActive = currentStep === s;
         const isPassed = validateStep(s);
         // const canNavigate = validateStep(currentStep);

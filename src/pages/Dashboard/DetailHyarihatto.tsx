@@ -1,6 +1,7 @@
-import  { useState } from 'react';
+import  { useRef,useState } from 'react';
 import { useParams} from 'react-router-dom';
 import RadioGroup from "../../components/form/input/RadioGroup";
+import DatePicker from '../../components/form/date-picker'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 
@@ -81,12 +82,73 @@ export default function DetailHyarihatto() {
    const optionsProgress = ["Terima", "Tolak"];
   const optionsUser = ["Oleh diri sendiri", "Bersama dalam SGA", "Pihak lain"];
   const [selectedProgress, setSelectedProgress] = useState(""); // utk pilihan "Terima" atau lainnya
-const [selectedPIC, setSelectedPIC] = useState(""); // utk pilihan user PIC
+  const [selectedPIC, setSelectedPIC] = useState(""); // utk pilihan user PIC
+  const [pihakLain, setPihakLain] = useState(""); // utk input pihak lain jika dipilih
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
+   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
+  const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [isCameraActive, setIsCameraActive] = useState(false);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
+   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
+
+  const startCamera = async () => {
+    setIsCameraActive(true);
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: 'environment' },
+      });
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
+      }
+    } catch (error) {
+      console.error('Gagal mengakses kamera:', error);
+    }
+  };
+
+  const stopCamera = () => {
+    setIsCameraActive(false);
+    const stream = videoRef.current?.srcObject as MediaStream;
+    if (stream) {
+      stream.getTracks().forEach((track) => track.stop());
+    }
+  };
+
+  const capturePhoto = () => {
+    if (!videoRef.current || !canvasRef.current) return;
+
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    const context = canvas.getContext('2d');
+
+    if (!context) return;
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    const imageDataUrl = canvas.toDataURL('image/png');
+    setPreviewImage(imageDataUrl);
+    stopCamera(); // stop kamera setelah ambil gambar
+  };
+   const openCameraModal = () => {
+    setIsCameraModalOpen(true);
+    startCamera();
+  };
+
+  const closeCameraModal = () => {
+    setIsCameraModalOpen(false);
+    stopCamera();
+  };
 
   return (
     <div className="grid grid-cols-12 gap-2 p-1">
- 
       {/* <!-- Total Rank --> */}
     <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-2 shadow-md
      dark:border-gray-800 dark:bg-white/[0.03] space-y-4 h-[220px]">
@@ -251,7 +313,7 @@ const [selectedPIC, setSelectedPIC] = useState(""); // utk pilihan user PIC
             <div className='flex items-center gap-12'>
               <div>
                 <p>Score:</p>
-                <p className='text-5xl font-semibold'>12</p>
+                <p className='text-5xl font-semibold'>13</p>
               </div>
               <div>
                 <p>Rank:</p>
@@ -266,95 +328,118 @@ const [selectedPIC, setSelectedPIC] = useState(""); // utk pilihan user PIC
         <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
           <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress</h3>
             <div className="text-sm text-gray-700 dark:text-gray-300"></div>
-                  <span>PIC Penanggulangan</span>
+                  <p className='mb-2 font-bold'>Tindak Lanjut</p>
                    <div className=" rounded-2xl border border-gray-300 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
                     <RadioGroup
                       options={optionsProgress}
-                      onChange={(value, group, name) => {
-                        setSelectedPIC(value);
-                      }}
-                      group="pic"
-                      name="picRadio"
-                      value={selectedPIC}
-                      error={false}
-                    />
-                   </div>
-                   {selectedPIC === "Tolak" && (
-                   <div>
-                    <label className="block mb-1">Alasan Menolak</label>
-                    <textarea
-                      rows={4}
-                      placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
-                      className="w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary"
-                    />
-                  </div>
-                   )}
-              </div>
-     {/* <!-- Progress Tindak Lanjut--> */}
-      {selectedPIC === "Terima" && (
-        <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
-          <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Tindak Lanjut</h3>
-              <div className="text-sm text-gray-700 dark:text-gray-300">
-                {/* Saran dan Usulan */}
-              <div className="grid grid-cols-12 gap-4">
-                {/* Kolom 1: PIC */}
-                <div className="col-span-8">
-                  <span>PIC Penanggulangan</span>
-                   <div className=" rounded-2xl border border-gray-300 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
-                    <RadioGroup
-                      options={optionsUser}
                       onChange={(value, group, name) => {
                         setSelectedProgress(value);
                       }}
                       group="pic"
                       name="picRadio"
+                      value={selectedProgress}
+                      error={false}
+                    />
+                   </div>
+                   {selectedProgress === "Tolak" && (
+                   <div>
+                    <p className="mb-1 font-semibold">Alasan Menolak</p>
+                    <textarea
+                      rows={4}
+                      placeholder="Silakan isi alasan menolak"
+                      className="w-full rounded-md border border-gray-500 shadow-sm focus:ring-primary focus:border-primary py-2 px-2"
+                    />
+                    <div className="text-center col-span-12">
+                    <button className="mt-4 bg-green-200 text-black px-2 py-1 rounded-md w-full font-extrabold text-lg">
+                      SUBMIT
+                    </button>
+                  </div>
+                  </div>
+                 
+                   )}
+              </div>
+     {/* <!-- Progress Tindak Lanjut--> */}
+      {selectedProgress === "Terima" && (
+        <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
+          <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Tindak Lanjut</h3>
+              <div className="text-sm text-gray-700 dark:text-gray-300">
+                {/* Saran dan Usulan */}
+              <div className="grid grid-cols-12 gap-2">
+                {/* Kolom 1: PIC */}
+                <div className="col-span-6 md:col-span-8">
+                  <p className='mb-1 font-bold'>PIC Penanggulangan</p>
+                   <div className=" rounded-2xl border border-gray-400 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
+                    <RadioGroup
+                      options={optionsUser}
+                      onChange={(value, group, name) => {
+                        setSelectedPIC(value);
+                        if (value !== "Pihak lain") {
+                        setPihakLain(''); // reset kalau bukan pihak lain
+                      }
+                      }}
+                      group="pic"
+                      name="picRadio" 
                       value={selectedPIC}
                       error={false}
-                      hint="Pilih siapa yang bertanggung jawab"
                     />
+                     {selectedPIC === "Pihak lain" && (
+                      <div className="mt-3">
+                        <input
+                          type="text"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                          placeholder="Nama Pihak Lain"
+                          value={pihakLain}
+                          onChange={(e) => setPihakLain(e.target.value)}
+                        />
+                      </div>
+                    )}
                    </div>
                 </div>
 
                 {/* Kolom 2: Tanggal */}
-                <div className="col-span-4 space-y-4">
+                <div className="col-span-6 md:col-span-4 space-y-4">
                   <div>
                     <label className="block font-medium mb-1">Tanggal Plan C/M</label>
-                    <input
-                      type="date"
-                      className="w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary"
-                    />
+                     <DatePicker
+                        id='period'
+                        mode='month'
+                        placeholder='Semua periode'
+                        className='bg-white'
+                      />
                   </div>
                   <div>
                     <label className="block font-medium mb-1">Tanggal Plan Selesai</label>
-                    <input
-                      type="date"
-                      className="w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary"
-                    />
+                    <DatePicker
+                        id='period'
+                        mode='month'
+                        placeholder='Semua periode'
+                        className='bg-white'
+                      />
                   </div>
                 </div>
               </div>
               <div className="md:col-span-2">
-              <label className="block font-medium mb-1">Saran & Usulan</label>
+              <label className="block font-bold mb-1 mt-3">Saran & Usulan</label>
               <div>
-                <label className="block mb-1">Section</label>
+                <label className="block mb-1">Section Head</label>
                 <textarea
                 rows={4}
                 placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
-                className="w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary"
+                className="w-full rounded-md   border border-gray-400 shadow-sm focus:ring-primary focus:border-primary py-2 px-2"
               />
               </div>
               <div>
-                <label className="block mb-1">Section</label>
+                <label className="block mb-1">Group Leader</label>
                 <textarea
                   rows={4}
                   placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
-                  className="w-full rounded-md border-gray-300 shadow-sm focus:ring-primary focus:border-primary"
+                  className="w-full rounded-md border border-gray-400 shadow-sm focus:ring-primary focus:border-primary py-2 px-2"
                 />
               </div>
               </div>
            
               <div className="md:col-span-2">
-              <label className="block font-medium mb-2">Gambar</label>
+              <label className="block font-bold mb-1 mt-2">Gambar</label>
               <div className="flex items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-48 cursor-pointer hover:border-primary">
                 <div className="text-center">
                   <svg
@@ -367,18 +452,101 @@ const [selectedPIC, setSelectedPIC] = useState(""); // utk pilihan user PIC
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                   <p className="text-gray-500 mt-2">Tambahkan gambar bukti setelah perbaikan</p>
-                  <div className="flex justify-center gap-2 mt-3">
-                    <button className="text-primary text-sm underline">Galeri</button>
+                    <div className="flex justify-center gap-2 mt-3">
+                    <button
+                      className="text-primary text-sm underline"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        fileInputRef.current?.click();
+                      }}
+                    >
+                      Galeri
+                    </button>
                     <span className="text-gray-400">|</span>
-                    <button className="text-primary text-sm underline">Kamera</button>
+                   <button
+                    className="text-primary text-sm underline"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openCameraModal(); // buka modal kamera
+                    }}
+                  >
+                    Kamera
+                  </button>
                   </div>
                 </div>
               </div>
+              
+               {previewImage && (
+                <div className="mt-3 text-center">
+                  <img src={previewImage} alt="Preview" className="max-h-40 mx-auto rounded" />
+                </div>
+              )}
+
+            {/* Input Galeri */}
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+            />
+
+            {/* Canvas untuk capture dari kamera */}
+            <canvas ref={canvasRef} style={{ display: 'none' }} />
+
+            {/* Tombol Submit */}
+            <div className="text-center col-span-12">
+              <button className="mt-4 bg-green-200 text-black px-2 py-1 rounded-md w-full font-extrabold text-lg">
+                SUBMIT
+              </button>
             </div>
-           </div>
-          </div>
-        )}
-        </div> 
+             {isCameraModalOpen && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                {/* BACKDROP BLUR & KLIK UNTUK CLOSE */}
+                <div
+                  className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+                  onClick={closeCameraModal}
+                ></div>
+
+                {/* MODAL KAMERA */}
+                <div className="relative bg-white p-4 rounded-lg shadow-lg w-full max-w-md z-10">
+                  {/* Tombol Close Bulat */}
+                  <button
+                    onClick={closeCameraModal}
+                    className="absolute top-1 right-1 w-10 h-10 flex items-center justify-center
+                              text-red-500 hover:text-white text-2xl font-bold 
+                              border-2 border-red-500 hover:bg-red-500 
+                              rounded-full transition duration-300"
+                  >
+                    &times;
+                  </button>
+
+                  {/* Live Video */}
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    muted
+                    playsInline
+                    className="w-full h-auto rounded mb-1 mt-4"
+                  />
+
+                  {/* Tombol Ambil Foto */}
+                  <div className="text-center">
+                    <button
+                      onClick={capturePhoto}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                    >
+                      Ambil Foto
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+        </div>
+      </div>
+      </div>
+    )}
+  </div> 
 
   );
 }

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { CalenderIcon } from "../../icons";
 
 type YearPickerProps = {
   value: number;
@@ -50,6 +51,10 @@ const YearPicker: React.FC<YearPickerProps> = ({
       >
         {selectedYear ? <span className="text-black dark:text-gray-300">{selectedYear}</span> : <span className="text-gray-400">{placeholder}</span>}
       </button>
+
+      <span className="absolute text-gray-500 -translate-y-1/2 pointer-events-none right-3 top-1/2 dark:text-gray-400">
+        <CalenderIcon className="size-6" />
+      </span>
 
       {isOpen && (
         <div className="absolute z-10 mt-1 w-full max-h-60 overflow-y-auto bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg">

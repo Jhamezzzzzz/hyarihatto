@@ -38,10 +38,8 @@ type MonthYearData = {
 };
 
 export default function GraphLocationHyat({ filter }: { filter: Filter }) {
-  const [loading, setLoading] = useState({
-    bar: false,
-    pie: false,
-  });
+  const [loadingBar, setLoadingBar] = useState<boolean>(false)
+  const [loadingPie, setLoadingPie] = useState<boolean>(false)
   const { getDashboardBarChart, getDashboardPieChart } = useHyarihattoDataService();
   const [dataBarChart, setDataBarChart] = useState<LineData[]>([]);
   const [dataPieChart, setDataPieChart] = useState<ResponseChart[]>([]);
@@ -120,14 +118,14 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
   // Fetch Data Bar Chart
   const fetchDashboardBarChart = async () => {
     try {
-      setLoading({ ...loading, bar: true})
+      setLoadingBar(true)
       const response = await getDashboardBarChart(filter.year, filter.month);
       // console.log("response bar chart: ", response?.data?.data)
       const rawData = response?.data?.data;
-
+      
       const transformed = transformDataForStackedBarChart(rawData, filter.month, filter.year);
       setDataBarChart(transformed);
-
+      
       // Extract unique line names to dynamically create Bar components
       const uniqueLineNames: string[] = Array.from(new Set(
         rawData.map((item: Partial<ResponseChart>) => item?.line?.lineName)
@@ -139,17 +137,17 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
       setDataBarChart([])
       setLineNames([])
     } finally {
-      setLoading({ ...loading, bar: false });
+      setLoadingBar(false)
     }
   };
 
   // Fetch Data Pie Chart
   const fetchDashboardPieChart = async () => {
     try {
-      setLoading({ ...loading, pie: true})
+      setLoadingPie(true)
       const response = await getDashboardPieChart(filter.year, filter.month);
       const rawData = response?.data?.data;
-
+      
       // Get max value for assign the colors
       let maxCount = 0;
       if (rawData && rawData.length > 0) {
@@ -157,7 +155,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
           ...rawData.map((item: ResponseChart) => item.count)
         );
       }
-
+      
       // Mapping data
       const data = rawData?.map((item: ResponseChart) => {
         return {
@@ -171,7 +169,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
       console.error(error);
       setDataPieChart([])
     } finally {
-      setLoading({ ...loading, pie: false });
+      setLoadingPie(false)
     }
   };
 
@@ -205,10 +203,10 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
               Potensi Bahaya Ditemukan Tiap Line
             </h2>
             <ResponsiveContainer width="100%" height="100%" >
-              { (loading.bar || dataBarChart.length === 0) ? (
-              <p className="flex items-center justify-center">
-                <NoDataOrLoading data={dataBarChart} loading={loading.bar}/>
-              </p>
+              { (loadingBar || dataBarChart.length === 0) ? (
+                <p className="flex items-center justify-center">
+                  <NoDataOrLoading data={dataBarChart} loading={loadingBar}/>
+                </p>
               ):(
                 <BarChart data={dataBarChart}>
                   <Legend verticalAlign="top"/>
@@ -257,9 +255,9 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
               Persentase Potensi Bahaya
             </h2>
             <ResponsiveContainer width="100%" height="100%">
-              { (loading.pie || dataPieChart.length === 0) ? (
+              { (loadingPie || dataPieChart.length === 0) ? (
                 <p className="flex items-center justify-center">
-                  <NoDataOrLoading data={dataPieChart} loading={loading.pie}/>
+                  <NoDataOrLoading data={dataPieChart} loading={loadingPie}/>
                 </p>
               ):(
                 <PieChart>

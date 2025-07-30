@@ -3,7 +3,7 @@ import ButtonNavigation from "./ButtonVoice";
 import TextArea from "../../../components/form/input/TextArea";
 import { useFormData } from "../../../context/FormHyarihattoContext";
 
-const Step2FormHyarihatto = () => {
+const Step2FormVoiceMember = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
   const { formData, updateFormData } = useFormData();
 
@@ -21,7 +21,7 @@ const Step2FormHyarihatto = () => {
           </div>
 
           <div className="p-6 space-y-4">
-            <div>
+             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 Apa yang sedang dilakukan?{" "}
                 <span className="text-red-500">*</span>
@@ -31,12 +31,14 @@ const Step2FormHyarihatto = () => {
                 className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
                 value={formData.hazardAssessment.currentActivity}
                 onChange={handleChangeInput}
+                // hint={errors.hazardAssessment?.currentActivity}
+                // error={errors?.hazardAssessment?.currentActivity !== undefined}
               />
             </div>
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Potensi bahaya apa yang akan timbul{" "}
+                Apa kendala yang dihadapi?*{" "}
                 <span className="text-red-500">*</span>
               </label>
               <TextArea
@@ -44,29 +46,27 @@ const Step2FormHyarihatto = () => {
                 className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
                 value={formData.hazardAssessment.potentialHazard}
                 onChange={handleChangeInput}
+                // hint={errors.hazardAssessment?.potentialHazard}
+                // error={errors?.hazardAssessment?.potentialHazard !== undefined}
               />
             </div>
-
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Mengapa kondisinya berbahaya seperti itu?{" "}
-                <span className="text-red-500">*</span>
+              <p className="block text-sm font-medium text-gray-700 mb-1">
+                Seharusnya kondisinya bagaimana?{" "}
+              </p>
+              <label className="block text-sm text-gray-500 mb-1">
+                a. Harapan yang diinginkan <span className="text-red-500">*</span>
               </label>
               <TextArea
                 name="expectedCondition"
                 className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
                 value={formData.hazardAssessment.expectedCondition}
                 onChange={handleChangeInput}
+                // hint={errors.hazardAssessment?.expectedCondition}
+                // error={errors?.hazardAssessment?.expectedCondition !== undefined}
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Seharusnya kondisinya bagaimana?{" "}
-                <span className="text-red-500">*</span>
-              </label>
               <label className="block text-sm text-gray-500 mb-1">
-                Tuliskan Harapan / Usulan perbaikan Anda
+                b. Usulan yang diinginkan
               </label>
               <TextArea
                 name="improvementSuggestion"
@@ -75,6 +75,7 @@ const Step2FormHyarihatto = () => {
                 onChange={handleChangeInput}
               />
             </div>
+
 
             <div className="flex justify-end gap-4">
               {ButtonPrevious(1)}
@@ -87,4 +88,4 @@ const Step2FormHyarihatto = () => {
   );
 };
 
-export default Step2FormHyarihatto;
+export default Step2FormVoiceMember;

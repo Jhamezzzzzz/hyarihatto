@@ -10,8 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import { PieSectorData } from "recharts/types/polar/Pie";
-import { GeometrySector } from "recharts/types/util/types";
+import { PieLabelProps } from "recharts/types/polar/Pie";
 import useHyarihattoDataService from "../../services/HyarihattoDataService";
 import { useEffect, useState } from "react";
 import { Filter } from "../../pages/QuestLeader/HomeLeader";
@@ -29,15 +28,24 @@ type ResponseChart = {
   accidentType?: string;
 };
 
+type LineData = {
+  [lineName: string]: number;
+};
+
+
+type MonthYearData = {
+  [monthYear: string]: LineData; // Each monthYear maps to a LineData object
+};
+
 export default function GraphLocationHyat({ filter }: { filter: Filter }) {
   const [loading, setLoading] = useState({
     bar: false,
     pie: false,
   });
   const { getDashboardBarChart, getDashboardPieChart } = useHyarihattoDataService();
-  const [dataBarChart, setDataBarChart] = useState<ResponseChart[]>([]);
+  const [dataBarChart, setDataBarChart] = useState<LineData[]>([]);
   const [dataPieChart, setDataPieChart] = useState<ResponseChart[]>([]);
-  const [lineNames, setLineNames] = useState([])
+  const [lineNames, setLineNames] = useState<string[]>([])
 
   // Get color chart based on percentage
   const getColors = (value: number, total: number) => {
@@ -52,10 +60,11 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
     }
   };
 
+  // Transform Response Data into Grouped By Month
   const transformDataForStackedBarChart = (rawData: ResponseChart[], targetMonth = '', targetYear: number) => {
-    const transformedData = {};
+    const transformedData: MonthYearData = {};
     // Collect all unique line names from the raw data
-    const allLineNames = Array.from(new Set(rawData.map(item => item.line.lineName)));
+    // const allLineNames = Array.from(new Set(rawData.map(item => item.line.lineName)));
 
     const monthsToDisplay = [];
 
@@ -72,7 +81,8 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
 
     // Step 2: Initialize transformedData with all selected months, but only with the "year-month" key initially
     monthsToDisplay.forEach(monthYear => {
-      transformedData[monthYear] = { "year-month": monthYear };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      transformedData[monthYear] = { "year-month": monthYear } as any;
     });
 
     // Step 3: Populate with actual data from rawData, applying filters
@@ -100,7 +110,9 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
 
     // Convert the object back into an array for Recharts and sort by month
     return Object.values(transformedData).sort((a, b) => {
-      return new Date(a["year-month"]) - new Date(b["year-month"]);
+      const dateA = new Date(a["year-month"]);
+      const dateB = new Date(b["year-month"]);
+      return dateA.getTime() - dateB.getTime()
     });
   };
 
@@ -117,8 +129,8 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
       setDataBarChart(transformed);
 
       // Extract unique line names to dynamically create Bar components
-      const uniqueLineNames = Array.from(new Set(
-        rawData.map(item => item.line.lineName)
+      const uniqueLineNames: string[] = Array.from(new Set(
+        rawData.map((item: Partial<ResponseChart>) => item?.line?.lineName)
       ));
       setLineNames(uniqueLineNames);
       
@@ -256,19 +268,16 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                     data={dataPieChart}
                     dataKey="count"
                     nameKey="name"
-                    // cx="50%"
-                    // cy="50%"
                     outerRadius={120}
                     fill="#8884d8"
-                    // label
                     label={({
                       cx,
                       cy,
                       midAngle,
                       outerRadius,
                       percent,
-                      // name,
-                    }: GeometrySector & PieSectorData) => {
+                      fill
+                    }: PieLabelProps) => {
                       // Calculate the outer point for the label line
                       const typedMidAngle = midAngle || 0;
                       const typedPercent = percent || 0;
@@ -280,7 +289,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                         <text
                           x={x}
                           y={y}
-                          fill={"black"} // Use slice color for label text or a consistent color
+                          fill={fill} // Use slice color for label text or a consistent color
                           textAnchor={x > cx ? "start" : "end"} // Align text based on its position relative to the center
                           dominantBaseline="central"
                         >

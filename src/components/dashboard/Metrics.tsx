@@ -82,7 +82,7 @@ export default function Metrics({ filter }: { filter: Filter}) {
             <div className="flex justify-between items-center">
               <div>
                 <h4 className="text-2xl text-gray-600 dark:text-gray-400">
-                  {item.title}
+                  {item.title.toUpperCase()}
                 </h4>
               </div>
               <div>

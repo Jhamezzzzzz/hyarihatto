@@ -46,19 +46,19 @@ const YearPicker: React.FC<YearPickerProps> = ({
     <div className="relative w-40" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className="w-full px-4 py-2 border border-gray-300 rounded-md bg-white text-left focus:outline-none focus:ring-2 focus:ring-primary1/30"
+        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-left focus:outline-none focus:ring-2 focus:ring-primary1/30"
       >
-        {selectedYear ? <span>{selectedYear}</span> : <span className="text-gray-400">{placeholder}</span>}
+        {selectedYear ? <span className="text-black dark:text-gray-300">{selectedYear}</span> : <span className="text-gray-400">{placeholder}</span>}
       </button>
 
       {isOpen && (
-        <div className="absolute z-10 mt-1 w-full max-h-60 overflow-y-auto bg-white border border-gray-300 rounded-md shadow-lg">
+        <div className="absolute z-10 mt-1 w-full max-h-60 overflow-y-auto bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-700 rounded-md shadow-lg">
           {years.map((year) => (
             <div
               key={year}
               onClick={() => handleYearClick(year)}
-              className={`px-4 py-2 cursor-pointer  ${
-                selectedYear === year ? "bg-brand-500 text-white font-semibold" : "hover:bg-gray-100"
+              className={`px-4 py-2 cursor-pointer dark:text-white ${
+                selectedYear === year ? "bg-brand-500 text-white font-semibold" : "hover:bg-gray-100 dark:hover:bg-gray-400"
               }`}
             >
               {year}

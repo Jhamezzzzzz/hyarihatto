@@ -189,7 +189,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
         {/* Bar Chart */}
         <div className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
           <div className="min-h-120 h-120 pb-10">
-            <h2 className="text-lg font-semibold mb-4">
+            <h2 className="text-lg font-semibold mb-4 dark:text-white">
               Potensi Bahaya Ditemukan Tiap Line
             </h2>
             <ResponsiveContainer width="100%" height="100%" >
@@ -241,7 +241,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
         {/* Pie Chart */}
         <div className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
           <div className="min-h-120 h-120">
-            <h2 className="text-lg font-semibold mb-4">
+            <h2 className="text-lg font-semibold mb-4 dark:text-white">
               Persentase Potensi Bahaya
             </h2>
             <ResponsiveContainer width="100%" height="100%">

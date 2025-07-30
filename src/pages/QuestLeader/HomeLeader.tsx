@@ -58,7 +58,7 @@ export default function HomeLeader() {
       />
 
       <div className="col-span-12 space-y-6 xl:col-span-5 flex items-end justify-between mb-6">
-        <p className="text-title-md font-bold mb-2">Hyarihatto</p>
+        <p className="text-title-md font-bold mb-2 dark:text-white">Hyarihatto</p>
         {/* ///filter/// */}
         <div className="flex gap-20">
           <div className="flex items-center gap-4">

@@ -47,6 +47,19 @@ const useHyarihattoDataService = () => {
         }
     }
 
+    const getSubmissions = async(month: string, year: number, page: string | number, limit: string | number, q: string) => {
+        try {
+            const response = await axiosJWT.get(`submissions?type=hyarihatto&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            return response
+        } catch (error) {
+            handleError(error)
+        }
+    }
+
     const postSubmission = async(body: string) => {
         try {
             const response = await axiosInstance.post(`submission`, body)
@@ -99,6 +112,7 @@ const useHyarihattoDataService = () => {
 
     return{
         getSubmissionForReviews,
+        getSubmissions,
         postSubmission,
         getDashboardStatusReport,
         getDashboardBarChart,

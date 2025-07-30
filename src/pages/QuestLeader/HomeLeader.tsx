@@ -1,10 +1,10 @@
-import VoiceMetrics from "../../components/ecommerce/VoiceMetrics";
-import RecentOrders from "../../components/dashboard/ListSubmissions";
-import RecentVoice from "../../components/ecommerce/RecentVoice";
+import ListSubmissions from "../../components/dashboard/ListSubmissions";
 import DatePicker from "../../components/form/date-picker";
 import Label from "../../components/form/Label";
-import Select from "../../components/form/Select";
-import GraphLocationVoice from "../../components/common/GraphLocationVoice";
+// import Select from "../../components/form/Select";
+// import GraphLocationVoice from "../../components/common/GraphLocationVoice";
+// import VoiceMetrics from "../../components/ecommerce/VoiceMetrics";
+// import RecentVoice from "../../components/ecommerce/RecentVoice";
 import GraphLocationHyat from "../../components/dashboard/GraphLocation";
 import "react-datepicker/dist/react-datepicker.css";
 import PageMeta from "../../components/common/PageMeta";
@@ -93,14 +93,13 @@ export default function HomeLeader() {
         <GraphLocationHyat filter={filter}/>
       </div>
       <div className="col-span-12 xl:col-span-7 mb-4">
-        <RecentOrders />
+        <ListSubmissions filter={filter} />
       </div>
 
       {/* ----------------------------------VOICE MEMBER-------------------------------- */}
-      <div className="col-span-12 space-y-6 xl:col-span-7 mt-10">
+      {/* <div className="col-span-12 space-y-6 xl:col-span-7 mt-10">
         <p className="text-title-md font-bold">Voice Member</p>
       </div>
-      {/* ///////////////Filter////////////////////// */}
       <div className="flex gap-4">
         <div>
           <Label>Periode</Label>
@@ -139,7 +138,7 @@ export default function HomeLeader() {
       </div>
       <div className="col-span-12 xl:col-span-7 mt-4">
         <RecentVoice />
-      </div>
+      </div> */}
     </>
   );
 }

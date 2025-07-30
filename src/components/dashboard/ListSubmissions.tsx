@@ -9,6 +9,11 @@ import Badge from "../ui/badge/Badge";
 import { useNavigate } from "react-router-dom";
 import Input from "../form/input/InputField";
 import { FaClone, FaSearch } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import useHyarihattoDataService from "../../services/HyarihattoDataService";
+import { useDebounce } from "../../hooks/useDebonce";
+import NoDataOrLoading from "../ui/table/NoDataOrLoading";
+import Pagination from "../ui/table/Pagination";
 
 // Define the TypeScript interface for the table rows
 interface Product {
@@ -71,8 +76,64 @@ const tableData: Product[] = [
   },
 ];
 
-export default function RecentOrders() {
+const STATUS: {
+  0: string,
+  1: string,
+  2: string,
+  3: string
+} = {
+  0: "Diajukan",
+  1: "Dijadwalkan",
+  2: "Terselesaikan",
+  3: "Ditolak"
+}
+
+type DataSubmissions = {
+  id: number;
+  incidentDate: string;
+  incidentTime: string;
+  user: {
+    name: string;
+    username: string;
+  };
+  shift: string;
+  status: number;
+  HazardEvaluation:{
+    totalScore: number;
+    rank: string;
+  }
+}
+
+export default function ListSubmissions() {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true)
+  const [dataSubmissions, setDataSubmissions] = useState([])
+  const { getSubmissionForReviews } = useHyarihattoDataService()
+  const [pagination, setPagination] = useState({
+    page: 0,
+    totalPages: 0,
+    limit: 10
+  })
+  const [searchQ, setSearchQ] = useState<string>("")
+  const debouncedQ = useDebounce(searchQ, 1000)
+
+  const fetchDataSubmissions = async() => {
+    try {
+      setLoading(true)
+      const response = await getSubmissionForReviews(pagination.page, pagination.limit, searchQ)
+      console.log("response table: ", response?.data?.data)
+      setDataSubmissions(response?.data?.data)
+    } catch (error) {
+      console.error(error)
+      setDataSubmissions([])
+    } finally{
+      setLoading(false)
+    }
+  }
+
+  useEffect(()=>{
+    fetchDataSubmissions()
+  }, [debouncedQ, pagination])
 
   return (
     <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
@@ -85,9 +146,10 @@ export default function RecentOrders() {
 
         <div className="flex items-center gap-3">
           <Input
-            placeholder="Cari "
+            placeholder="Cari"
             endIcon={<FaSearch/>}
-            // onChange={(e)=>setSearchQ(e.target.value)}
+            onChange={(e)=>setSearchQ(e.target.value)}
+            value={searchQ}
           />
         </div>
       </div>
@@ -110,37 +172,37 @@ export default function RecentOrders() {
         {/* Table Body */}
 
         <TableBody>
-          {tableData.map((product) => (
-            <TableRow key={product.id}>
-              <TableCell>{product.tanggal}</TableCell>
-              <TableCell>{product.waktu}</TableCell>
-              <TableCell>{product.nama}</TableCell>
-              <TableCell>{product.noreg}</TableCell>
-              <TableCell>{product.shift}</TableCell>
-              <TableCell>{product.score}</TableCell>
-              <TableCell>{product.rank}</TableCell>
+          {(dataSubmissions.length > 0 && !loading) && dataSubmissions.map((item: DataSubmissions) => (
+            <TableRow key={item.id}>
+              <TableCell>{item.incidentDate}</TableCell>
+              <TableCell>{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
+              <TableCell>{item.user.name}</TableCell>
+              <TableCell>{0+item.user.username}</TableCell>
+              <TableCell>{item.shift}</TableCell>
+              <TableCell>{item.HazardEvaluation.totalScore}</TableCell>
+              <TableCell>{item.HazardEvaluation.rank}</TableCell>
               <TableCell>
                 <Badge
                   size="sm"
                   color={
-                    product.status === "terselesaikan"
+                    item.status === 2
                       ? "success"
-                      : product.status === "diajukan"
+                      : item.status === 0
                       ? "warning"
-                      : product.status === "dijadwalkan"
+                      : item.status === 1
                       ? "info"
-                      : product.status === "ditolak"
+                      : item.status === 3
                       ? "error"
                       : "error"
                   }
                 >
-                  {product.status.toUpperCase()}
+                  {STATUS[Number(item.status)].toUpperCase() || ""}
                 </Badge>
               </TableCell>
               <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                 <button
                   className="px-4 py-1 text-sm font-medium text-dark bg-primary hover:bg-primary-dark rounded-md transition duration-200"
-                  onClick={() => navigate(`/${product.id}`)} // Fungsi handleDetail opsional
+                  onClick={() => navigate(`/hyarihatto/${item.id}`)} // Fungsi handleDetail opsional
                 >
                   <FaClone/>
                 </button>
@@ -149,6 +211,20 @@ export default function RecentOrders() {
           ))}
         </TableBody>
       </Table>
+      <NoDataOrLoading data={dataSubmissions} loading={loading}/>
+      <Pagination
+        currentPage={pagination.page}
+        totalPages={pagination.totalPages}
+        onPageChange={(e)=>{
+          setPagination({...pagination, page: e})
+        }}
+        showLimit
+        onLimitChange={(e)=>{
+          setPagination({ ...pagination, limit: e, page: 1})
+        }}
+        limitPerPage={pagination.limit}
+        options={[10, 25, 50]}
+        />
     </div>
   );
 }

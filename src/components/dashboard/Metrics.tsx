@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import useHyarihattoDataService from "../../services/HyarihattoDataService";
 import Spinner from "../ui/spinner";
+import { Filter } from "../../pages/QuestLeader/HomeLeader";
 
 interface DataStatusReport{
   total: number
@@ -22,21 +23,17 @@ interface DataStatusReport{
   }
 }
 
-export default function Metrics() {
+export default function Metrics({ filter }: { filter: Filter}) {
   const [loading, setLoading] = useState({
     statusReport: true
   })
-  const [filter, setFilter] = useState({
-    period: new Date().toLocaleDateString('en-CA').slice(0, 7)
-  })
-  const [dataStatusReport, setDataStatusReport] = useState<DataStatusReport>([])
+  const [dataStatusReport, setDataStatusReport] = useState<DataStatusReport>()
   const { getDashboardStatusReport } = useHyarihattoDataService()
 
   const fetchDashboardStatusReport = async() => {
     try {
-      const response = await getDashboardStatusReport(filter.period)
+      const response = await getDashboardStatusReport(filter.year, filter.month)
       const data = response?.data?.data
-      console.log("RESPONSE Data: ", data)
       setDataStatusReport(data)
     } catch (error) {
       console.error(error)
@@ -47,7 +44,7 @@ export default function Metrics() {
 
   useEffect(()=>{
     fetchDashboardStatusReport()
-  }, [])
+  }, [filter.year, filter.month])
 
   const dataMetrics = [
     {
@@ -82,25 +79,25 @@ export default function Metrics() {
       { dataMetrics.map((item, index)=>{
         return(
           <div key={index} className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-            <div className="grid grid-cols-12 items-center">
-              <div className="col-span-11">
-                <span className="text-2xl text-gray-600 dark:text-gray-400">
+            <div className="flex justify-between items-center">
+              <div>
+                <h4 className="text-2xl text-gray-600 dark:text-gray-400">
                   {item.title}
-                </span>
-                <div>
-                  <span
-                    style={{ fontSize: "11px" }}
-                    className="mt-2 text-gray-600 dark:text-white/90"
-                  >
-                    {item.caption}
-                  </span>
-                </div>
+                </h4>
               </div>
-              <div className="col-span-1">
+              <div>
                 <h4 className="font-bold text-gray-800 text-4xl dark:text-white/90">
                   { !loading.statusReport ? item.number : <Spinner/>}
                 </h4>
               </div>
+            </div>
+            <div>
+              <p
+                style={{ fontSize: "11px" }}
+                className="mt-2 text-gray-600 dark:text-white/90"
+              >
+                {item.caption}
+              </p>
             </div>
           </div>
 

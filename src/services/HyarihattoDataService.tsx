@@ -36,7 +36,7 @@ const useHyarihattoDataService = () => {
 
     const getSubmissionForReviews = async(page: string | number, limit: string | number, q: string) => {
         try {
-            const response = await axiosJWT.get(`submissions/reviews?page=${page}&limit=${limit}&q=${q}`, {
+            const response = await axiosJWT.get(`submissions/reviews?type=hyarihatto&page=${page}&limit=${limit}&q=${q}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -57,9 +57,9 @@ const useHyarihattoDataService = () => {
         }
     }
 
-    const getDashboardStatusReport = async(period: string) => {
+    const getDashboardStatusReport = async(year: number, month: string) => {
         try {
-            const response = await axiosJWT.get(`dashboard/report-stats?period=${period}&type=hyarihatto`, {
+            const response = await axiosJWT.get(`dashboard/by-status?type=hyarihatto&year=${year}&month=${month}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -70,9 +70,9 @@ const useHyarihattoDataService = () => {
         }
     }
 
-    const getDashboardBarChart = async(period: string) => {
+    const getDashboardBarChart = async(year: number, month: string) => {
         try {
-            const response = await axiosJWT.get(`dashboard/potential-hazard-line?type=hyarihatto&period=${period}`, {
+            const response = await axiosJWT.get(`dashboard/by-line?type=hyarihatto&year=${year}&month=${month}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -80,6 +80,19 @@ const useHyarihattoDataService = () => {
             return response
         } catch (error) {
             handleError(error)
+        }
+    }
+
+    const getDashboardPieChart = async(year: number, month: string) => {
+        try {
+            const response = await axiosJWT.get(`dashboard/by-accident-type?year=${year}&month=${month}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            handleError(error)   
         }
     }
     
@@ -88,7 +101,8 @@ const useHyarihattoDataService = () => {
         getSubmissionForReviews,
         postSubmission,
         getDashboardStatusReport,
-        getDashboardBarChart
+        getDashboardBarChart,
+        getDashboardPieChart
     }
   
 }

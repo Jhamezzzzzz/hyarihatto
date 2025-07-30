@@ -14,6 +14,7 @@ import useHyarihattoDataService from "../../services/HyarihattoDataService";
 import { useDebounce } from "../../hooks/useDebonce";
 import NoDataOrLoading from "../ui/table/NoDataOrLoading";
 import Pagination from "../ui/table/Pagination";
+import { Filter } from "../../pages/QuestLeader/HomeLeader";
 
 const STATUS = [
   "Diajukan",
@@ -38,13 +39,13 @@ type DataSubmissions = {
   }
 }
 
-export default function ListSubmissions() {
+export default function ListSubmissions({ filter }:{ filter: Filter}) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true)
   const [dataSubmissions, setDataSubmissions] = useState([])
-  const { getSubmissionForReviews } = useHyarihattoDataService()
+  const { getSubmissions } = useHyarihattoDataService()
   const [pagination, setPagination] = useState({
-    page: 0,
+    page: 1,
     totalPages: 0,
     limit: 10
   })
@@ -54,7 +55,7 @@ export default function ListSubmissions() {
   const fetchDataSubmissions = async() => {
     try {
       setLoading(true)
-      const response = await getSubmissionForReviews(pagination.page, pagination.limit, searchQ)
+      const response = await getSubmissions(filter.month, filter.year, pagination.page, pagination.limit, searchQ)
       console.log("response table: ", response)
       setDataSubmissions(response?.data?.data)
       setPagination({
@@ -72,7 +73,7 @@ export default function ListSubmissions() {
 
   useEffect(()=>{
     fetchDataSubmissions()
-  }, [debouncedQ, pagination.page])
+  }, [debouncedQ, pagination.page, filter.month, filter.year])
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">

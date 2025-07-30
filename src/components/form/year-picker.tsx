@@ -44,10 +44,10 @@ const YearPicker: React.FC<YearPickerProps> = ({
   }, []);
 
   return (
-    <div className="relative w-40" ref={dropdownRef}>
+    <div className="relative w-60 " ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-left focus:outline-none focus:ring-2 focus:ring-primary1/30"
+        className="w-full py-2.5 h-11 px-4 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-900 text-left focus:outline-none focus:ring-2 focus:ring-primary1/30"
       >
         {selectedYear ? <span className="text-black dark:text-gray-300">{selectedYear}</span> : <span className="text-gray-400">{placeholder}</span>}
       </button>

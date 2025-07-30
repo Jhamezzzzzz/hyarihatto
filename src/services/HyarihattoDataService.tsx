@@ -47,9 +47,9 @@ const useHyarihattoDataService = () => {
         }
     }
 
-    const getSubmissions = async(month: string, year: number, page: string | number, limit: string | number, q: string) => {
+    const getSubmissionsRecent = async(month: string, year: number, page: string | number, limit: string | number, q: string) => {
         try {
-            const response = await axiosJWT.get(`submissions?type=hyarihatto&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
+            const response = await axiosJWT.get(`dashboard/recents?type=hyarihatto&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -112,7 +112,7 @@ const useHyarihattoDataService = () => {
 
     return{
         getSubmissionForReviews,
-        getSubmissions,
+        getSubmissionsRecent,
         postSubmission,
         getDashboardStatusReport,
         getDashboardBarChart,

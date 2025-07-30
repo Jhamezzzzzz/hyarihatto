@@ -43,7 +43,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true)
   const [dataSubmissions, setDataSubmissions] = useState([])
-  const { getSubmissions } = useHyarihattoDataService()
+  const { getSubmissionsRecent } = useHyarihattoDataService()
   const [pagination, setPagination] = useState({
     page: 1,
     totalPages: 0,
@@ -55,7 +55,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
   const fetchDataSubmissions = async() => {
     try {
       setLoading(true)
-      const response = await getSubmissions(filter.month, filter.year, pagination.page, pagination.limit, searchQ)
+      const response = await getSubmissionsRecent(filter.month, filter.year, pagination.page, pagination.limit, searchQ)
       console.log("response table: ", response)
       setDataSubmissions(response?.data?.data)
       setPagination({

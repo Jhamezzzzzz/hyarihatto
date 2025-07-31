@@ -6,6 +6,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { useNavigate } from "react-router";
 import PageMeta from "../../components/common/PageMeta";
+import LabelMark from "./LabelMark";
+import LogoSafety from "../../components/image/000ab1bef0f166ad984632cf1b4d63fb.png";
 
 export default function MainUser() {
   const navigate = useNavigate();
@@ -19,13 +21,18 @@ export default function MainUser() {
 
   return (
     <section className="home">
+      <div className="absolute top-1 right-2">
+      <img src={LogoSafety} alt="Logo Safety" className="w-14 h-14 mr-1" />
+      </div>
       <PageMeta title="Warehouse Member | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <button
         onClick={handleBackMainPage}
-        className="absolute top-4 left-4 inline-flex items-center px-5 py-2.5 
-            bg-gradient-to-r from-green-400 to-gray-400 text-white text-sm 
-            font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300
-             hover:from-gray-500 hover:to-green-800"
+         className="absolute top-4 left-4 inline-flex items-center 
+          px-3 py-2 text-xs sm:text-sm
+          bg-gradient-to-r from-green-400 to-gray-400 text-white 
+          font-semibold rounded-full shadow-lg 
+          hover:scale-105 transition-transform duration-300
+          hover:from-gray-500 hover:to-green-800"
       >
         <svg
           className="w-5 h-5 mr-2"
@@ -127,6 +134,9 @@ export default function MainUser() {
           </div>
         </button>
       </div>
+      <div className="absolute bottom-1 left-2">
+          <LabelMark />
+        </div>
     </section>
   );
 }

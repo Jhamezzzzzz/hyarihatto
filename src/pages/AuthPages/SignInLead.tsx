@@ -7,6 +7,8 @@ import useAuthService from "../../services/AuthService";
 import "../../css/home.css";
 import PageMeta from "../../components/common/PageMeta";
 import useVerify from "../../hooks/useVerify";
+import LabelMark from "../MainPages/LabelMark";
+import LogoSafety from "../../components/image/000ab1bef0f166ad984632cf1b4d63fb.png";
 
 interface Errors{
   username: string;
@@ -72,11 +74,15 @@ export default function SignInLead() {
 
   return (
     <div className="login-page ">
+       <div className="absolute top-1 right-2 z-5">
+      <img src={LogoSafety} alt="Logo Safety" className="w-14 h-14 mr-1" />
+      </div>
       <PageMeta title="Leader Login | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <div style={{ zIndex: 1, maxWidth: "900px", width: "750px" }}>
         <button
                 onClick={()=>navigate("/")}
-                className="absolute top-4 left-4 inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-green-400 to-green-600 text-white text-sm font-semibold rounded-full shadow-lg hover:scale-105 transition-transform duration-300 hover:from-green-600 hover:to-green-800"
+                className="absolute top-4 left-4 inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-green-400 to-green-600 text-white text-sm font-semibold rounded-full shadow-md 
+                hover:scale-105 transition-transform duration-300 hover:from-green-600 hover:to-green-800 z-5"
             >
             <svg
                 className="w-5 h-5 mr-2"
@@ -89,7 +95,7 @@ export default function SignInLead() {
             </svg>
                 Kembali
             </button>
-        <div className="w-full max-w-4xl bg-white bg-opacity-60 backdrop-blur-md shadow-xl rounded-3xl flex flex-col md:flex-row overflow-hidden z-10">
+        <div className="w-full max-w-4xl bg-white bg-opacity-60 backdrop-blur-md shadow-xl rounded-2xl flex flex-col md:flex-row overflow-hidden z-4">
           {/* KIRI */}
           <div className="w-full md:w-1/2 p-8 flex flex-col justif-start items-center text-start bg-white/70">
             <div>
@@ -154,6 +160,9 @@ export default function SignInLead() {
           </div>
         </div>
       </div>
+      <div className="absolute bottom-1 left-2">
+                <LabelMark />
+              </div>
     </div>
   );
 }

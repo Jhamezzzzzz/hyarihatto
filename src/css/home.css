@@ -75,6 +75,20 @@
   color: #023d21;
 
 }
+@media (max-width: 640px) {
+  .title-little-1 {
+    font-size: 1rem;
+  }
+
+  .title-little-online {
+    font-size: 1.7rem;
+  }
+
+  .title-bigger {
+    font-size: 3.1rem;
+  }
+}
+
 
 .title-little {
   font-size: 2.2rem;
@@ -140,6 +154,19 @@
     transform: scale(1.1);
  }
 
+ @media (max-width: 640px) {
+  .button-user {
+    font-size: 1rem;
+  }
+
+  .button-leader {
+    font-size: 1rem;
+  }
+
+  .button-panduan {
+    font-size: 1rem;
+  }
+}
  /* //////////////////////////////////Answer User////////////////////////////////////// */
  /* .page-center {
 
@@ -170,7 +197,7 @@
   font-size: 1rem;
 } */
   .title-bigger-1 {
-  font-size: 2rem;
+  font-size: 3rem;
   font-family:Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bold;
   color: #023c0b;

@@ -4,6 +4,9 @@ import RadioGroupProgress from "../../components/form/input/RadioGroupProgress";
 import DatePicker from '../../components/form/date-picker'
 import ButtonSubmit from "./ButtonSubmit";
 import useHyarihattoDataService from "../../services/HyarihattoDataService";
+import StaticOptions from "../../utils/StaticOptions";
+import Badge from "../../components/ui/badge/Badge";
+import config from '../../utils/Config'
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 export type Submission = {
@@ -34,7 +37,7 @@ export type Submission = {
     accidentLevel: string;
     workingFrequency: string;
   }
- 
+  status: number;
   type: string;
   incidentDate: string;
   incidentTime: string;
@@ -42,58 +45,13 @@ export type Submission = {
 };
 
 
-// export const dummyData: DetailCatatan[] = [
-//   {
-//     id: 1,
-//     tanggal: "2025-07-09",
-//     waktu: "11:38",
-//     nama: "Dika",
-//     noreg: "2234102",
-//     shift: "Non-shift",
-//     rank: "Bb",
-//     score: 16,
-//     kegiatan: "Fill in item/part ke rak shopping",
-//     potensiBahaya: "Tangan tergores sekat/pembatas pada rak jalur 1 no 5 kolom 7",
-//     penyebab: "Sekat atau pembatas pada rak material terbuat dari bahan plat/akrilik",
-//     harapan: "Ada sedikit material tambahan seperti karet atau busa untuk melapisi ujung-ujung pembatas/sekat pada rak shopping",
-//     usulan: "-",
-//     jenis: "Sumber & Akibat, Terluka, Sebab: Regular, Pengalaman: Tangan, Lalai/lengah",
-//     kategori: "Human",
-//     bukti: "Ini gambar foto",
-//     tipeKecelakaan: "Tergores",
-//     levelKecelakaan: "b - Perlu Cuti - 6",
-//     frekuensiKerja: "Sedang - 4",
-//     levelPencegah: "Level Rendah - 6"
-//   },
-//   {
-//     id: 2,
-//     tanggal: "2025-07-10",
-//     waktu: "08:20",
-//     nama: "Bagus",
-//     noreg: "2234103",
-//     shift: "Pagi",
-//     rank: "Cc",
-//     score: 12,
-//     kegiatan: "Mengangkat box berat ke rak atas",
-//     potensiBahaya: "Box terjatuh dan mengenai kepala",
-//     penyebab: "Posisi rak terlalu tinggi dan tidak ada bantuan alat",
-//     harapan: "Gunakan tangga atau alat bantu angkat",
-//     usulan: "Sediakan tangga dorong di area tersebut",
-//     jenis: "Tertimpa benda jatuh",
-//     kategori: "Environment",
-//     bukti: "Foto kondisi rak tinggi",
-//     tipeKecelakaan: "Tertimpa",
-//     levelKecelakaan: "c - Cidera Ringan - 5",
-//     frekuensiKerja: "Tinggi - 5",
-//     levelPencegah: "Sedang - 5"
-//   }
-// ];
+
 
 export default function DetailHyarihatto() {
   const { id } = useParams<{ id: string }>();
   const { getSubmissionById } = useHyarihattoDataService();
-    const [data, setData] = useState<Submission | null>(null);
-
+  const [data, setData] = useState<Submission | null>(null);
+  const { STATUS_SUBMISSION } = StaticOptions()
   // const catatan = dummyData.find(item => item.id === Number(id));
    const optionsProgress = ["Terima", "Tolak"];
   const optionsUser = ["Oleh diri sendiri", "Bersama dalam SGA", "Pihak lain"];
@@ -224,6 +182,7 @@ useEffect(() => {
     setIsCameraModalOpen(false);
     stopCamera();
   };
+             {console.log("Image URL:", `${config.BACKEND_URL}/${data.HazardReport.proof}`)}
 
   return (
     <div className="grid grid-cols-12 gap-2 p-1">
@@ -269,9 +228,23 @@ useEffect(() => {
         </div>
          <div>
           <p className="font-medium">Status</p>
-         <span className="inline-block text-white bg-green-600 text-md px-2 py-1 rounded-full">
-          
-        </span>
+          <Badge
+            size="sm"
+            variant="solid"
+            color={
+              data.status === 2
+                ? "success"
+                : data.status === 0
+                ? "warning"
+                : data.status === 1
+                ? "info"
+                : data.status === 3
+                ? "error"
+                : "error"
+            }
+          >
+            {STATUS_SUBMISSION[data.status].toUpperCase() || ""}
+          </Badge>
           {/* <p>{catatan?.rank}</p> */}
         </div>
         </div>
@@ -343,9 +316,16 @@ useEffect(() => {
           <div className="pb-4 border-b border-gray-300">
             <p className="font-medium">Bukti Kejadian</p>
             <div className="grid grid-cols-2 gap-4">
+              
           <div>
             <span className="font-semibold">a. Harapan yang diinginkan:</span><br />
-            <img src={data.HazardReport?.proof || "-"} className="w-8 h-8 inline-block mr-2" />
+            {/* <img src={data.HazardReport?.proof || "-"} className="w-8 h-8  mr-2" /> */}
+           
+           <img
+            src={`${config.BACKEND_URL}/${data.HazardReport.proof}`} 
+            className="w-34 h-34 mr-2"
+          />
+
           </div>
             <div>
               <span className="font-semibold">b. Usulan Perbaikan:</span><br />

@@ -68,10 +68,8 @@ const useHyarihattoDataService = () => {
                     Authorization: `Bearer ${token}`,
                 },
             })
-            console.log("✅ GET Submission response:", response.data); 
             return response.data.data
         } catch (error) {
-             console.error("❌ Failed to fetch submission:", error);
             handleError(error)
         }
     }

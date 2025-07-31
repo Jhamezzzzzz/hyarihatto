@@ -5,6 +5,8 @@ import { motion } from 'framer-motion';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import PageMeta from "../../components/common/PageMeta";
+import LabelMark from "./LabelMark";
+import LogoSafety from "../../components/image/000ab1bef0f166ad984632cf1b4d63fb.png";
 
 export default function MainHome() {
   useEffect(() => {
@@ -12,7 +14,10 @@ export default function MainHome() {
   }, []);
 
   return (
-    <section className='home'>
+    <section className='home'>  
+      <div className="absolute top-1 right-2">
+      <img src={LogoSafety} alt="Logo Safety" className="w-14 h-14 mr-1" />
+      </div>
       <PageMeta title="Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <div className='hyarihato'>
         <motion.p
@@ -99,11 +104,15 @@ export default function MainHome() {
               <label className="justify-start" style={{ fontWeight: "bold" }}>
                 Panduan
               </label>
-              <label>Petunjuk pengisian catatan bagi Member</label>
+              <label className=""
+              >Petunjuk pengisian catatan bagi Member</label>
             </div>
           </div>
         </button>
       </div>
+      <div className="absolute bottom-1 left-2">
+    <LabelMark />
+  </div>
     </section>
   );
 };

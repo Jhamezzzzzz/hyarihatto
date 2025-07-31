@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import WaveBackground from "../../components/image/Hijau-Hyarihatto.png";
+import LabelMark from "../MainPages/LabelMark";
+import LogoSafety from "../../components/image/000ab1bef0f166ad984632cf1b4d63fb.png";
+
+
 export default function PamduanHyat() {
 const navigate = useNavigate();
-
-
 const handleBack = () => {
   navigate('/');
 };
@@ -13,6 +15,9 @@ const handleBack = () => {
         <div 
         className=" min-h-screen bg-no-repeat bg-cover bg-center"
          style={{ backgroundImage: `url(${WaveBackground})` }} >
+             <div className="absolute top-1 right-2">
+                <img src={LogoSafety} alt="Logo Safety" className="w-14 h-14 mr-1" />
+            </div>
             <div style={{position:'relative'}} >
                 {/* Tombol Kembali di kiri */}
                 <button 
@@ -32,20 +37,20 @@ const handleBack = () => {
                 </button>
                 </div>
                 {/* Judul HYARIHATTO di tengah */}
-                <div className='card'>
+                <div className='py-12'>
                   <div style={{ textAlign: 'center' }}>
-                    <h2 className="title-bigger-1 m-0">HYARIHATTO</h2>
+                    <h2 className="title-bigger-1 ">HYARIHATTO</h2>
                     <h6 className="m-0">“Mari ber-Hyarihatto untuk mencegah kecelakaan menimpa kita”</h6>
                 </div>
            
             <div className='flex justify-center items-center '>
                 <div 
-                className="card shadow mt-10 px-4 py-4 opacity-80 bg-white rounded-xl backdrop-blur-md" 
+                className="card shadow mt-2 px-4 py-4 opacity-80 bg-white rounded-xl backdrop-blur-md" 
                 style={{ width: '100%', maxWidth: '750px' }}>
                     <div className="card-header text-center mb-3">
-                        <p className="mb-0 text-2xl font-semibold">Petunjuk Pengisian Catatan Digital Hyarihatto</p>
+                        <p className="mb-0 text-md md:text-2xl font-semibold">Petunjuk Pengisian Catatan Digital Hyarihatto</p>
                     </div>
-                    <div className="card-body ">
+                    <div className="text-sm md:text-xl ">
                         <p className='leading-[1.8]'>1. Ini adalah bentuk digital dari Buku Catatan Hyarihatto.</p>
                         <p className='leading-[1.8]'>2. Diisi oleh masing-masing pribadi dan dikomunikasikan dengan atasan.</p>
                         <p className='leading-[1.8]'>3. Online Hyarihatto ini juga berfungsi sebagai usulan dari karyawan untuk kondisi
@@ -59,11 +64,13 @@ const handleBack = () => {
                         <p className='leading-[1.8]'>7. Apabila countermeasure tidak diperoleh di level GL/TL maka tema Hyarihatto 
                         tersebut harus dikonsultasikan dengan pimpinan yang lebih tinggi.</p>
                         <p className='leading-[1.8]'>8. Apabila ada hal yang perlu ditanyakan dapat langsung disampaikan kepada 
-                        SHE Karawang (ext. 5551, 5044, 5064, 5061) melalui pimpinan masing-masing.</p> 
-                        
+                        SHE Karawang (ext. 5551, 5044, 5064, 5061) melalui pimpinan masing-masing.</p>     
+                        </div>
                     </div>
-                    </div>
+                </div>
             </div>
+            <div className="absolute bottom-1 left-2">
+                <LabelMark />
             </div>
         </div>
  )

@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router';
+import { ThemeToggleButton } from '../../../components/common/ThemeToggleButton';
 
 type TitleFormHyarihatto = {
     showBack: boolean;
@@ -40,9 +41,12 @@ const TitleFormHyarihatto = ({ showBack, backToHome }: TitleFormHyarihatto) => {
                 Kembali
             </button>
         )}
+        <div className='flex justify-center mb-10'>
+            <ThemeToggleButton/>
+        </div>
         <div className="mb-2 text-center">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-2">HYARIHATTO</h2>
-            <p className="text-lg text-gray-600">“Mari ber-Hyarihatto untuk mencegah kecelakaan menimpa kita”</p>
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-2 dark:text-gray-200">HYARIHATTO</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-400">“Mari ber-Hyarihatto untuk mencegah kecelakaan menimpa kita”</p>
         </div>
     </div>
   )

@@ -208,12 +208,12 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
             <h2 className="text-lg font-semibold mb-4 dark:text-white">
               Potensi Bahaya Ditemukan Tiap Line
             </h2>
-            <ResponsiveContainer width="100%" height="100%" >
               { (loadingBar || dataBarChart.length === 0) ? (
-                <p className="flex items-center justify-center">
+                <div className="flex h-full items-center justify-center">
                   <NoDataOrLoading data={dataBarChart} loading={loadingBar}/>
-                </p>
+                </div>
               ):(
+                <ResponsiveContainer width="100%" height="100%" >
                 <BarChart data={dataBarChart}>
                   <Legend verticalAlign="top" height={100}/>
                   <XAxis
@@ -249,8 +249,8 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                     </Bar>
                   ))}
                 </BarChart>
-              )}
             </ResponsiveContainer>
+              )}
           </div>
         </div>
       </div>
@@ -262,12 +262,12 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
             <h2 className="text-lg font-semibold mb-4 dark:text-white">
               Persentase Potensi Bahaya
             </h2>
-            <ResponsiveContainer width="100%" height="100%">
               { (loadingPie || dataPieChart.length === 0) ? (
-                <p className="flex items-center justify-center">
+                <div className="flex h-full items-center justify-center">
                   <NoDataOrLoading data={dataPieChart} loading={loadingPie}/>
-                </p>
+                </div>
               ):(
+                <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Legend verticalAlign="top" />
                   <Pie
@@ -311,8 +311,8 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                   </Pie>
                   <Tooltip/>
                 </PieChart>
-              )}
             </ResponsiveContainer>
+              )}
           </div>
         </div>
       </div>

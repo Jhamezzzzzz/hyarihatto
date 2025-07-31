@@ -9,6 +9,7 @@ import {
   YAxis,
   Tooltip,
   Legend,
+  LabelList,
 } from "recharts";
 import { PieLabelProps } from "recharts/types/polar/Pie";
 import useHyarihattoDataService from "../../services/HyarihattoDataService";
@@ -126,6 +127,11 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
       const transformed = transformDataForStackedBarChart(rawData, filter.month, filter.year);
       setDataBarChart(transformed);
       
+      // Sort by descending count
+      // const sortedRaw = rawData.sort((a: { count: number; }, b: { count: number; }) => {
+      //   return b.count - a.count
+      // })
+
       // Extract unique line names to dynamically create Bar components
       const uniqueLineNames: string[] = Array.from(new Set(
         rawData.map((item: Partial<ResponseChart>) => item?.line?.lineName)
@@ -181,7 +187,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
 
 
   useEffect(()=>{
-    console.log("data bar chart: ", dataBarChart)
+    // console.log("data bar chart: ", dataBarChart)
   }, [dataBarChart])
 
   const getMonthName = (yearMonth: string) => {
@@ -202,14 +208,14 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
             <h2 className="text-lg font-semibold mb-4 dark:text-white">
               Potensi Bahaya Ditemukan Tiap Line
             </h2>
-            <ResponsiveContainer width="100%" height="100%" >
               { (loadingBar || dataBarChart.length === 0) ? (
-                <p className="flex items-center justify-center">
+                <div className="flex h-full items-center justify-center">
                   <NoDataOrLoading data={dataBarChart} loading={loadingBar}/>
-                </p>
+                </div>
               ):(
+                <ResponsiveContainer width="100%" height="100%" >
                 <BarChart data={dataBarChart}>
-                  <Legend verticalAlign="top"/>
+                  <Legend verticalAlign="top" height={100}/>
                   <XAxis
                     padding={{ right: 0 }}
                     label={{
@@ -236,13 +242,15 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                       width={20}
                       key={name}
                       dataKey={name}
-                      stackId="year-month" // Use the same stackId for all bars to stack them
-                      fill={COLORS[index % COLORS.length]} // Cycle through colors
-                    />
+                      stackId="year-month"
+                      fill={COLORS[index % COLORS.length]}
+                    >
+                      <LabelList dataKey={name} position="center" color="white" fill="white" />
+                    </Bar>
                   ))}
                 </BarChart>
-              )}
             </ResponsiveContainer>
+              )}
           </div>
         </div>
       </div>
@@ -254,12 +262,12 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
             <h2 className="text-lg font-semibold mb-4 dark:text-white">
               Persentase Potensi Bahaya
             </h2>
-            <ResponsiveContainer width="100%" height="100%">
               { (loadingPie || dataPieChart.length === 0) ? (
-                <p className="flex items-center justify-center">
+                <div className="flex h-full items-center justify-center">
                   <NoDataOrLoading data={dataPieChart} loading={loadingPie}/>
-                </p>
+                </div>
               ):(
+                <ResponsiveContainer width="100%" height="100%">
                 <PieChart>
                   <Legend verticalAlign="top" />
                   <Pie
@@ -303,8 +311,8 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                   </Pie>
                   <Tooltip/>
                 </PieChart>
-              )}
             </ResponsiveContainer>
+              )}
           </div>
         </div>
       </div>

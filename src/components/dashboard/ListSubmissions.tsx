@@ -52,7 +52,6 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
     try {
       setLoading(true)
       const response = await getSubmissionsRecent(filter.month, filter.year, pagination.page, pagination.limit, searchQ)
-      console.log("response table: ", response)
       setDataSubmissions(response?.data?.data)
       setPagination({
         page: response?.data?.meta?.page,
@@ -120,7 +119,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
                 <TableCell>{item.user.name}</TableCell>
                 <TableCell>{0+item.user.username}</TableCell>
                 <TableCell>
-                  <Badge color={item.shift === "non-shift" ? "light" : item.shift === "red-shift" ? "error" : item.shift === "white-shift" ? "dark" : "info"}>
+                  <Badge color={item.shift === "non-shift" ? "light" : item.shift === "red" ? "error" : item.shift === "white" ? "dark" : "info"}>
                     {item.shift.toUpperCase()}
                   </Badge>
                 </TableCell>

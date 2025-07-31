@@ -194,7 +194,7 @@ const HyarihattoReview = () => {
                       <TableCell>{item.user.name}</TableCell>
                       <TableCell>{0+item.user.username}</TableCell>
                       <TableCell>
-                        <Badge color={item.shift === "non-shift" ? "light" : item.shift === "red-shift" ? "error" : item.shift === "white-shift" ? "dark" : "info"}>
+                        <Badge color={item.shift === "non-shift" ? "light" : item.shift === "red" ? "error" : item.shift === "white" ? "dark" : "info"}>
                           {item.shift.toUpperCase()}
                         </Badge>
                       </TableCell>

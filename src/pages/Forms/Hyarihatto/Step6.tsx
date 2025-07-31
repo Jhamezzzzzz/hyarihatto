@@ -1,6 +1,7 @@
 import Template from "./Template";
 import ButtonNavigation from "./ButtonNavigation";
-import { useFormData } from "../../../context/FormHyarihattoContext";
+// import { useFormData } from "../../../context/FormVoiceMemberContext";
+import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
 import { useEffect, useState } from "react";
 import usePublicDataService from "../../../services/PublicService";
 import RadioGroupV2 from "../../../components/form/input/RadioGroupV2";
@@ -19,7 +20,7 @@ interface ResponseLevel {
 const Step6FormHyarihatto = () => {
   const { ButtonPrevious, ButtonSubmit } = ButtonNavigation();
   const [loading, setLoading] = useState(true)
-  const { formData, updateFormData } = useFormData();
+  const { formData, updateFormData } = useFormHyarihatto();
   const { errors, updateError } = useFormErrors()
   const [optionsAccidentLevel, setOptionsAccidentLevel] = useState([]);
   const [optionsHazardControlLevel, setOptionsHazardControlLevel] = useState([]);

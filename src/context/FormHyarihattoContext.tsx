@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, ReactNode } from "react";
 
 // 1. Define the type
-type FormData = {
+type FormHyarihatto = {
   name: string;
   noreg: string;
   shift: string;
@@ -49,68 +49,68 @@ type FormData = {
 };
 
 // 2. Context shape
-interface FormDataContextType {
-  formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
-  updateFormData: (section: keyof Pick<FormData, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation"> | null, key: string, value: string | number | null) => void;
+interface FormHyarihattoContextType {
+  formData: FormHyarihatto;
+  setFormData: React.Dispatch<React.SetStateAction<FormHyarihatto>>;
+  updateFormData: (section: keyof Pick<FormHyarihatto, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation"> | null, key: string, value: string | number | null) => void;
   clearAllLocal: () => void
 }
 
 // 3. Create context
-const FormDataContext = createContext<FormDataContextType | undefined>(undefined);
+const FormHyarihattoContext = createContext<FormHyarihattoContextType | undefined>(undefined);
 
 // 4. Provider
-export const FormDataProvider = ({ children }: { children: ReactNode }) => {
-  const [formData, setFormData] = useState<FormData>({
-    name: localStorage.getItem("name") || "",
-    noreg: localStorage.getItem("noreg") || "",
-    lineName: localStorage.getItem("lineName") || "",
-    sectionName: localStorage.getItem("sectionName") || "",
-    shift: localStorage.getItem("submissions.shift") || "",
-    formattedDate: localStorage.getItem("formattedDate") || "",
+export const FormHyarihattoProvider = ({ children }: { children: ReactNode }) => {
+  const [formData, setFormData] = useState<FormHyarihatto>({
+    name: localStorage.getItem("hyarihatto.name") || "",
+    noreg: localStorage.getItem("hyarihatto.noreg") || "",
+    lineName: localStorage.getItem("hyarihatto.lineName") || "",
+    sectionName: localStorage.getItem("hyarihatto.sectionName") || "",
+    shift: localStorage.getItem("hyarihatto.submissions.shift") || "",
+    formattedDate: localStorage.getItem("hyarihatto.formattedDate") || "",
     time: "",
     line: "",
     location: "",
-    image: localStorage.getItem("image") || "",
+    image: localStorage.getItem("hyarihatto.image") || "",
 
     submissions: {
-      userId: Number(localStorage.getItem("submissions.userId")) || null,
-      lineId: Number(localStorage.getItem("submissions.lineId")) || null,
-      sectionId: Number(localStorage.getItem("submissions.sectionId")) || null,
+      userId: Number(localStorage.getItem("hyarihatto.submissions.userId")) || null,
+      lineId: Number(localStorage.getItem("hyarihatto.submissions.lineId")) || null,
+      sectionId: Number(localStorage.getItem("hyarihatto.submissions.sectionId")) || null,
       type: "hyarihatto",
-      shift: localStorage.getItem("submissions.shift") || "",
-      incidentDate: localStorage.getItem("submissions.incidentDate") || "",
-      incidentTime: localStorage.getItem("submissions.incidentTime") || "",
-      location: localStorage.getItem("submissions.location") || "",
+      shift: localStorage.getItem("hyarihatto.submissions.shift") || "",
+      incidentDate: localStorage.getItem("hyarihatto.submissions.incidentDate") || "",
+      incidentTime: localStorage.getItem("hyarihatto.submissions.incidentTime") || "",
+      location: localStorage.getItem("hyarihatto.submissions.location") || "",
     },
 
     hazardAssessment: {
-      currentActivity: localStorage.getItem("hazardAssessment.currentActivity") || "",
-      potentialHazard: localStorage.getItem("hazardAssessment.potentialHazard") || "",
-      hazardReason: localStorage.getItem("hazardAssessment.hazardReason") || "",
-      expectedCondition: localStorage.getItem("hazardAssessment.expectedCondition") || "",
-      improvementSuggestion: localStorage.getItem("hazardAssessment.improvementSuggestion") || "",
+      currentActivity: localStorage.getItem("hyarihatto.hazardAssessment.currentActivity") || "",
+      potentialHazard: localStorage.getItem("hyarihatto.hazardAssessment.potentialHazard") || "",
+      hazardReason: localStorage.getItem("hyarihatto.hazardAssessment.hazardReason") || "",
+      expectedCondition: localStorage.getItem("hyarihatto.hazardAssessment.expectedCondition") || "",
+      improvementSuggestion: localStorage.getItem("hyarihatto.hazardAssessment.improvementSuggestion") || "",
     },
 
     hazardReport: {
-      pattern: localStorage.getItem("hazardReport.pattern") || "",
-      source: localStorage.getItem("hazardReport.source") || "",
-      injured: localStorage.getItem("hazardReport.injured") || "",
-      cause: localStorage.getItem("hazardReport.cause") || "",
-      category: localStorage.getItem("hazardReport.category") || "",
-      accidentType: localStorage.getItem("hazardReport.accidentType") || "",
+      pattern: localStorage.getItem("hyarihatto.hazardReport.pattern") || "",
+      source: localStorage.getItem("hyarihatto.hazardReport.source") || "",
+      injured: localStorage.getItem("hyarihatto.hazardReport.injured") || "",
+      cause: localStorage.getItem("hyarihatto.hazardReport.cause") || "",
+      category: localStorage.getItem("hyarihatto.hazardReport.category") || "",
+      accidentType: localStorage.getItem("hyarihatto.hazardReport.accidentType") || "",
     },
 
     hazardEvaluation: {
-      accidentLevelId: Number(localStorage.getItem("hazardEvaluation.accidentLevelId")) || null,
-      hazardControlLevelId: Number(localStorage.getItem("hazardEvaluation.hazardControlLevelId")) || null,
-      workingFrequencyId: Number(localStorage.getItem("hazardEvaluation.workingFrequencyId")) || null,
+      accidentLevelId: Number(localStorage.getItem("hyarihatto.hazardEvaluation.accidentLevelId")) || null,
+      hazardControlLevelId: Number(localStorage.getItem("hyarihatto.hazardEvaluation.hazardControlLevelId")) || null,
+      workingFrequencyId: Number(localStorage.getItem("hyarihatto.hazardEvaluation.workingFrequencyId")) || null,
     },
   });
 
   // 5. Helper to update nested formData and localStorage
   const updateFormData = (
-    section: keyof Pick<FormData, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation"> | null,
+    section: keyof Pick<FormHyarihatto, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation"> | null,
     key: string,
     value: string | number | null
   ) => {
@@ -120,7 +120,7 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
           ...prev,
           [key]: value,
         };
-        localStorage.setItem(`${key}`, String(value));
+        localStorage.setItem(`hyarihatto.${key}`, String(value));
         return updatedSection;
       });
     }else{
@@ -135,52 +135,52 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
           [section]: updatedSection,
         };
   
-        localStorage.setItem(`${section}.${key}`, String(value));
+        localStorage.setItem(`hyarihatto.${section}.${key}`, String(value));
         return updatedFormData;
       });
     }
   };
 
   const clearAllLocal = () => {
-    localStorage.setItem('noreg', "")
-    localStorage.setItem('name', "")
-    localStorage.setItem('line', "")
-    localStorage.setItem('section', "")
-    localStorage.setItem('formattedDate', "")
-    localStorage.setItem('image', "")
-    localStorage.setItem('submissions.userId', "")
-    localStorage.setItem('submissions.lineId', "")
-    localStorage.setItem('submissions.sectionId', "")
-    localStorage.setItem('submissions.shift', "")
-    localStorage.setItem('submissions.incidentDate', "")
-    localStorage.setItem('submissions.incidentTime', "")
-    localStorage.setItem('submissions.location', "")
-    localStorage.setItem('hazardAssessment.currentActivity', "")
-    localStorage.setItem('hazardAssessment.potentialHazard', "")
-    localStorage.setItem('hazardAssessment.hazardReason', "")
-    localStorage.setItem('hazardAssessment.expectedCondition', "")
-    localStorage.setItem('hazardAssessment.improvementSuggestion', "")
-    localStorage.setItem('hazardReport.pattern', "")
-    localStorage.setItem('hazardReport.source', "")
-    localStorage.setItem('hazardReport.injured', "")
-    localStorage.setItem('hazardReport.cause', "")
-    localStorage.setItem('hazardReport.category', "")
-    localStorage.setItem('hazardReport.accidentType', "")
-    localStorage.setItem('hazardEvaluation.accidentLevelId', "")
-    localStorage.setItem('hazardEvaluation.hazardControlLevelId', "")
-    localStorage.setItem('hazardEvaluation.workingFrequencyId', "")
+    localStorage.setItem('hyarihatto.noreg', "")
+    localStorage.setItem('hyarihatto.name', "")
+    localStorage.setItem('hyarihatto.line', "")
+    localStorage.setItem('hyarihatto.section', "")
+    localStorage.setItem('hyarihatto.formattedDate', "")
+    localStorage.setItem('hyarihatto.image', "")
+    localStorage.setItem('hyarihatto.submissions.userId', "")
+    localStorage.setItem('hyarihatto.submissions.lineId', "")
+    localStorage.setItem('hyarihatto.submissions.sectionId', "")
+    localStorage.setItem('hyarihatto.submissions.shift', "")
+    localStorage.setItem('hyarihatto.submissions.incidentDate', "")
+    localStorage.setItem('hyarihatto.submissions.incidentTime', "")
+    localStorage.setItem('hyarihatto.submissions.location', "")
+    localStorage.setItem('hyarihatto.hazardAssessment.currentActivity', "")
+    localStorage.setItem('hyarihatto.hazardAssessment.potentialHazard', "")
+    localStorage.setItem('hyarihatto.hazardAssessment.hazardReason', "")
+    localStorage.setItem('hyarihatto.hazardAssessment.expectedCondition', "")
+    localStorage.setItem('hyarihatto.hazardAssessment.improvementSuggestion', "")
+    localStorage.setItem('hyarihatto.hazardReport.pattern', "")
+    localStorage.setItem('hyarihatto.hazardReport.source', "")
+    localStorage.setItem('hyarihatto.hazardReport.injured', "")
+    localStorage.setItem('hyarihatto.hazardReport.cause', "")
+    localStorage.setItem('hyarihatto.hazardReport.category', "")
+    localStorage.setItem('hyarihatto.hazardReport.accidentType', "")
+    localStorage.setItem('hyarihatto.hazardEvaluation.accidentLevelId', "")
+    localStorage.setItem('hyarihatto.hazardEvaluation.hazardControlLevelId', "")
+    localStorage.setItem('hyarihatto.hazardEvaluation.workingFrequencyId', "")
   }
 
   return (
-    <FormDataContext.Provider value={{ formData, setFormData, updateFormData, clearAllLocal }}>
+    <FormHyarihattoContext.Provider value={{ formData, setFormData, updateFormData, clearAllLocal }}>
       {children}
-    </FormDataContext.Provider>
+    </FormHyarihattoContext.Provider>
   );
 };
 
 // 6. Hook to use in components
-export const useFormData = (): FormDataContextType => {
-  const context = useContext(FormDataContext);
+export const useFormHyarihatto = (): FormHyarihattoContextType => {
+  const context = useContext(FormHyarihattoContext);
   if (!context) {
     throw new Error("useFormData must be used within a FormDataProvider");
   }

@@ -1,12 +1,13 @@
 import Template from "./Template";
 import ButtonNavigation from "./ButtonNavigation";
 import TextArea from "../../../components/form/input/TextArea";
-import { useFormData } from "../../../context/FormHyarihattoContext";
+// import { useFormData } from "../../../context/FormVoiceMemberContext";
+import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
 import { useFormErrors } from "../../../context/FormErrorContext";
 
 const Step2FormHyarihatto = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
-  const { formData, updateFormData } = useFormData();
+  const { formData, updateFormData } = useFormHyarihatto();
   const { errors, updateError } = useFormErrors()
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {

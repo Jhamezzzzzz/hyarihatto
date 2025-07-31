@@ -2,7 +2,8 @@ import Template from "./Template";
 import ButtonNavigation from "./ButtonNavigation";
 import RadioGroup from "../../../components/form/input/RadioGroup";
 import StaticOptions from "../../../utils/StaticOptions";
-import { useFormData } from "../../../context/FormHyarihattoContext";
+// import { useFormData } from "../../../context/FormVoiceMemberContext";
+import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
 import { useFormErrors } from "../../../context/FormErrorContext";
 
 type FormDataKey = {
@@ -22,7 +23,7 @@ const Step3FormHyarihatto = () => {
     optionsHyarihattoHazardInjured,
   } = StaticOptions()
 
-  const { formData, updateFormData } = useFormData()
+  const { formData, updateFormData } = useFormHyarihatto()
   const { errors, updateError } = useFormErrors()
 
   const handleChangeRadio = (option: string, group: keyof FormDataKey, name: string) => {

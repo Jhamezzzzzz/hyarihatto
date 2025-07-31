@@ -66,7 +66,7 @@ export default function Metrics({ filter }: { filter: Filter}) {
           return{
             title: item.title,
             caption: item.caption,
-            number: data?.[index-1]?.count
+            number: data?.[index-1]?.count || 0
           }
         }
       })

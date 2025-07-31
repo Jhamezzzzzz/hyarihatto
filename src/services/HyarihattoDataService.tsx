@@ -1,6 +1,7 @@
 import useShowAlert from "../hooks/useShowAlert"
 import useVerify from "../hooks/useVerify"
 import axiosInstance from "../utils/AxiosInstance";
+// import { Submission } from "../../src/pages/Dashboard/DetailHyarihatto"; 
 
 interface ErrorResponse {
   response?: {
@@ -43,6 +44,21 @@ const useHyarihattoDataService = () => {
             })
             return response
         } catch (error) {
+            handleError(error)
+        }
+    }
+
+        const getSubmissionById = async (id: number) => {
+        try {
+            const response = await axiosJWT.get(`submissions/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            console.log("✅ GET Submission response:", response.data); 
+            return response.data.data
+        } catch (error) {
+             console.error("❌ Failed to fetch submission:", error);
             handleError(error)
         }
     }
@@ -102,7 +118,8 @@ const useHyarihattoDataService = () => {
         postSubmission,
         getDashboardStatusReport,
         getDashboardBarChart,
-        getDashboardPieChart
+        getDashboardPieChart,
+        getSubmissionById
     }
   
 }

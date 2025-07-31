@@ -1,44 +1,31 @@
-import TemplateVoiceMember from "./TemplateVoiceMember";
+import Template from "./TemplateVoiceMember";
 import ButtonNavigation from "./ButtonVoice";
 import { useRef, useState } from "react";
 import { FaCamera, FaImage, FaTimes } from "react-icons/fa";
+import { useFormErrors } from "../../../context/FormErrorContext";
+import { useFormData } from "../../../context/FormHyarihattoContext";
 
-type Image = {
-  file: File | null;
-  base64: string;
-  url: string
-}
 
-const Step4FormHyarihatto = () => {
-  const { ButtonPrevious, ButtonNext } = ButtonNavigation();
+const Step3FormVoiceMember = () => {
+    const { ButtonPrevious, ButtonSubmit } = ButtonNavigation();
+  const { errors, updateError } = useFormErrors()
+  const { formData, updateFormData } = useFormData()
   const [showCameraModal, setShowCameraModal] = useState<boolean>(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const galleryInputRef = useRef<HTMLInputElement | null>(null);
   const [stream, setStream] = useState<MediaStream | null>(null);
 
-  const [image, setImage] = useState<Image>({
-      file: null,
-      base64: localStorage.getItem('imageBase64') || "",
-      url: ""
-  })
-
-
   const handleRemoveImage = () => {
-        setImage({
-            file: null,
-            base64: "",
-            url: "" 
-        })
-        localStorage.setItem("imageBase64", "")
-        // setPreviewImage((prev) => prev.filter((_, i) => i !== index));
+        updateFormData(null, "image", "")
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files) return;
 
+        updateError(null, "image", undefined)
         const file = e.target.files[0];
-        const imageUrl = URL.createObjectURL(file);
+        // const imageUrl = URL.createObjectURL(file);
 
         
         // Convert to Base64 and store
@@ -53,28 +40,32 @@ const Step4FormHyarihatto = () => {
         const base64Image = await toBase64(file);
         
         // Show preview
-        // setPreviewImage((prev) => [...prev, { file, url: imageUrl }]);
-        setImage({ 
-            file,
-            base64: base64Image, 
-            url: imageUrl 
-        });
-        localStorage.setItem("imageBase64", base64Image);
+        updateFormData(null, "image", base64Image)
+        localStorage.setItem("imageFileName", file.name)
+
     };
 
-    const handleCameraOpen = async () => {
-        try {
-        setShowCameraModal(true);
-        const mediaStream = await navigator.mediaDevices.getUserMedia({
-            video: { facingMode: "environment" }
-        });
-        setStream(mediaStream);
-        } catch (err) {
-        console.error("Gagal membuka kamera:", err);
-        alert("Tidak bisa mengakses kamera. Pastikan akses kamera diizinkan dan gunakan HTTPS atau localhost.");
-        }
-    };
+ const handleCameraOpen = async () => {
+  try {
+    const mediaStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: "environment" }, // atau "user" untuk kamera depan
+      audio: false
+    });
 
+    setStream(mediaStream);
+    setShowCameraModal(true); // Tampilkan modal setelah dapat stream
+
+    // Tunggu hingga videoRef sudah ter-render
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.srcObject = mediaStream;
+      }
+    }, 100);
+  } catch (err) {
+    console.error("Gagal membuka kamera:", err);
+    alert("Tidak bisa mengakses kamera. Pastikan akses kamera diizinkan dan gunakan HTTPS atau localhost.");
+  }
+};
     const handleCaptureImage = () => {
         const video = videoRef.current;
         const canvas = canvasRef.current;
@@ -84,8 +75,9 @@ const Step4FormHyarihatto = () => {
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             ctx.drawImage(video, 0, 0);
-            // const imageData = canvas.toDataURL('image/png');
-            // setPreviewImage((prev) => [...prev, { url: imageData }]);
+            const imageData = canvas.toDataURL('image/png');
+            updateFormData(null, "image", imageData);
+
             handleCloseCamera();
         }
     };
@@ -100,7 +92,7 @@ const Step4FormHyarihatto = () => {
 
   return (
     <div>
-      <TemplateVoiceMember showStep step={4}>
+      <Template showStep step={4}>
         <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
           <div className="bg-blue-600 text-white text-center py-3">
             <h5 className="text-lg font-semibold">Bukti Kejadian</h5>
@@ -108,17 +100,21 @@ const Step4FormHyarihatto = () => {
 
           <div className="p-6 space-y-4">
             {/* Preview Image */}
-            {!image.base64 ? (
-              <div className="w-full max-w-xl h-72 bg-black rounded-lg flex items-center justify-center mx-auto mb-5">
-                <p className="text-white text-center">
-                  Silakan upload gambar kejadian
-                </p>
-              </div>
+            {!formData?.image ? (
+              <>
+                <div className={`w-full max-w-xl h-72 bg-transparent rounded-lg flex flex-col items-center justify-center mx-auto mb-5 border ${errors.image !== undefined ? "border-error-500" : "border-gray-300"}`}>
+                  <FaImage size={52} className="text-secondary1"/>
+                  <p className="text-secondary1 text-center">
+                    Silakan upload gambar kejadian
+                  </p>
+                </div>
+                { errors.image !== undefined && <p className="ml-6 text-error-500">Gambar tidak boleh kosong!</p>}
+              </>
             ) : (
               <div className="flex flex-wrap justify-center gap-4 mb-6">
-                <div className="relative w-100 h-100 rounded-lg border border-gray-300 overflow-hidden">
+                <div className={`relative w-100 h-100 rounded-lg border border-gray-300 overflow-hidden`}>
                   <img
-                    src={image?.base64}
+                    src={formData?.image}
                     alt={`img-preview`}
                     className="w-full h-full object-cover"
                   />
@@ -161,7 +157,7 @@ const Step4FormHyarihatto = () => {
 
             {/* Modal Kamera */}
             {showCameraModal && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+              <div className="fixed inset-0 bg-opacity-40 backdrop-blur-sm z-25 flex items-center justify-center">
                 <div className="bg-white w-full max-w-3xl rounded-lg shadow-lg overflow-hidden">
                   <div className="flex justify-between items-center px-4 py-3 border-b">
                     <h5 className="text-lg font-medium">Ambil Foto</h5>
@@ -178,7 +174,7 @@ const Step4FormHyarihatto = () => {
                       autoPlay
                       playsInline
                       muted
-                      className="w-full max-h-96 bg-black rounded-md"
+                      className="w-full max-h-90 rounded-md"
                     />
                     <canvas ref={canvasRef} className="hidden" />
                   </div>
@@ -202,13 +198,13 @@ const Step4FormHyarihatto = () => {
 
             <div className="flex justify-end gap-4">
               {ButtonPrevious(2)}
-              {ButtonNext(6)}
+              {ButtonSubmit()}
             </div>
           </div>
         </div>
-      </TemplateVoiceMember>
+      </Template>
     </div>
   );
 };
 
-export default Step4FormHyarihatto;
+export default Step3FormVoiceMember;

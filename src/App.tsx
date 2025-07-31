@@ -29,11 +29,14 @@ import Step3FormHyarihatto from "./pages/Forms/Hyarihatto/Step3";
 import Step4FormHyarihatto from "./pages/Forms/Hyarihatto/Step4";
 import Step5FormHyarihatto from "./pages/Forms/Hyarihatto/Step5";
 import Step6FormHyarihatto from "./pages/Forms/Hyarihatto/Step6";
+import HyarihattoFinish from "./pages/Forms/Hyarihatto/Finish";
 import IdentityFormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Identity";
 import Step1FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step1Voice";
 import Step2FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step2Voice";
 import Step3FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step3Voice";
-import Finish from "./pages/Forms/Hyarihatto/Finish";
+import VoiceMemberFinish from "./pages/Forms/Hyarihatto/Finish";
+
+
 
 export default function App() {
   return (
@@ -76,6 +79,7 @@ export default function App() {
           <Route path="/member/voice-member/1" element={<Step1FormVoiceMember />} />
           <Route path="/member/voice-member/2" element={<Step2FormVoiceMember />} />
           <Route path="/member/voice-member/3" element={<Step3FormVoiceMember />} />
+          <Route path="/member/voice-member/submitted" element={<VoiceMemberFinish />} />,
 
           {/* Member Form Hyarihatto */}
           <Route path="/member/hyarihatto" element={<IdentityFormHyarihatto />} />,
@@ -85,7 +89,7 @@ export default function App() {
           <Route path="/member/hyarihatto/4" element={<Step4FormHyarihatto />} />,
           <Route path="/member/hyarihatto/5" element={<Step5FormHyarihatto />} />,
           <Route path="/member/hyarihatto/6" element={<Step6FormHyarihatto />} />,
-          <Route path="/member/hyarihatto/submitted" element={<Finish />} />,
+          <Route path="/member/hyarihatto/submitted" element={<HyarihattoFinish />} />,
 
           <Route path="/panduan" element={<PanduanHyat />} />
           {/* Fallback Route */}

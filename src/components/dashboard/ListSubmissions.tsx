@@ -15,13 +15,8 @@ import { useDebounce } from "../../hooks/useDebonce";
 import NoDataOrLoading from "../ui/table/NoDataOrLoading";
 import Pagination from "../ui/table/Pagination";
 import { Filter } from "../../pages/QuestLeader/HomeLeader";
-
-const STATUS = [
-  "Diajukan",
-  "Dijadwalkan",
-  "Terselesaikan",
-  "Ditolak"
-]
+import StaticOptions from "../../utils/StaticOptions";
+import Button from "../ui/button/Button";
 
 type DataSubmissions = {
   id: number;
@@ -41,6 +36,7 @@ type DataSubmissions = {
 
 export default function ListSubmissions({ filter }:{ filter: Filter}) {
   const navigate = useNavigate();
+  const { STATUS_SUBMISSION } = StaticOptions()
   const [loading, setLoading] = useState(true)
   const [dataSubmissions, setDataSubmissions] = useState([])
   const { getSubmissionsRecent } = useHyarihattoDataService()
@@ -66,6 +62,11 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
     } catch (error) {
       console.error(error)
       setDataSubmissions([])
+      setPagination({
+        ...pagination,
+        page: 1,
+        totalPages: 0,
+      })
     } finally{
       setLoading(false)
     }
@@ -86,7 +87,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
 
         <div className="flex items-center gap-3">
           <Input
-            placeholder="Cari"
+            placeholder="Cari nama atau no reg"
             endIcon={<FaSearch/>}
             onChange={(e)=>setSearchQ(e.target.value)}
             value={searchQ}
@@ -141,16 +142,17 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
                         : "error"
                     }
                   >
-                    {STATUS[item.status].toUpperCase() || ""}
+                    {STATUS_SUBMISSION[item.status].toUpperCase() || ""}
                   </Badge>
                 </TableCell>
                 <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                  <button
+                  <Button
+                    size="sm"
                     className="px-4 py-1 text-sm font-medium text-dark bg-primary hover:bg-primary-dark rounded-md transition duration-200"
                     onClick={() => navigate(`/hyarihatto/${item.id}`)} // Fungsi handleDetail opsional
                   >
                     <FaClone/>
-                  </button>
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -170,7 +172,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
         }}
         limitPerPage={pagination.limit}
         options={[10, 25, 50]}
-        />
+      />
     </div>
   );
 }

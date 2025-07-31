@@ -3,7 +3,8 @@ import Input from "../../../components/form/input/InputField";
 import Select from "../../../components/form/Select";
 import ButtonNavigation from "./ButtonNavigation";
 import Template from "./Template";
-import { useFormData } from "../../../context/FormHyarihattoContext";
+// import { useFormData } from "../../../context/FormVoiceMemberContext";
+import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
 import { useDebounce } from "../../../hooks/useDebonce";
 import usePublicDataService from "../../../services/PublicService";
 import StaticOptions from "../../../utils/StaticOptions";
@@ -11,7 +12,7 @@ import { useFormErrors } from "../../../context/FormErrorContext";
 
 const IdentityFormHyarihatto: React.FC = () => {
   const { ButtonNext } = ButtonNavigation();
-  const { formData, updateFormData } = useFormData();
+  const { formData, updateFormData } = useFormHyarihatto();
   const { errors, updateError } = useFormErrors();
 
   const [name, setName] = useState(localStorage.getItem("name") || "");

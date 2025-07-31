@@ -3,12 +3,13 @@ import ButtonNavigation from "./ButtonNavigation";
 import { useRef, useState } from "react";
 import { FaCamera, FaImage, FaTimes } from "react-icons/fa";
 import { useFormErrors } from "../../../context/FormErrorContext";
-import { useFormData } from "../../../context/FormHyarihattoContext";
+// import { useFormData } from "../../../context/FormVoiceMemberContext";
+import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
 
 const Step4FormHyarihatto = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
   const { errors, updateError } = useFormErrors()
-  const { formData, updateFormData } = useFormData()
+  const { formData, updateFormData } = useFormHyarihatto()
   const [showCameraModal, setShowCameraModal] = useState<boolean>(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);

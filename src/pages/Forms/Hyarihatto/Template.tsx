@@ -2,7 +2,8 @@ import React, { ReactNode, useState } from "react";
 import WaveBackground from "../../../components/image/Wave-Background-Hyat.png";
 import TitleFormHyarihatto from "./Title";
 import { useNavigate } from "react-router";
-import { useFormData } from "../../../context/FormHyarihattoContext";
+// import { useFormData } from "../../../context/FormVoiceMemberContext";
+import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
 import { useFormErrors } from "../../../context/FormErrorContext";
 import StaticOptions from "../../../utils/StaticOptions";
 import PageMeta from "../../../components/common/PageMeta";
@@ -23,7 +24,7 @@ const Template = ({
   const [currentStep, setCurrentStep] = useState(step || 0);
   const navigate = useNavigate();
   const { errorMessageObject } = StaticOptions()
-  const { formData } = useFormData();
+  const { formData } = useFormHyarihatto();
   const { updateError, clearAllErrors } = useFormErrors()
 
   const step1NotComplete =

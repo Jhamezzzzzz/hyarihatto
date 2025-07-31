@@ -2,13 +2,14 @@ import Template from "./Template";
 import DatePicker from "../../../components/form/date-picker";
 import Input from "../../../components/form/input/InputField";
 import ButtonNavigation from "./ButtonNavigation";
-import { useFormData } from "../../../context/FormHyarihattoContext";
+// import { useFormData } from "../../../context/FormVoiceMemberContext";
+import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
 import { useState } from "react";
 import { useFormErrors } from "../../../context/FormErrorContext";
 
 const Step1FormHyarihatto = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
-   const { formData, updateFormData } = useFormData();
+   const { formData, updateFormData } = useFormHyarihatto();
    const { errors, updateError } = useFormErrors()
    const [formattedDate, setFormattedDate] = useState(localStorage.getItem("formattedDate") || "")
 

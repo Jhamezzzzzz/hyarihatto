@@ -34,9 +34,9 @@ const useHyarihattoDataService = () => {
         }
     }
 
-    const getSubmissionForReviews = async(page: string | number, limit: string | number, q: string) => {
+    const getSubmissionForReviews = async(month: string, year: number, page: string | number, limit: string | number, q: string) => {
         try {
-            const response = await axiosJWT.get(`submissions/reviews?type=hyarihatto&page=${page}&limit=${limit}&q=${q}`, {
+            const response = await axiosJWT.get(`submissions/reviews?type=hyarihatto&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

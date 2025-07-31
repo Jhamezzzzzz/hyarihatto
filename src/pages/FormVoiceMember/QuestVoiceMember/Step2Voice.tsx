@@ -1,7 +1,7 @@
 import TemplateVoiceMember from "./TemplateVoiceMember";
 import ButtonNavigation from "./ButtonVoice";
 import TextArea from "../../../components/form/input/TextArea";
-import { useFormData } from "../../../context/FormHyarihattoContext";
+import { useFormData } from "../../../context/FormVoiceMemberContext";
 
 const Step2FormVoiceMember = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();

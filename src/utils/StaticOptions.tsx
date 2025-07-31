@@ -91,8 +91,14 @@ const StaticOptions = () => {
         accidentLevelId: "Level kecelakaan",
         hazardControlLevelId: "Frekuensi kerja",
         workingFrequencyId: "Level pencegah bahaya",
-
     }
+
+    const STATUS_SUBMISSION = [
+        "Diajukan",
+        "Dijadwalkan",
+        "Terselesaikan",
+        "Ditolak"
+    ]
 
     return{
         optionsShift,
@@ -102,7 +108,8 @@ const StaticOptions = () => {
         optionsHyarihattoHazardCause,
         optionsHyarihattoHazardCategory,
         optionsHyarihattoAccidentType,
-        errorMessageObject
+        errorMessageObject,
+        STATUS_SUBMISSION
     }
 }
 

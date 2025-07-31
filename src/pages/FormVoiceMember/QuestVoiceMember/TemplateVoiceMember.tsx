@@ -3,6 +3,8 @@ import WaveBackground from "../../../components/image/Wave-Background.png";
 import TitleFormHyarihatto from "./Title";
 import { useNavigate } from "react-router";
 import { useFormData } from "../../../context/FormHyarihattoContext";
+import { useFormErrors } from "../../../context/FormErrorContext";
+import StaticOptions from "../../../utils/StaticOptions";
 
 const TemplateVoiceMember = ({
   children,
@@ -18,6 +20,8 @@ const TemplateVoiceMember = ({
   const [currentStep, setCurrentStep] = useState(step || 0);
   const navigate = useNavigate();
   const { formData } = useFormData();
+  const { updateError, clearAllErrors } = useFormErrors()
+  const { errorMessageObject } = StaticOptions()
 
 const step1NotComplete =
     !formData.submissions.incidentDate ||
@@ -30,28 +34,49 @@ const step1NotComplete =
     !formData.hazardAssessment.expectedCondition ||
     !formData.hazardAssessment.improvementSuggestion;
 
-
-
-  const step4NotComplete = !formData.hazardReport.pattern;
+   const step3NotComplete = !formData.hazardAssessment.currentActivity ;
 
 
 
-  const validateStep = (step: number) => {
+  const isError = (step: number) => {
     switch (step) {
       case 1:
-        return !step1NotComplete;
+        return step1NotComplete;
       case 2:
-        return !step2NotComplete;
-      case 4:
-        return !step4NotComplete;
+        return step2NotComplete;
+      case 3:
+        return step3NotComplete;
     }
   };
 
-  const buttonStep = (
+    const setErrorForm = (step: number) => {
+      const requiredSections: (keyof typeof formData)[] = ["submissions", "hazardAssessment"];
+      const sectionForm = formData[requiredSections[step-1]]
+
+      Object.entries(sectionForm).forEach(([key, value]) => {
+          const isEmpty = value === "" || value === null || value === undefined;
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          updateError(requiredSections[step-1] as any, key, isEmpty ? `${errorMessageObject[key]} tidak boleh kosong!` : undefined);
+      });
+    };
+
+
+
+  const handleClickStep = (s: number) => {
+    if(!isError(currentStep) || s < currentStep){
+      setCurrentStep(s);
+      navigate(`/member/voice-member/${s}`);
+      clearAllErrors()
+    }else{
+      setErrorForm(currentStep)
+    }
+  }
+
+   const buttonStep = (
     <div className="flex justify-center items-center gap-2 mb-4">
       {[1, 2, 3].map((s, index) => {
         const isActive = currentStep === s;
-        const isPassed = validateStep(s);
+        const isPassed = !isError(s);
         // const canNavigate = validateStep(currentStep);
 
         return (
@@ -65,19 +90,13 @@ const step1NotComplete =
                                 ? "border-blue-600 text-blue-600 hover:bg-blue-100"
                                 : "border-gray-300 text-gray-400 cursor-not-allowed"
                             }`}
-              onClick={() => {
-                // if (s <= currentStep) {
-                console.log("CLICKED S: ", s)
-                setCurrentStep(s);
-                navigate(`/member/hyarihatto/${s}`);
-                // }
-              }}
+              onClick={()=>handleClickStep(s)}
             //   disabled={!canNavigate}
             >
               {index + 1}
             </button>
 
-            {index < 3 && <span className="text-gray-400 select-none">─</span>}
+            {index < 2 && <span className="text-gray-400 select-none">─</span>}
           </React.Fragment>
         );
       })}

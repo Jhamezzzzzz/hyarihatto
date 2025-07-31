@@ -2,7 +2,7 @@ import Template from './Template'
 import Button from '../../../components/ui/button/Button'
 import { useNavigate } from 'react-router'
 
-const Finish = () => {
+const HyarihattoFinish = () => {
     const navigate = useNavigate()
 
     const handleToHome = () => {
@@ -20,4 +20,4 @@ const Finish = () => {
   )
 }
 
-export default Finish
+export default HyarihattoFinish

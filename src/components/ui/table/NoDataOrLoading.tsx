@@ -2,7 +2,7 @@ import Spinner from '../spinner'
 
 const NoDataOrLoading = ({data, loading} : {data: unknown[] | [], loading: boolean}) => {
   return (
-    <div className='flex justify-center items-center py-10 dark:text-gray-400'>
+    <div className={`flex justify-center items-center ${(data.length === 0 || loading ? "py-10" : "py-2")} dark:text-gray-400`}>
         { (data.length === 0 && !loading) && (
             <p>Tidak ada data ditemukan</p>
         )}

@@ -42,14 +42,14 @@ const Step1FormHyarihatto = () => {
   return (
     <div>
       <Template showStep step={1}>
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl">
+        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 shadow-lg rounded-xl">
           <div className="bg-green-600 text-white text-center py-3 rounded-t-xl">
             <h5 className="text-lg font-semibold">Waktu & Lokasi</h5>
           </div>
 
           <div className="p-6 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Tanggal:<span className="text-red-500">*</span>
               </label>
               <DatePicker
@@ -63,7 +63,7 @@ const Step1FormHyarihatto = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Waktu:<span className="text-red-500">*</span>
               </label>
               <DatePicker
@@ -77,7 +77,7 @@ const Step1FormHyarihatto = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Lokasi:<span className="text-red-500">*</span>
               </label>
               <Input

@@ -19,14 +19,14 @@ const Step2FormHyarihatto = () => {
   return (
     <div>
       <Template showStep step={2}>
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
+        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 shadow-lg rounded-xl overflow-hidden">
           <div className="bg-green-600 text-white text-center py-3">
             <h5 className="text-lg font-semibold">Catatan</h5>
           </div>
 
           <div className="p-6 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Apa yang sedang dilakukan?{" "}
                 <span className="text-red-500">*</span>
               </label>
@@ -41,7 +41,7 @@ const Step2FormHyarihatto = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Potensi bahaya apa yang akan timbul{" "}
                 <span className="text-red-500">*</span>
               </label>
@@ -56,7 +56,7 @@ const Step2FormHyarihatto = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Mengapa kondisinya berbahaya seperti itu?{" "}
                 <span className="text-red-500">*</span>
               </label>
@@ -71,10 +71,10 @@ const Step2FormHyarihatto = () => {
             </div>
 
             <div>
-              <p className="block text-sm font-medium text-gray-700 mb-1">
+              <p className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Seharusnya kondisinya bagaimana?{" "}
               </p>
-              <label className="block text-sm text-gray-500 mb-1">
+              <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">
                 a. Harapan yang diinginkan <span className="text-red-500">*</span>
               </label>
               <TextArea
@@ -85,7 +85,7 @@ const Step2FormHyarihatto = () => {
                 hint={errors.hazardAssessment?.expectedCondition}
                 error={errors?.hazardAssessment?.expectedCondition !== undefined}
               />
-              <label className="block text-sm text-gray-500 mb-1">
+              <label className="block text-sm text-gray-500 dark:text-gray-400 mb-1">
                 b. Usulan yang diinginkan
               </label>
               <TextArea

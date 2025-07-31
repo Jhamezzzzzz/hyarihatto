@@ -86,7 +86,7 @@ export default function DatePicker({
     };
   }, [mode, onChange, id, defaultDate, dateFormat]);
 
-  const errorClass = " text-error-800 border-error-500 focus:ring-3 focus:ring-error-500/10  dark:text-error-400 dark:border-error-500"
+  const errorClass = " text-error-800 border-error-500 focus:ring-3 focus:ring-error-500/10  dark:text-error-400 dark:border-error-500!"
 
   const handleClear = () => {
     if(flatpickrInstance.current && !Array.isArray(flatpickrInstance.current)){

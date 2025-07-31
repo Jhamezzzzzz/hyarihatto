@@ -1,8 +1,6 @@
 import React, { ReactNode, useState } from "react";
-import WaveBackground from "../../../components/image/Wave-Background-Hyat.png";
 import TitleFormHyarihatto from "./Title";
 import { useNavigate } from "react-router";
-// import { useFormData } from "../../../context/FormVoiceMemberContext";
 import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
 import { useFormErrors } from "../../../context/FormErrorContext";
 import StaticOptions from "../../../utils/StaticOptions";
@@ -129,8 +127,7 @@ const Template = ({
     <div>
       <PageMeta title="Form Hyarihatto | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <div
-        className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center"
-        style={{ backgroundImage: `url(${WaveBackground})` }}
+        className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center bg-[url(components/image/Wave-Background-Hyat.png)] dark:bg-[url(components/image/Wave-Dark-Background-Hyat.jpg)]"
       >
         <div className="w-full max-w-2xl">
           <TitleFormHyarihatto showBack={showBack || false} backToHome={backToHome}/>

@@ -112,16 +112,16 @@ const IdentityFormHyarihatto: React.FC = () => {
               </li>
               <li>
                 <span className="mx-2">{">"}</span>
-                <span className="text-gray-800 font-semibold">
+                <span className="text-gray-800 dark:text-gray-400 font-semibold">
                   Hyarihatto
                 </span>
               </li>
             </ol>
           </nav>
         </div>
-        <div className="bg-white shadow-lg rounded-lg p-6">
+        <div className="bg-white dark:bg-gray-900 shadow-lg rounded-lg p-6">
           <div className="border-b border-gray-200 pb-4 mb-6 text-center">
-            <h5 className="text-xl font-semibold text-gray-800">
+            <h5 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
               Identitas Member
             </h5>
           </div>
@@ -129,7 +129,7 @@ const IdentityFormHyarihatto: React.FC = () => {
             <div>
               <label
                 htmlFor="noreg"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1"
               >
                 No.Reg<span className="text-red-500">*</span>
               </label>
@@ -148,7 +148,7 @@ const IdentityFormHyarihatto: React.FC = () => {
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1"
               >
                 Nama<span className="text-red-500">*</span>
               </label>
@@ -163,7 +163,7 @@ const IdentityFormHyarihatto: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Line
               </label>
               <Input
@@ -176,7 +176,7 @@ const IdentityFormHyarihatto: React.FC = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Section<span className="text-red-500">*</span>
               </label>
               <Input
@@ -193,7 +193,7 @@ const IdentityFormHyarihatto: React.FC = () => {
             <div>
               <label
                 htmlFor="shift"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1"
               >
                 Shift<span className="text-red-500">*</span>
               </label>

@@ -5,6 +5,9 @@ import useShowAlert from './useShowAlert'
 import { useAuth } from '../context/AuthProvider'
 // import { useEffect } from 'react'
 
+let isRefreshing = false
+let refreshPromise: Promise<unknown> | null = null
+
 const useVerify = () => {
   const { auth, setTokenAndDecode } = useAuth()
   const navigate = useNavigate()
@@ -16,25 +19,42 @@ const useVerify = () => {
   axiosJWT.interceptors.request.use(
     async (config) => {
       const currentDate = new Date()
-      console.log("TES COK AUTH: ", auth)
-      if (auth?.expire as number  * 1000 < currentDate.getTime()) {
-        try {
-          const response = await axiosTWIIS.get('/token')
-          const newAccessToken = response.data.accessToken
-          config.headers.Authorization = `Bearer ${newAccessToken}`
-          setTokenAndDecode(newAccessToken)
-        } catch (error) {
-          console.error('Token refresh failed:', error)
-          alertError("Sesi telah berakhir. Silakan login kembali!")
-          navigate('/signin')
-          return Promise.reject(error)
+      if (auth.expire * 1000 < currentDate.getTime()) {
+        console.log('Token expired, refreshing...')
+
+        if (!isRefreshing) {
+          isRefreshing = true
+          refreshPromise = axiosTWIIS
+            .get('/token') // pakai axios TANPA interceptor
+            .then((response) => {
+              const newAccessToken = response.data.accessToken
+              setTokenAndDecode(newAccessToken)
+              isRefreshing = false
+              return newAccessToken
+            })
+            .catch((error) => {
+              isRefreshing = false
+              console.error('Token refresh failed:', error)
+              alertError("Sesi telah berakhir. Silakan login kembali!")
+              navigate('/signin')
+              return Promise.reject(error)
+            })
         }
+
+        try {
+          const newToken = await refreshPromise
+          config.headers.Authorization = `Bearer ${newToken}`
+        } catch (err) {
+          return Promise.reject(err)
+        }
+
       } else {
         config.headers.Authorization = `Bearer ${auth.token}`
       }
+
       return config
     },
-    (error) => Promise.reject(error),
+    (error) => Promise.reject(error)
   )
 
   return {

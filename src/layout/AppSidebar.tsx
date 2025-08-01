@@ -9,7 +9,7 @@ import {
   TableIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import { FaBalanceScale, FaBookReader, FaChartBar, FaDiagnoses, FaPeopleCarry, FaUserInjured } from "react-icons/fa";
+import { FaBalanceScale, FaBookReader, FaDiagnoses, FaPeopleCarry, FaUserInjured } from "react-icons/fa";
 
 
 type NavItem = {
@@ -28,11 +28,11 @@ const navItems: NavItem[] = [
 ];
 
 const hyarihattoItems: NavItem[] = [
-  {
-    icon: <FaChartBar />,
-    name: "Summary",
-    path: "/hyarihatto/summary",
-  },
+  // {
+  //   icon: <FaChartBar />,
+  //   name: "Summary",
+  //   path: "/hyarihatto/summary",
+  // },
   {
     icon: <FaBookReader/>,
     name: "Review",
@@ -46,11 +46,11 @@ const hyarihattoItems: NavItem[] = [
 ];
 
 const voiceMemberItems: NavItem[] = [
-  {
-    icon: <FaChartBar />,
-    name: "Summary",
-    path: "/voice-member/summary",
-  },
+  // {
+  //   icon: <FaChartBar />,
+  //   name: "Summary",
+  //   path: "/voice-member/summary",
+  // },
   {
     icon: <FaBookReader />,
     name: "Review",

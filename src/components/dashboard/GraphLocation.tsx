@@ -274,35 +274,35 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                     data={dataPieChart}
                     dataKey="count"
                     nameKey="name"
-                    outerRadius={120}
+                    // outerRadius={120}
                     fill="#8884d8"
+                    labelLine={false}
                     label={({
                       cx,
                       cy,
                       midAngle,
+                      innerRadius, // Make sure to destructure innerRadius if you're using it
                       outerRadius,
-                      percent,
-                      fill
+                      percent
                     }: PieLabelProps) => {
-                      // Calculate the outer point for the label line
-                      const typedMidAngle = midAngle || 0;
-                      const typedPercent = percent || 0;
                       const RADIAN = Math.PI / 180;
-                      const radius = outerRadius * 1.2; // A bit further out than the pie
-                      const x = cx + radius * Math.cos(-typedMidAngle * RADIAN);
-                      const y = cy + radius * Math.sin(-typedMidAngle * RADIAN);
-                      return (
-                        <text
-                          x={x}
-                          y={y}
-                          fill={fill} // Use slice color for label text or a consistent color
-                          textAnchor={x > cx ? "start" : "end"} // Align text based on its position relative to the center
-                          dominantBaseline="central"
-                        >
-                          {/* {name}{" "} */}
-                          {`(${(typedPercent * 100).toFixed(0)}%)`}{" "}
-                        </text>
-                      );
+                      const radius = innerRadius + (outerRadius - innerRadius) * 0.5; // Midpoint of the slice thickness
+                      if(midAngle && percent){
+                        const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                        const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                        return (
+                          <text
+                            x={x}
+                            y={y}
+                            fill="white" // Consider using a contrasting color for better readability inside slices
+                            textAnchor={x > cx ? "start" : "end"}
+                            dominantBaseline="central"
+                          >
+                            {`${(percent * 100).toFixed(0)}%`}
+                          </text>
+                        );
+                      }
+
                     }}
                   >
                     {dataPieChart.map((entry, index) => {

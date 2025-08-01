@@ -37,14 +37,14 @@ const RadioV2: React.FC<RadioProps> = ({
         value={value}
         checked={checked}
         onChange={() => !disabled && onChange(value)} // Prevent onChange when disabled
-        className="sr-only"
+        className={`sr-only hover:bg-brand-50`}
         disabled={disabled} // Disable input
       />
       <span
         className={`flex h-5 w-5 items-center justify-center rounded-full border-[1.25px] ${
           checked
             ? "border-brand-500 bg-brand-500"
-            : "bg-transparent border-gray-300 dark:border-gray-700"
+            : "bg-transparent border-gray-300 dark:border-gray-70"
         } ${
           disabled
             ? "bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-700"

@@ -1,6 +1,12 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import LimitPerPage from "./LimitPerPage";
 
+export type Pagination = {
+  page: number;
+  totalPages: number;
+  limit: number;
+}
+
 type PaginationProps = {
   currentPage: number;
   totalPages: number;

@@ -74,8 +74,8 @@ export default function SignInLead() {
 
   return (
     <div className="login-page ">
-       <div className="absolute top-1 right-2 z-5">
-      <img src={LogoSafety} alt="Logo Safety" className="w-14 h-14 mr-1" />
+      <div className="absolute top-1 right-2 z-5">
+        <img src={LogoSafety} alt="Logo Safety" className="w-14 h-14 mr-1" />
       </div>
       <PageMeta title="Leader Login | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <div style={{ zIndex: 1, maxWidth: "900px", width: "750px" }}>
@@ -95,7 +95,7 @@ export default function SignInLead() {
             </svg>
                 Kembali
             </button>
-        <div className="w-full max-w-4xl bg-white bg-opacity-60 backdrop-blur-md shadow-xl rounded-2xl flex flex-col md:flex-row overflow-hidden z-4">
+        <div className="w-full max-w-4xl bg-white dark:bg-gray-900 bg-opacity-60 backdrop-blur-md shadow-xl rounded-2xl flex flex-col md:flex-row overflow-hidden z-4">
           {/* KIRI */}
           <div className="w-full md:w-1/2 p-8 flex flex-col justif-start items-center text-start bg-white/70">
             <div>

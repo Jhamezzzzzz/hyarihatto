@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #f0f0f0;
+  /* background-color: #f0f0f0; */
   overflow: hidden;
   z-index: 1;
   padding-bottom: 150px; /* untuk ruang wave bawah */

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import PageMeta from "../../components/common/PageMeta";
 import LabelMark from "./LabelMark";
 import LogoSafety from "../../components/image/000ab1bef0f166ad984632cf1b4d63fb.png";
+import { ThemeToggleButton } from "../../components/common/ThemeToggleButton";
 
 export default function MainUser() {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ export default function MainUser() {
   return (
     <section className="home">
       <div className="absolute top-1 right-2">
-      <img src={LogoSafety} alt="Logo Safety" className="w-14 h-14 mr-1" />
+        <img src={LogoSafety} alt="Logo Safety" className="w-14 h-14 mr-1" />
       </div>
       <PageMeta title="Warehouse Member | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <button
@@ -49,9 +50,13 @@ export default function MainUser() {
         </svg>
         Kembali
       </button>
+
+      <div className="mb-10">
+        <ThemeToggleButton/>
+      </div>
       <div className="hyarihato">
         <motion.p
-          className="title-little-1"
+          className="title-little-1 dark:text-gray-200"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
@@ -59,7 +64,7 @@ export default function MainUser() {
           Selamat datang di
         </motion.p>
         <motion.p
-          className="title-little-online"
+          className="title-little-online dark:text-gray-300"
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
@@ -68,7 +73,7 @@ export default function MainUser() {
         </motion.p>
 
         <motion.p
-          className="title-bigger"
+          className="title-bigger dark:text-green-400!"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6, duration: 0.6 }}
@@ -77,7 +82,7 @@ export default function MainUser() {
         </motion.p>
 
         <motion.p
-          className="title-little"
+          className="title-little dark:text-blue-600!"
           initial={{ opacity: 0, x: 50 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.9, duration: 0.6 }}

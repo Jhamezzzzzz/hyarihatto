@@ -150,8 +150,8 @@ const ButtonNavigation = () => {
                     }
                     return new File([u8arr], filename, { type: mime });
                 };
-                const base64ImageLocal = localStorage.getItem("image") || ""
-                const base64ImageFileNameLocal = localStorage.getItem("imageFileName") || ""
+                const base64ImageLocal = localStorage.getItem("hyarihatto.image") || ""
+                const base64ImageFileNameLocal = localStorage.getItem("hyarihatto.imageFileName") || ""
                 const fileImage = base64ToFile(base64ImageLocal, base64ImageFileNameLocal, "image/png")
     
                 const newFormData = new FormData()

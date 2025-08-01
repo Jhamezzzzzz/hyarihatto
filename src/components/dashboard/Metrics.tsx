@@ -90,7 +90,7 @@ export default function Metrics({ filter }: { filter: Filter}) {
           <div key={index} className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
             <div className="flex justify-between items-center">
               <div>
-                <h4 className="text-2xl text-gray-600 dark:text-gray-400">
+                <h4 className="text-xl text-gray-600 dark:text-gray-400">
                   {item.title.toUpperCase()}
                 </h4>
               </div>
@@ -102,7 +102,7 @@ export default function Metrics({ filter }: { filter: Filter}) {
             </div>
             <div>
               <p
-                style={{ fontSize: "11px" }}
+                style={{ fontSize: "10px" }}
                 className="mt-2 text-gray-600 dark:text-white/90"
               >
                 {item.caption}

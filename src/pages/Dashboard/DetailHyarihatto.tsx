@@ -185,9 +185,10 @@ useEffect(() => {
              {console.log("Image URL:", `${config.BACKEND_URL}/${data.HazardReport.proof}`)}
 
   return (
+    
     <div className="grid grid-cols-12 gap-2 p-1">
       {/* <!-- Total Rank --> */}
-    <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-2 shadow-md
+    <div className="col-span-12 rounded-2xl border border-gray-200 bg-white px-5 py-2 shadow-md
      dark:border-gray-800 dark:bg-white/[0.03] space-y-4 h-[220px]">
       <h3 className=" mt-4 text-xl font-bold text-gray-800 dark:text-white">Identitas Catatan</h3>
       <div className=" text-sm text-gray-700 dark:text-gray-300">
@@ -323,7 +324,7 @@ useEffect(() => {
            
            <img
             src={`${config.BACKEND_URL}/${data.HazardReport.proof}`} 
-            className="w-34 h-34 mr-2"
+            className="w-38 h-38 mr-2"
           />
 
           </div>
@@ -334,7 +335,7 @@ useEffect(() => {
             </div>
             </div>
           </div>
-          <div>
+          <div className="pb-4 border-b border-gray-300">
             <p className="font-medium">Tipe Kecelakaan [Stop 6 + alpha]</p>
               <p>{data.HazardReport?.accidentType || "-"}</p>
           </div>

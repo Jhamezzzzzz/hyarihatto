@@ -127,7 +127,7 @@ const Step6FormHyarihatto = () => {
   return (
     <div>
       <Template showStep step={6}>
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
+        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 shadow-lg rounded-xl overflow-hidden border dark:border-gray-700">
           <div className="bg-green-600 text-white text-center py-3">
             <h5 className="text-lg font-semibold">
               Pengisian Hyarihatto Score dan Rank
@@ -136,17 +136,17 @@ const Step6FormHyarihatto = () => {
 
           <div className="p-6 space-y-4">
             {/* Card Score dan Rank */}
-            <div className="bg-white shadow rounded-lg">
-              <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
-                <h5 className="text-lg font-semibold">
+            <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 shadow rounded-lg">
+              <div className="bg-gray-100 dark:bg-gray-600 px-4 py-2 text-center rounded-t-lg">
+                <h5 className="text-lg font-semibold dark:text-gray-300">
                   Silakan pilih satu pada ketiga level berikut 
                 </h5>
               </div>
               <div className="p-4 space-y-4">
                 {/* Level Kecelakaan */}
-                <div className="bg-white shadow rounded-lg">
-                  <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
-                    <h5 className="text-base font-semibold">
+                <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 shadow rounded-lg">
+                  <div className="bg-gray-100 dark:bg-gray-600 px-4 py-2 text-center rounded-t-lg">
+                    <h5 className="text-base font-semibold dark:text-gray-300">
                       Level Kecelakaan <span className="text-red-500">*</span>
                     </h5>
                   </div>
@@ -172,9 +172,9 @@ const Step6FormHyarihatto = () => {
                 {/* Frekuensi & Pencegah */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* Frekuensi Kerja */}
-                  <div className="bg-white shadow rounded-lg">
-                    <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
-                      <h5 className="text-base font-semibold">
+                  <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 shadow rounded-lg">
+                    <div className="bg-gray-100 dark:bg-gray-600 px-4 py-2 text-center rounded-t-lg">
+                      <h5 className="text-base font-semibold dark:text-gray-300">
                         Frekuensi Kerja <span className="text-red-500">*</span>
                       </h5>
                     </div>
@@ -198,9 +198,9 @@ const Step6FormHyarihatto = () => {
                   </div>
 
                   {/* Pencegah Bahaya */}
-                  <div className="bg-white shadow rounded-lg">
-                    <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
-                      <h5 className="text-base font-semibold">
+                  <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 shadow rounded-lg">
+                    <div className="bg-gray-100 dark:bg-gray-600 px-4 py-2 text-center rounded-t-lg">
+                      <h5 className="text-base font-semibold dark:text-gray-300">
                         Level Pencegah Bahaya{" "}
                         <span className="text-red-500">*</span>
                       </h5>
@@ -230,24 +230,24 @@ const Step6FormHyarihatto = () => {
             {/* Panduan dan Total Nilai */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Panduan */}
-              <div className="bg-white shadow rounded-lg">
-                <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
-                  <h5 className="text-base font-semibold">Panduan Nilai</h5>
+              <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 shadow rounded-lg">
+                <div className="bg-gray-100 dark:bg-gray-600 px-4 py-2 text-center rounded-t-lg">
+                  <h5 className="text-base font-semibold dark:text-gray-300">Panduan Nilai</h5>
                 </div>
                 <div className="p-3 text-sm">
                   <table className="w-full text-left">
                     <thead>
                       <tr>
-                        <th className="px-2 py-1">SCORE</th>
-                        <th className="px-2 py-1">RANK</th>
+                        <th className="px-2 py-1 dark:text-gray-300">SCORE</th>
+                        <th className="px-2 py-1 dark:text-gray-300">RANK</th>
                       </tr>
                     </thead>
                     <tbody>
                       { scoreRanks.map((item: ResponseLevel, index: number)=>{
                         return(
                           <tr key={index}>
-                            <td className="px-2 py-1">{item.minScore} - {item.maxScore}</td>
-                            <td className="px-2 py-1">{item.rank}</td>
+                            <td className="px-2 py-1 dark:text-gray-400">{item.minScore} - {item.maxScore}</td>
+                            <td className="px-2 py-1 dark:text-gray-400">{item.rank}</td>
                           </tr>
                         )
                       })}
@@ -263,18 +263,18 @@ const Step6FormHyarihatto = () => {
               </div>
 
               {/* Total Nilai */}
-              <div className="bg-white shadow rounded-lg">
-                <div className="bg-gray-100 px-4 py-2 text-center rounded-t-lg">
-                  <h5 className="text-base font-semibold">Total Nilai</h5>
+              <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 shadow rounded-lg">
+                <div className="bg-gray-100 dark:bg-gray-600 px-4 py-2 text-center rounded-t-lg">
+                  <h5 className="text-base font-semibold dark:text-gray-300">Total Nilai</h5>
                 </div>
-                <div className="flex divide-x divide-gray-200">
+                <div className="flex divide-x divide-gray-200 dark:divide-gray-700">
                   <div className="flex-1 p-4 text-center">
-                    <p className="text-sm text-gray-600 mb-1">SCORE</p>
-                    <h2 className="text-2xl font-bold">{finalScoreRank.score || "-"}</h2>
+                    <p className="text-sm text-gray-600 font-semibold dark:text-gray-300 mb-1">SCORE</p>
+                    <h2 className="text-2xl font-bold dark:text-gray-400">{finalScoreRank.score || "-"}</h2>
                   </div>
                   <div className="flex-1 p-4 text-center">
-                    <p className="text-sm text-gray-600 mb-1">RANK</p>
-                    <h2 className="text-2xl font-bold">{finalScoreRank.rank || "-"}</h2>
+                    <p className="text-sm text-gray-600 font-semibold dark:text-gray-300 mb-1">RANK</p>
+                    <h2 className="text-2xl font-bold dark:text-gray-400">{finalScoreRank.rank || "-"}</h2>
                   </div>
                 </div>
               </div>

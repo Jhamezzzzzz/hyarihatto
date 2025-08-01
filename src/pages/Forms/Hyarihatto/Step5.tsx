@@ -20,13 +20,13 @@ const Step5FormHyarihatto = () => {
   return (
     <div>
         <Template showStep step={5}>
-            <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
+            <div className="w-full max-w-2xl bg-white dark:bg-gray-900 shadow-lg rounded-xl overflow-hidden border dark:border-gray-700">
                 <div className="bg-green-600 text-white text-center py-3">
                     <h5 className="text-lg font-semibold">Tipe Kecelakaan [Stop 6 + alpha]</h5>
                 </div>
 
                 <div className="p-6 space-y-4">
-                    <p className="mb-3">Silakan pilih salah satu:</p>
+                    <p className="mb-3 dark:text-gray-300">Silakan pilih salah satu:</p>
                     <RadioGroup
                         options={optionsHyarihattoAccidentType}
                         onChange={handleChangeRadio}

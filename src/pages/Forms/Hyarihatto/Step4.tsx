@@ -27,7 +27,6 @@ const Step4FormHyarihatto = () => {
         const file = e.target.files[0];
         // const imageUrl = URL.createObjectURL(file);
 
-        
         // Convert to Base64 and store
         const toBase64 = (file: File): Promise<string> =>
             new Promise((resolve, reject) => {
@@ -38,10 +37,10 @@ const Step4FormHyarihatto = () => {
             });
             
         const base64Image = await toBase64(file);
-        
+
         // Show preview
         updateFormData(null, "image", base64Image)
-        localStorage.setItem("imageFileName", file.name)
+        localStorage.setItem("hyarihatto.imageFileName", file.name)
 
     };
 
@@ -93,7 +92,7 @@ const Step4FormHyarihatto = () => {
   return (
     <div>
       <Template showStep step={4}>
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
+        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 shadow-lg rounded-xl overflow-hidden">
           <div className="bg-green-600 text-white text-center py-3">
             <h5 className="text-lg font-semibold">Bukti Kejadian</h5>
           </div>
@@ -102,7 +101,7 @@ const Step4FormHyarihatto = () => {
             {/* Preview Image */}
             {!formData?.image ? (
               <>
-                <div className={`w-full max-w-xl h-72 bg-transparent rounded-lg flex flex-col items-center justify-center mx-auto mb-5 border ${errors.image !== undefined ? "border-error-500" : "border-gray-300"}`}>
+                <div className={`w-full max-w-xl h-72 bg-transparent rounded-lg flex flex-col items-center justify-center mx-auto mb-5 border dark:border-gray-700 ${errors.image !== undefined ? "border-error-500!" : "border-gray-300"}`}>
                   <FaImage size={52} className="text-secondary1"/>
                   <p className="text-secondary1 text-center">
                     Silakan upload gambar kejadian

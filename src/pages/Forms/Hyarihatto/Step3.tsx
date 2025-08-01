@@ -34,7 +34,7 @@ const Step3FormHyarihatto = () => {
   return (
     <div>
       <Template showStep step={3}>
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
+        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 shadow-lg rounded-xl overflow-hidden">
           <div className="bg-green-600 text-white text-center py-3">
             <h5 className="text-lg font-semibold">Tingkat Catatan</h5>
           </div>
@@ -43,8 +43,8 @@ const Step3FormHyarihatto = () => {
             {/* Row 1: Jenis & Sumber */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {/* Jenis */}
-              <div className="bg-white shadow rounded-lg">
-                <div className="bg-blue-100 px-3 py-2 text-center rounded-t-lg">
+              <div className="bg-white dark:bg-gray-900 shadow rounded-lg border dark:border-gray-700">
+                <div className="bg-blue-100 dark:bg-blue-300 px-3 py-2 text-center rounded-t-lg">
                   <h5 className="font-medium">
                     Jenis <span className="text-red-500">*</span>
                   </h5>
@@ -65,8 +65,8 @@ const Step3FormHyarihatto = () => {
               </div>
 
               {/* Sumber */}
-              <div className="bg-white shadow rounded-lg">
-                <div className="bg-blue-100 px-3 py-2 text-center rounded-t-lg">
+              <div className="bg-white dark:bg-gray-900 shadow rounded-lg border dark:border-gray-700">
+                <div className="bg-blue-100 dark:bg-blue-300 px-3 py-2 text-center rounded-t-lg">
                   <h5 className="font-medium">
                     Sumber & Akibat <span className="text-red-500">*</span>
                   </h5>
@@ -90,8 +90,8 @@ const Step3FormHyarihatto = () => {
             {/* Row 2: Terluka, Sebab, Kategori */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Terluka */}
-              <div className="bg-white shadow rounded-lg">
-                <div className="bg-blue-100 px-3 py-2 text-center rounded-t-lg">
+              <div className="bg-white dark:bg-gray-900 shadow rounded-lg border dark:border-gray-700">
+                <div className="bg-blue-100 dark:bg-blue-300 px-3 py-2 text-center rounded-t-lg">
                   <h5 className="font-medium">
                     Terluka <span className="text-red-500">*</span>
                   </h5>
@@ -112,8 +112,8 @@ const Step3FormHyarihatto = () => {
               </div>
 
               {/* Sebab */}
-              <div className="bg-white shadow rounded-lg">
-                <div className="bg-blue-100 px-3 py-2 text-center rounded-t-lg">
+              <div className="bg-white dark:bg-gray-900 shadow rounded-lg border dark:border-gray-700">
+                <div className="bg-blue-100 dark:bg-blue-300 px-3 py-2 text-center rounded-t-lg">
                   <h5 className="font-medium">
                     Sebab <span className="text-red-500">*</span>
                   </h5>
@@ -134,8 +134,8 @@ const Step3FormHyarihatto = () => {
               </div>
 
               {/* Kategori */}
-              <div className="bg-white shadow rounded-lg">
-                <div className="bg-blue-100 px-3 py-2 text-center rounded-t-lg">
+              <div className="bg-white dark:bg-gray-900 shadow rounded-lg border dark:border-gray-700">
+                <div className="bg-blue-100 dark:bg-blue-300 px-3 py-2 text-center rounded-t-lg">
                   <h5 className="font-medium">
                     Kategori <span className="text-red-500">*</span>
                   </h5>

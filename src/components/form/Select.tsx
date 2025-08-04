@@ -128,7 +128,7 @@ const Select: React.FC<SelectProps> = ({
                 onChange={handleSearchChange}
                 autoFocus
                 placeholder={placeholderInput}
-                className="w-full dark:placeholder:text-gray-400 rounded border border-gray-300 px-2 py-1 text-sm text-gray-700 focus:border-primary1-300 focus:ring-2 focus:ring-primary1/30 dark:border-gray-600 dark:bg-gray-800 dark:text-white"
+                className="w-full dark:placeholder:text-gray-400 rounded border border-gray-300 px-2 py-1 text-sm text-gray-700 ring-brand-600 focus:outline-none focus:border-brand-300 focus:ring-2 focus:ring-primary1/30! dark:border-gray-600 dark:bg-gray-800 dark:text-white"
               />
             </div>
           )}

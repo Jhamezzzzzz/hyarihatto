@@ -4,6 +4,7 @@ import useVerify from "../../hooks/useVerify";
 import { FaUser } from "react-icons/fa";
 import Button from "../ui/button/Button";
 import { useAuth } from "../../context/AuthProvider";
+import config from "../../utils/Config";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,7 +27,12 @@ export default function UserDropdown() {
       >
         <span className="mr-3 overflow-hidden rounded-full h-11 w-11 flex items-center justify-center border-1 dark:border-gray-800">
           {imgProfile ? (
-            <img src="/images/user/owner.jpg" alt="User" />
+            <img src={
+              imgProfile ? imgProfile.startsWith('http') || imgProfile.startsWith("//")
+                ? imgProfile
+                : `${config.BACKEND_URL_TWIIS}${imgProfile}`
+                : ""
+            } alt="User" />
           ) : (
             <FaUser/>
           )}

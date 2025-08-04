@@ -35,9 +35,9 @@ const useHyarihattoDataService = () => {
         }
     }
 
-    const getAllSubmissions = async(type: string, lineId: number | string, sectionId: number | string, month: string, year: number, page: string | number, limit: string | number, q: string) => {
+    const getAllSubmissions = async(type: string, lineId: number | string, sectionId: number | string, startDate: string, endDate: string, page: string | number, limit: string | number, q: string, status: string, shift: string) => {
         try {
-            const response = await axiosJWT.get(`submissions?type=${type}&lineId=${lineId}&sectionId=${sectionId}&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
+            const response = await axiosJWT.get(`submissions?type=${type}&lineId=${lineId}&sectionId=${sectionId}&startDate=${startDate}&endDate=${endDate}&page=${page}&limit=${limit}&q=${q}&status=${status}&shift=${shift}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -135,6 +135,19 @@ const useHyarihattoDataService = () => {
             handleError(error)   
         }
     }
+
+    const getDashboardLeaderboard = async(type: string, year: number, month: string) => {
+        try {
+            const response = await axiosJWT.get(`/dashboard/by-user?type=${type}&year=${year}&month=${month}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            handleError(error)
+        }
+    }
     
 
     return{
@@ -145,7 +158,8 @@ const useHyarihattoDataService = () => {
         getDashboardStatusReport,
         getDashboardBarChart,
         getDashboardPieChart,
-        getSubmissionById
+        getSubmissionById,
+        getDashboardLeaderboard
     }
   
 }

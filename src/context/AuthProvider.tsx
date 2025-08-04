@@ -21,9 +21,12 @@ interface AuthStates{
 }
 
 export interface AuthContextProps {
-  auth: AuthStates
+  auth: AuthStates;
   setTokenAndDecode: (accessToken: string) => void; 
-  clearAuth: () => void
+  clearAuth: () => void;
+  modalIsOpen: boolean;
+  openModal: () => void;
+  closeModal: () => void;
 }
 
 const AuthContext = createContext<AuthContextProps | undefined>(undefined)
@@ -44,6 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode}) => {
     isWarehouse: 0,
     imgProfile: '',
   })
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false)
 
   const setAuthStates = () => {
     const storedToken = localStorage.getItem('accessToken')
@@ -113,8 +117,11 @@ export const AuthProvider = ({ children }: { children: ReactNode}) => {
     })
   }
 
+  const openModal = () => setModalIsOpen(true)
+  const closeModal = () => setModalIsOpen(false)
+
   return (
-    <AuthContext.Provider value={{ auth, setTokenAndDecode, clearAuth }}>
+    <AuthContext.Provider value={{ auth, setTokenAndDecode, clearAuth, modalIsOpen, openModal, closeModal }}>
       {children}
     </AuthContext.Provider>
   )  

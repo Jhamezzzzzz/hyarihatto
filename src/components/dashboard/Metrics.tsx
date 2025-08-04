@@ -13,34 +13,40 @@ interface ResponseStatus{
 interface DataStatusReport{
   title: string;
   caption: string;
-  number: number
+  number: number;
+  color: string;
 }
 
 const dataMetrics = [
   {
     title: "Total",
-    caption: "Jumlah catatan yang dibuat oleh Member",
+    caption: "Jumlah catatan yang dibuat Member",
     number: 0,
+    color: ""
   },
   {
     title: "Diajukan",
-    caption: "Jumlah yang perlu direview oleh Leader",
+    caption: "Jumlah yang perlu direview Leader",
     number: 0,
+    color: "#F79009"
   },
   {
     title: "Dijadwalkan",
     caption: "Jumlah yang sudah dijadwalkan",
     number: 0,
+    color: "#0BA5EC"
   },
   {
     title: "Terselesaikan",
     caption: "Jumlah yang sudah terselesaikan",
     number: 0,
+    color: "#12B76A"
   },
   {
     title: "Ditolak",
     caption: "Jumlah yang ditolak oleh Leader",
     number: 0,
+    color: "#F04438"
   },
 ];
 
@@ -60,13 +66,16 @@ export default function Metrics({ filter }: { filter: Filter}) {
           return{
             title: item.title,
             caption: item.caption,
-            number: data.total
+            number: data.total,
+            color: item.color
           }
         }else{
           return{
             title: item.title,
             caption: item.caption,
-            number: data?.[index-1]?.count || 0
+            number: data?.[index-1]?.count || 0,
+            // number: 1000,
+            color: item.color
           }
         }
       })
@@ -87,29 +96,17 @@ export default function Metrics({ filter }: { filter: Filter}) {
     <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-5 md:gap-4">
       { dataStatusReport?.map((item, index)=>{
         return(
-          <div key={index} className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-            <div className="flex justify-between items-center">
-              <div>
-                <h4 className="text-xl text-gray-600 dark:text-gray-400">
-                  {item.title.toUpperCase()}
-                </h4>
-              </div>
-              <div>
-                <h4 className="font-bold text-gray-800 text-4xl dark:text-white/90">
-                  { !loading.statusReport ? item.number : <Spinner/>}
-                </h4>
-              </div>
-            </div>
-            <div>
-              <p
-                style={{ fontSize: "10px" }}
-                className="mt-2 text-gray-600 dark:text-white/90"
-              >
-                {item.caption}
-              </p>
-            </div>
+          <div key={index} className="rounded-2xl border border-gray-300 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
+            <h4 className="text-xl font-bold text-gray-600 dark:text-gray-400" style={{ color: item.color}}>
+              {item.title.toUpperCase()}
+            </h4>
+            <p className="-2 text-gray-600 dark:text-white/90 text-[10px]">
+              {item.caption}
+            </p>
+            <h4 className="font-bold text-end text-gray-800 text-4xl dark:text-white/90">
+              { !loading.statusReport ? item.number : <Spinner/>}
+            </h4>
           </div>
-
         )
       })}
 

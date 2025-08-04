@@ -213,7 +213,7 @@ const AccidentLevel = () => {
         className="w-full lg:w-100"
       >
         <Card>
-          <h1 className='font-bold mb-5 dark:text-gray-100'>{type==="add" ? "Tambah" : type==="update" ? "Ubah" : type==="delete" ? "Hapus" : ""} Level</h1>
+          <h1 className='font-bold dark:text-gray-100 pl-4 pt-4'>{type==="add" ? "Tambah" : type==="update" ? "Ubah" : type==="delete" ? "Hapus" : ""} Level</h1>
           <CardContent>
             { type !== "delete" && (
             <Form onSubmit={()=>handleSubmit(type)}>

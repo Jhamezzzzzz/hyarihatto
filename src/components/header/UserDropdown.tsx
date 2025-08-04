@@ -1,18 +1,14 @@
 import { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
-import { useNavigate } from "react-router";
 import useVerify from "../../hooks/useVerify";
 import { FaUser } from "react-icons/fa";
-import useAuthService from "../../services/AuthService";
-import useShowAlert from "../../hooks/useShowAlert";
 import Button from "../ui/button/Button";
+import { useAuth } from "../../context/AuthProvider";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
   const { name, roleName, imgProfile } = useVerify()
-  const { logout } = useAuthService()
-  const { alertSuccess } = useShowAlert()
-  const navigate = useNavigate()
+  const { openModal } = useAuth()
 
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -22,19 +18,8 @@ export default function UserDropdown() {
     setIsOpen(false);
   }
 
-  const handleLogout = async() => {
-    try {
-      const response = await logout()
-      navigate("/")
-      alertSuccess(response.data.message)
-      
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   return (
-    <div className="relative">
+    <div className="relative ">
       <button
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400"
@@ -84,7 +69,7 @@ export default function UserDropdown() {
 
         
         <Button
-          onClick={handleLogout}
+          onClick={openModal}
           variant="outline"
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
         >

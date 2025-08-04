@@ -9,7 +9,8 @@ import {
   TableIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
-import { FaBalanceScale, FaBookReader, FaChartBar, FaDiagnoses, FaPeopleCarry, FaUserInjured } from "react-icons/fa";
+import { FaBalanceScale, FaBookReader, FaDiagnoses, FaPeopleCarry, FaUserInjured } from "react-icons/fa";
+import useVerify from "../hooks/useVerify";
 
 
 type NavItem = {
@@ -28,11 +29,11 @@ const navItems: NavItem[] = [
 ];
 
 const hyarihattoItems: NavItem[] = [
-  {
-    icon: <FaChartBar />,
-    name: "Summary",
-    path: "/hyarihatto/summary",
-  },
+  // {
+  //   icon: <FaChartBar />,
+  //   name: "Summary",
+  //   path: "/hyarihatto/summary",
+  // },
   {
     icon: <FaBookReader/>,
     name: "Review",
@@ -46,11 +47,11 @@ const hyarihattoItems: NavItem[] = [
 ];
 
 const voiceMemberItems: NavItem[] = [
-  {
-    icon: <FaChartBar />,
-    name: "Summary",
-    path: "/voice-member/summary",
-  },
+  // {
+  //   icon: <FaChartBar />,
+  //   name: "Summary",
+  //   path: "/voice-member/summary",
+  // },
   {
     icon: <FaBookReader />,
     name: "Review",
@@ -91,6 +92,9 @@ const masterItems: NavItem[] = [
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const location = useLocation();
+  const { roleName } = useVerify()
+
+  const isAdmin = roleName === "super admin"
 
   const [openSubmenu, setOpenSubmenu] = useState<{
     type: "main" | "hyarihatto" | "voice-member" | "master";
@@ -387,22 +391,25 @@ const AppSidebar: React.FC = () => {
               {renderMenuItems(voiceMemberItems, "voice-member")}
             </div>
 
-            <div>
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? "lg:justify-center"
-                    : "justify-start"
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Master"
-                ) : (
-                  <HorizontaLDots className="size-6" />
-                )}
-              </h2>
-              {renderMenuItems(masterItems, "master")}
-            </div>
+              {/* IF ROLE SUPER ADMIN */}
+            { isAdmin && (
+              <div>
+                <h2
+                  className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
+                    !isExpanded && !isHovered
+                      ? "lg:justify-center"
+                      : "justify-start"
+                  }`}
+                >
+                  {isExpanded || isHovered || isMobileOpen ? (
+                    "Master"
+                  ) : (
+                    <HorizontaLDots className="size-6" />
+                  )}
+                </h2>
+                {renderMenuItems(masterItems, "master")}
+              </div>
+            )}
 
 
             <div className="">

@@ -9,9 +9,12 @@ import PageMeta from "../../components/common/PageMeta";
 import LabelMark from "./LabelMark";
 import LogoSafety from "../../components/image/000ab1bef0f166ad984632cf1b4d63fb.png";
 import { ThemeToggleButton } from "../../components/common/ThemeToggleButton";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function MainUser() {
   const navigate = useNavigate();
+  const { theme } = useTheme()
+
   useEffect(() => {
     AOS.init({ duration: 1000 });
   }, []);
@@ -51,7 +54,8 @@ export default function MainUser() {
         Kembali
       </button>
 
-      <div className="mb-10">
+      <div className="absolute top-3 right-20 flex items-center gap-3">
+        <p className='text-gray-100 dark:text-gray-700'>{theme[0].toUpperCase()+theme.slice(1)} Mode</p>
         <ThemeToggleButton/>
       </div>
       <div className="hyarihato">

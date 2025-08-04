@@ -9,6 +9,8 @@ import PageMeta from "../../components/common/PageMeta";
 import useVerify from "../../hooks/useVerify";
 import LabelMark from "../MainPages/LabelMark";
 import LogoSafety from "../../components/image/000ab1bef0f166ad984632cf1b4d63fb.png";
+import { ThemeToggleButton } from "../../components/common/ThemeToggleButton";
+import { useTheme } from "../../context/ThemeContext";
 
 interface Errors{
   username: string;
@@ -17,6 +19,7 @@ interface Errors{
 
 export default function SignInLead() {
   const { name } = useVerify()
+  const { theme } = useTheme()
   const [loading, setLoading] = useState<boolean>(false);
   const [form, setForm] = useState<Errors>({
     username: "",
@@ -74,6 +77,10 @@ export default function SignInLead() {
 
   return (
     <div className="login-page ">
+      <div className="absolute top-3 right-20 flex items-center gap-3">
+        <p className='text-gray-100 dark:text-gray-700'>{theme[0].toUpperCase()+theme.slice(1)} Mode</p>
+        <ThemeToggleButton/>
+      </div>
       <div className="absolute top-1 right-2 z-5">
         <img src={LogoSafety} alt="Logo Safety" className="w-14 h-14 mr-1" />
       </div>
@@ -95,12 +102,12 @@ export default function SignInLead() {
             </svg>
                 Kembali
             </button>
-        <div className="w-full max-w-4xl bg-white dark:bg-gray-900 bg-opacity-60 backdrop-blur-md shadow-xl rounded-2xl flex flex-col md:flex-row overflow-hidden z-4">
+        <div className="w-full max-w-4xl bg-white dark:bg-gray-900  shadow-xl rounded-2xl flex flex-col md:flex-row overflow-hidden z-4">
           {/* KIRI */}
-          <div className="w-full md:w-1/2 p-8 flex flex-col justif-start items-center text-start bg-white/70">
+          <div className="w-full md:w-1/2 p-8 flex flex-col justif-start items-center text-start ">
             <div>
-              <h1 className="text-3xl font-bold mb-2">Hello!</h1>
-              <h6 className="text-lg text-gray-600 px-3">Welcome To</h6>
+              <h1 className="text-3xl font-bold mb-2 dark:text-gray-300">Hello!</h1>
+              <h6 className="text-lg text-gray-600 dark:text-gray-400 px-3">Welcome To</h6>
               <h5 className="text-2xl font-semibold text-green-600 mb-4 text-center">
                 Dashboard Leader
               </h5>
@@ -109,11 +116,11 @@ export default function SignInLead() {
           </div>
 
           {/* KANAN */}
-          <div className="w-full md:w-1/2 p-8 flex items-center bg-white/80">
+          <div className="w-full md:w-1/2 p-8 flex items-center bg-white dark:bg-gray-900">
             <form onSubmit={Auth} className="w-full space-y-7">
               <div>
-                <p className="text-4xl font-bold mb-1">Login</p>
-                <p className="text-sm text-gray-500">Sign In to your account</p>
+                <p className="text-4xl font-bold mb-1 dark:text-gray-300">Login</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Sign In to your account</p>
               </div>
               <div>
                 <div className={`flex items-center border ${errors.username !== "" ? "border-error-500" :  "border-gray-300"} rounded px-3 py-2`}>
@@ -124,7 +131,7 @@ export default function SignInLead() {
                     placeholder="Username"
                     value={form.username}
                     onChange={handleChangeInput}
-                    className="w-full outline-none bg-transparent"
+                    className="w-full outline-none bg-transparent dark:placeholder:text-gray-400"
                     autoComplete="username"
                   />
                 </div>
@@ -139,7 +146,7 @@ export default function SignInLead() {
                     placeholder="Password"
                     value={form.password}
                     onChange={handleChangeInput}
-                    className="w-full outline-none bg-transparent"
+                    className="w-full outline-none bg-transparent dark:placeholder:text-gray-400 autofill:bg-red-400"
                     autoComplete="current-password"
                   />
                 </div>

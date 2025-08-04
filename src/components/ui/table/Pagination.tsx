@@ -1,7 +1,13 @@
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import LimitPerPage from "./LimitPerPage";
 
-type PaginationProps = {
+export type PaginationProps = {
+  page: number;
+  totalPages: number;
+  limit: number;
+}
+
+type PaginationComponent = {
   currentPage: number;
   totalPages: number;
   onPageChange: (page: number) => void;
@@ -12,7 +18,7 @@ type PaginationProps = {
   onLimitChange?: (limit: number) => void;
 };
 
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination: React.FC<PaginationComponent> = ({
   currentPage,
   totalPages,
   onPageChange,

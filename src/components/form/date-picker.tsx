@@ -107,7 +107,7 @@ export default function DatePicker({
           placeholder={placeholder}
           ref={inputRef}
           disabled={disabled}
-          className={`${error ? errorClass : "text-gray-800 pr-10 bg-white border-gray-300 focus:border-primary1-300 focus:ring-primary1/30"} ${className} disabled:cursor-not-allowed! disabled:bg-gray-100 h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3  dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/90  bg-transparent dark:border-gray-700  dark:focus:border-brand-800`}
+          className={`${error ? errorClass : "text-gray-800 pr-10 bg-white border-gray-300 focus:border-primary1-300 focus:ring-primary1/30"} ${className} disabled:cursor-not-allowed! disabled:bg-gray-100 h-11 w-full rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3  dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-gray-500!  bg-transparent dark:border-gray-700  dark:focus:border-brand-800`}
         /> 
 
         { (defaultDate !== "" && isClearable) && (

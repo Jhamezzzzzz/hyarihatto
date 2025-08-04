@@ -25,14 +25,14 @@ export default function UserDropdown() {
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400"
       >
-        <span className="mr-3 overflow-hidden rounded-full h-11 w-11 flex items-center justify-center border-1 dark:border-gray-800">
+        <span className="mr-3 overflow-hidden rounded-full h-11 w-11 flex items-center justify-center border-1 bg-white dark:border-gray-800">
           {imgProfile ? (
             <img src={
               imgProfile ? imgProfile.startsWith('http') || imgProfile.startsWith("//")
                 ? imgProfile
                 : `${config.BACKEND_URL_TWIIS}${imgProfile}`
                 : ""
-            } alt="User" />
+            } alt="User" className="mt-3 p-1" />
           ) : (
             <FaUser/>
           )}

@@ -24,9 +24,7 @@ interface DataSubmissions {
   user:{
     name: string;
     username: string;
-    noreg: number;
   };
-  noreg: number; 
   shift: string;
   HazardEvaluation: {
     rank: string;
@@ -151,57 +149,64 @@ const HyarihattoHistory = () => {
         <CardContent>
           <Table>
             <TableHeader>
-              <TableCell>No</TableCell>
-              <TableCell>Tanggal</TableCell>
-              <TableCell>Waktu</TableCell>
-              <TableCell>Nama</TableCell>
-              <TableCell>No Reg</TableCell>
-              <TableCell>Shift</TableCell>
-              <TableCell>Rank</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Detail</TableCell>
+              <TableRow>
+                <TableCell>No</TableCell>
+                <TableCell>Tanggal</TableCell>
+                <TableCell>Waktu</TableCell>
+                <TableCell>Nama</TableCell>
+                <TableCell>No Reg</TableCell>
+                <TableCell>Shift</TableCell>
+                <TableCell>Rank</TableCell>
+                <TableCell>Score</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Detail</TableCell>
+              </TableRow>
             </TableHeader>
              <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
             { (!loading.fetch && dataSubmissions.length > 0) && dataSubmissions.map((item: DataSubmissions, index: number) => {
               return(
                 <TableRow key={item.id} className="">
-                <TableCell className="py-3">{index+1}</TableCell>
-                <TableCell className="py-3">{item.incidentDate}</TableCell>
-                <TableCell className="py-3">{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
-                <TableCell className="py-3">{item.user.name}</TableCell>
-                <TableCell className="py-3">{item.user.noreg}</TableCell>
-                <TableCell className="py-3">{item.shift}</TableCell>
-                <TableCell className="py-3">{item.HazardEvaluation.rank}</TableCell>
-                <TableCell className="py-3">{item.HazardEvaluation.totalScore}</TableCell>
-                <TableCell className="py-3 text-gray-900 text-theme-md dark:text-gray-400">
-                  <Badge
-                    size="sm"
-                    variant="solid"
-                    color={
-                      item.status === 2
-                        ? "success"
-                        : item.status === 0
-                        ? "warning"
-                        : item.status === 1
-                        ? "info"
-                        : item.status === 3
-                        ? "error"
-                        : "error"
-                    }
-                  >
-                    {STATUS_SUBMISSION[item.status].toUpperCase() || ""}
-                  </Badge>
-                </TableCell>
-                <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">                
-                  <Button
-                    size="sm"
-                    className="px-4 py-1 text-sm font-medium text-dark bg-primary hover:bg-primary-dark rounded-md transition duration-200" // Fungsi handleDetail opsional
-                    onClick={()=>navigate(`/hyarihatto/${item.id}`)}
-                  >
-                    <FaClone/>
-                  </Button>
-                </TableCell>
-              </TableRow>
+                  <TableCell className="py-3">{index+1}</TableCell>
+                  <TableCell className="py-3">{item.incidentDate}</TableCell>
+                  <TableCell className="py-3">{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
+                  <TableCell className="py-3">{item.user.name}</TableCell>
+                  <TableCell className="py-3">{0+item.user.username}</TableCell>
+                  <TableCell className="py-3">
+                    <Badge color={item.shift === "non-shift" ? "light" : item.shift === "red" ? "error" : item.shift === "white" ? "dark" : "info"}>
+                      {item.shift.toUpperCase()}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="py-3">{item.HazardEvaluation.rank}</TableCell>
+                  <TableCell className="py-3">{item.HazardEvaluation.totalScore}</TableCell>
+                  <TableCell className="py-3 text-gray-900 text-theme-md dark:text-gray-400">
+                    <Badge
+                      size="sm"
+                      variant="solid"
+                      color={
+                        item.status === 2
+                          ? "success"
+                          : item.status === 0
+                          ? "warning"
+                          : item.status === 1
+                          ? "info"
+                          : item.status === 3
+                          ? "error"
+                          : "error"
+                      }
+                    >
+                      {STATUS_SUBMISSION[item.status].toUpperCase() || ""}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="py-3 text-gray-500 text-theme-sm dark:text-gray-400">                
+                    <Button
+                      size="sm"
+                      className="px-4 py-1 text-sm font-medium text-dark bg-primary hover:bg-primary-dark rounded-md transition duration-200" // Fungsi handleDetail opsional
+                      onClick={()=>navigate(`/hyarihatto/${item.id}`)}
+                    >
+                      <FaClone/>
+                    </Button>
+                  </TableCell>
+                </TableRow>
               )
             })}
           </TableBody>

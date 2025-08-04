@@ -1,5 +1,5 @@
 import Template from "./Template";
-import ButtonNavigation from "./ButtonNavigation";
+import ButtonNavigation from "../Hyarihatto/ButtonNavigation";
 // import { useFormData } from "../../../context/FormVoiceMemberContext";
 import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
 import { useEffect, useState } from "react";

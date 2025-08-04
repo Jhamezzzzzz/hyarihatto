@@ -84,6 +84,38 @@ const useHyarihattoDataService = () => {
         }
     }
 
+       const postRejectLeaderAction = async (body: { submissionId: number; suggestion: string }) => {
+        try {
+            const response = await axiosJWT.post(`reviews/reject`, body)
+            alertSuccess(response?.data?.message)
+            return response
+        } catch (error) {
+            handleError(error)
+        }
+    }
+      const postSolvedLeaderAction = async (formData: FormData) => {
+        try {
+            const response = await axiosJWT.post(`/reviews/solve`, formData,{
+            headers: {
+            'Content-Type': 'multipart/form-data',
+            },
+            });
+            alertSuccess(response?.data?.message)
+            return response
+        } catch (error) {
+            handleError(error)
+        }
+    };
+      const postCounterMeasureAction = async(body: {submissionId: number; actionPic: string ; thirdParty?: string ; actionPlan: string ; actionDate : string ; suggestion: string}) => {
+        try {
+            const response = await axiosJWT.post(`/reviews/counter-measure`, body)
+            alertSuccess(response?.data?.message)
+            return response
+        } catch (error) {
+            handleError(error)
+        }
+    }
+
     const getDashboardStatusReport = async(year: number, month: string) => {
         try {
             const response = await axiosJWT.get(`dashboard/by-status?type=hyarihatto&year=${year}&month=${month}`, {
@@ -131,7 +163,10 @@ const useHyarihattoDataService = () => {
         getDashboardStatusReport,
         getDashboardBarChart,
         getDashboardPieChart,
-        getSubmissionById
+        getSubmissionById,
+        postRejectLeaderAction,
+        postSolvedLeaderAction,
+        postCounterMeasureAction
     }
   
 }

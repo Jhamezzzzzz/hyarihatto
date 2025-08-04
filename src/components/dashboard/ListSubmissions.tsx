@@ -148,7 +148,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
                   <Button
                     size="sm"
                     className="px-4 py-1 text-sm font-medium text-dark bg-primary hover:bg-primary-dark rounded-md transition duration-200"
-                    onClick={() => navigate(`/hyarihatto/${item.id}`)} // Fungsi handleDetail opsional
+                    onClick={() => window.open(`/hyarihatto/${item.id}`)} // Fungsi handleDetail opsional
                   >
                     <FaClone/>
                   </Button>

@@ -27,7 +27,7 @@ const Step1FormHyarihatto = () => {
             year: "numeric",
         }).replace(/ /g, '-');
 
-         updateError("submissions", "incidentDate", undefined)
+        updateError("submissions", "incidentDate", undefined)
         updateFormData("submissions", "incidentDate", dateString)
         setFormattedDate(formattedDate)
         localStorage.setItem("formattedDate", formattedDate)

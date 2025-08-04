@@ -86,14 +86,14 @@ export default function HomeLeader() {
           />
         </div>
         {/* ///filter/// */}
-        <div className="flex gap-20">
-          <div className="flex items-center gap-4">
+        <div className="flex gap-4">
+          <div className="">
             <Label>Bulan </Label>
             <DatePicker
               id="month"
               mode="month"
               placeholder="Semua periode"
-              className="bg-white"
+              className="bg-white w-[200px]!"
               onChange={handleChangeDate}
               dateFormat="M"
               defaultDate={filter.monthName}
@@ -101,12 +101,13 @@ export default function HomeLeader() {
               onClear={handleClearMonth}
             />
           </div>
-          <div className="flex items-center gap-4">
+          <div className="">
             <Label>Tahun </Label>
             <YearPicker
               placeholder="Pilih tahun"
               onChange={handleChangeYear}
               value={filter.year}
+              className="w-[200px]!"
             />
           </div>
         </div>
@@ -116,7 +117,7 @@ export default function HomeLeader() {
         <Metrics filter={filter}/>
       </div>
       <div className="col-span-12 space-y-6 mb-4">
-        <Leaderboard/>
+        <Leaderboard filter={filter}/>
       </div>
       <div className="col-span-12 space-y-6 xl:col-span-7  mb-4">
         <GraphLocationHyat filter={filter}/>

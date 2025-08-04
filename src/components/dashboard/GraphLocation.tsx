@@ -201,7 +201,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
 
   return (
     <div className="grid grid-cols-12 gap-4 ">
-      <div className="col-span-8">
+      <div className="xl:col-span-8 col-span-12">
         {/* Bar Chart */}
         <div className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
           <div className="min-h-120 h-120 pb-10">
@@ -255,7 +255,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
         </div>
       </div>
 
-      <div className="col-span-4">
+      <div className="xl:col-span-4 col-span-12">
         {/* Pie Chart */}
         <div className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
           <div className="min-h-120 h-120">

@@ -1,14 +1,73 @@
 import { SidebarProvider, useSidebar } from "../context/SidebarContext";
-import { Outlet } from "react-router";
+import { Outlet, useNavigate } from "react-router";
 import AppHeader from "./AppHeader";
 import Backdrop from "./Backdrop";
 import AppSidebar from "./AppSidebar";
+import { Modal } from "../components/ui/modal";
+import { Card, CardContent } from "../components/ui/card/card";
+import Button from "../components/ui/button/Button";
+import { useState } from "react";
+import useAuthService from "../services/AuthService";
+import useShowAlert from "../hooks/useShowAlert";
+import Spinner from "../components/ui/spinner";
+import { useAuth } from "../context/AuthProvider";
+import { FaExclamationCircle } from "react-icons/fa";
 
 const LayoutContent: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
+  const { modalIsOpen, closeModal } = useAuth()
+  const { logout } = useAuthService()
+  const { alertSuccess } = useShowAlert()
+
+  const handleLogout = async() => {
+    try {
+      setLoading(true)
+      const response = await logout()
+      navigate("/")
+      alertSuccess(response?.data?.message)
+      
+    } catch (error) {
+      console.error(error)
+    } finally{
+      setLoading(false)
+    }
+  }
+
+  const renderModalConfirmation = () => {
+    return(
+      <Modal
+        isOpen={modalIsOpen}
+        onClose={closeModal}
+        parentClass="md:px-40 px-10 rounded"
+        className="w-full lg:w-100"
+      >
+        <Card>
+          <div className="p-5 pb-0 flex flex-col items-center justify-center gap-4">
+            <FaExclamationCircle className="text-[52px] text-warning-500"/>
+            <h1 className="dark:text-gray-300 ">Apakah Anda yakin ingin keluar?</h1>
+          </div>
+          <CardContent>
+            {/* <h3 className="dark:text-gray-300">Apakah yakin Anda ingin keluar?</h3> */}
+            <div className="flex justify-end gap-4 ">
+              <Button variant="outline" size="sm" onClick={closeModal}>Kembali</Button>
+              <Button disabled={loading} size="sm" onClick={handleLogout}>
+                { loading && <Spinner/> }
+                <p>Keluar</p>
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </Modal>
+    )
+  }
 
   return (
     <div className="min-h-screen xl:flex">
+      <div>
+        {renderModalConfirmation()}
+      </div>
       <div>
         <AppSidebar />
         <Backdrop />

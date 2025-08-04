@@ -1,23 +1,14 @@
 import { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
-import { useNavigate } from "react-router";
 import useVerify from "../../hooks/useVerify";
 import { FaUser } from "react-icons/fa";
-import useAuthService from "../../services/AuthService";
-import useShowAlert from "../../hooks/useShowAlert";
 import Button from "../ui/button/Button";
-import { Modal } from "../ui/modal";
-import { Card, CardContent } from "../ui/card/card";
-import Spinner from "../ui/spinner";
+import { useAuth } from "../../context/AuthProvider";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(false)
-  const [showModal, setShowModal] = useState<boolean>(false)
   const { name, roleName, imgProfile } = useVerify()
-  const { logout } = useAuthService()
-  const { alertSuccess } = useShowAlert()
-  const navigate = useNavigate()
+  const { openModal } = useAuth()
 
   function toggleDropdown() {
     setIsOpen(!isOpen);
@@ -27,47 +18,8 @@ export default function UserDropdown() {
     setIsOpen(false);
   }
 
-  const handleLogout = async() => {
-    try {
-      setLoading(true)
-      const response = await logout()
-      navigate("/")
-      alertSuccess(response?.data?.message)
-      
-    } catch (error) {
-      console.error(error)
-    } finally{
-      setLoading(false)
-    }
-  }
-
-  const renderModalConfirmation = () => {
-    return(
-      <Modal
-        isOpen={showModal}
-        onClose={()=>setShowModal(false)}
-        parentClass="md:px-40 px-10"
-        className="w-full lg:w-100 "
-      >
-        <Card>
-          <CardContent>
-            <h3>Apakah yakin Anda ingin keluar?</h3>
-            <div className="flex justify-end gap-4 mt-3">
-              <Button size="sm" onClick={()=>setShowModal(false)}>Kembali</Button>
-              <Button disabled={loading} size="sm" onClick={handleLogout}>
-                { loading && <Spinner/> }
-                <text>Keluar</text>
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </Modal>
-    )
-  }
-
   return (
     <div className="relative ">
-      {renderModalConfirmation()}
       <button
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dropdown-toggle dark:text-gray-400"
@@ -117,7 +69,7 @@ export default function UserDropdown() {
 
         
         <Button
-          onClick={()=>setShowModal(true)}
+          onClick={openModal}
           variant="outline"
           className="flex items-center gap-3 px-3 py-2 mt-3 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
         >

@@ -12,6 +12,7 @@ const useVerify = () => {
   const { auth, setTokenAndDecode } = useAuth()
   const navigate = useNavigate()
   const { alertError } = useShowAlert()
+  const isSuperAdmin = auth.roleName === "super admin"
 
  
   const axiosJWT = axiosInstance.create()
@@ -103,6 +104,7 @@ const useVerify = () => {
 
   return {
     ...auth,
+    isSuperAdmin,
     axiosJWT,
     axiosTWIISJWT,
     setTokenAndDecode, // optional kalau mau set token manual juga

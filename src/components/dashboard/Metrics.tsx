@@ -3,13 +3,6 @@ import useHyarihattoDataService from "../../services/HyarihattoDataService";
 import Spinner from "../ui/spinner";
 import { Filter } from "../../pages/QuestLeader/HomeLeader";
 
-interface ResponseStatus{
-  total: number
-  [index: number]: {
-    status: number,
-    count: number
-  }
-}
 interface DataStatusReport{
   title: string;
   caption: string;
@@ -60,28 +53,25 @@ export default function Metrics({ filter }: { filter: Filter}) {
   const fetchDashboardStatusReport = async() => {
     try {
       const response = await getDashboardStatusReport(filter.year, filter.month)
-      const data: ResponseStatus = response?.data?.data
-      const formatted = dataMetrics?.map((item, index)=>{
-        if(index===0){
-          return{
-            title: item.title,
-            caption: item.caption,
-            number: data.total,
-            color: item.color
-          }
-        }else{
-          return{
-            title: item.title,
-            caption: item.caption,
-            number: data?.[index-1]?.count || 0,
-            // number: 1000,
-            color: item.color
-          }
-        }
-      })
-      setDataStatusReport(formatted)
+      const data = response?.data?.data
+      console.log(data)
+
+      dataMetrics[0].number = data.total
+      dataMetrics[1].number = data?.grouped?.find((item: {status: number, count: number})=>item.status === 0)?.count || 0
+      dataMetrics[2].number = data?.grouped?.find((item: {status: number, count: number})=>item.status === 1)?.count || 0
+      dataMetrics[3].number = data?.grouped?.find((item: {status: number, count: number})=>item.status === 2)?.count || 0
+      dataMetrics[4].number = data?.grouped?.find((item: {status: number, count: number})=>item.status === 3)?.count || 0
+
+      console.log("DATA METRICS: ", dataMetrics)
+
+      setDataStatusReport(dataMetrics)
     } catch (error) {
       console.error(error)
+      dataMetrics[0].number = 0
+      dataMetrics[1].number = 0
+      dataMetrics[2].number = 0
+      dataMetrics[3].number = 0
+      dataMetrics[4].number = 0
       setDataStatusReport(dataMetrics)
     } finally{
       setLoading({ ...loading, statusReport: false})

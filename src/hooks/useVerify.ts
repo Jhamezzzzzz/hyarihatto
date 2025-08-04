@@ -15,20 +15,64 @@ const useVerify = () => {
 
  
   const axiosJWT = axiosInstance.create()
-
+  
+  // Axios Hyarihatto
   axiosJWT.interceptors.request.use(
     async (config) => {
       const currentDate = new Date()
       if (auth.expire * 1000 < currentDate.getTime()) {
         console.log('Token expired, refreshing...')
-
+        
         if (!isRefreshing) {
           isRefreshing = true
           refreshPromise = axiosTWIIS
-            .get('/token') // pakai axios TANPA interceptor
-            .then((response) => {
-              const newAccessToken = response.data.accessToken
-              setTokenAndDecode(newAccessToken)
+          .get('/token') // pakai axios TANPA interceptor
+          .then((response) => {
+            const newAccessToken = response.data.accessToken
+            setTokenAndDecode(newAccessToken)
+            isRefreshing = false
+            return newAccessToken
+          })
+          .catch((error) => {
+            isRefreshing = false
+            console.error('Token refresh failed:', error)
+            alertError("Sesi telah berakhir. Silakan login kembali!")
+            navigate('/signin')
+            return Promise.reject(error)
+          })
+        }
+
+        try {
+          const newToken = await refreshPromise
+          config.headers.Authorization = `Bearer ${newToken}`
+        } catch (err) {
+          return Promise.reject(err)
+        }
+        
+      } else {
+        config.headers.Authorization = `Bearer ${auth.token}`
+      }
+      
+      return config
+    },
+    (error) => Promise.reject(error)
+  )
+  
+  // Axios TWIIS
+  const axiosTWIISJWT = axiosTWIIS.create()
+  axiosTWIISJWT.interceptors.request.use(
+    async (config) => {
+      const currentDate = new Date()
+      if (auth.expire * 1000 < currentDate.getTime()) {
+        console.log('Token expired, refreshing...')
+        
+        if (!isRefreshing) {
+          isRefreshing = true
+          refreshPromise = axiosTWIIS
+          .get('/token') // pakai axios TANPA interceptor
+          .then((response) => {
+            const newAccessToken = response.data.accessToken
+            setTokenAndDecode(newAccessToken)
               isRefreshing = false
               return newAccessToken
             })
@@ -60,6 +104,7 @@ const useVerify = () => {
   return {
     ...auth,
     axiosJWT,
+    axiosTWIISJWT,
     setTokenAndDecode, // optional kalau mau set token manual juga
   }
 }

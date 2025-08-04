@@ -12,7 +12,7 @@ interface ErrorResponse {
 }
 
 const useMasterDataService = () => {
-    const { token, axiosJWT } = useVerify()
+    const { token, axiosJWT, axiosTWIISJWT } = useVerify()
     const { alertSuccess, alertError } = useShowAlert()
 
     const handleError = (typedError: unknown) => {
@@ -31,6 +31,19 @@ const useMasterDataService = () => {
         }else{
             alertError(error?.message || "Terjadi kesalahan pada server!")
             throw error?.message
+        }
+    }
+
+    const getMasterPublicData = async(api: string) => {
+        try {
+            const response = await axiosTWIISJWT.get(api, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+            return response
+        } catch (error) {
+            handleError(error)
         }
     }
 
@@ -91,6 +104,7 @@ const useMasterDataService = () => {
     }
 
     return{
+        getMasterPublicData,
         getMasterData,
         postMasterData,
         updateMasterDataById,

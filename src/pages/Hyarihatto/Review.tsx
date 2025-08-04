@@ -167,7 +167,7 @@ const HyarihattoReview = () => {
 
       {/* Table Data */}
       <Card className='mt-4'>
-        <CardContent className='border border-gray-300 rounded-lg'>
+        <CardContent className='border border-gray-300 dark:border-gray-700 rounded-lg'>
           <div className='overflow-x-auto'>
             <Table>
               <TableHeader>

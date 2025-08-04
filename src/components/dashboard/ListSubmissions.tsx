@@ -28,9 +28,8 @@ type DataSubmissions = {
   };
   shift: string;
   status: number;
-  HazardEvaluation:{
-    totalScore: number;
-    rank: string;
+  line: {
+    lineName: string;
   }
 }
 
@@ -51,12 +50,15 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
   const fetchDataSubmissions = async() => {
     try {
       setLoading(true)
-      const response = await getSubmissionsRecent(filter.month, filter.year, pagination.page, pagination.limit, searchQ)
-      setDataSubmissions(response?.data?.data)
+      const response = await getSubmissionsRecent(filter.type, filter.month, filter.year, pagination.page, pagination.limit, searchQ)
+      const data = response?.data?.data
+      const meta = response?.data?.meta
+      console.log("response data: ", data)
+      setDataSubmissions(data)
       setPagination({
-        page: response?.data?.meta?.page,
-        totalPages: response?.data?.meta?.totalPages,
-        limit: response?.data?.meta?.limit,
+        page: meta?.page,
+        totalPages: meta?.totalPages,
+        limit: meta?.limit,
       })
     } catch (error) {
       console.error(error)
@@ -73,7 +75,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
 
   useEffect(()=>{
     fetchDataSubmissions()
-  }, [debouncedQ, pagination.page, filter.month, filter.year])
+  }, [debouncedQ, pagination.page, filter.month, filter.year, filter.type])
 
   return (
     <div className="rounded-2xl border border-gray-200 bg-white px-4 pb-3 pt-4 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6">
@@ -103,8 +105,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
               <TableCell>Nama</TableCell>
               <TableCell>No Reg</TableCell>
               <TableCell>Shift</TableCell>
-              <TableCell>Score</TableCell>
-              <TableCell>Rank</TableCell>
+              <TableCell>Line</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Detail</TableCell>
             </TableRow>
@@ -123,8 +124,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
                     {item.shift.toUpperCase()}
                   </Badge>
                 </TableCell>
-                <TableCell>{item.HazardEvaluation.totalScore}</TableCell>
-                <TableCell>{item.HazardEvaluation.rank}</TableCell>
+                <TableCell>{item?.line?.lineName}</TableCell>
                 <TableCell>
                   <Badge
                     size="sm"

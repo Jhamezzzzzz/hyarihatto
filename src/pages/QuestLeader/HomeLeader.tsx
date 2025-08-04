@@ -11,19 +11,37 @@ import PageMeta from "../../components/common/PageMeta";
 import Metrics from "../../components/dashboard/Metrics";
 import { useState } from "react";
 import YearPicker from "../../components/form/year-picker";
+import Select from "../../components/form/Select";
+import Leaderboard from "../../components/dashboard/Leaderboard";
 
 export type Filter = {
   year: number;
   month: string;
   monthName: string;
+  type: string;
 }
 
 export default function HomeLeader() {
+  const OPTIONS_TYPE = [{
+    value: 'hyarihatto',
+    label: 'Hyarihatto'
+  },{
+    value: 'voice-member',
+    label: 'Voice Member'
+  }]
   const [filter, setFilter] = useState<Filter>({
     year: new Date().getFullYear(),
     month: "",
-    monthName: ""
+    monthName: "",
+    type: "hyarihatto"
   })
+
+  const handleChangeSelect = (value: string) => {
+    setFilter({
+      ...filter,
+      type: value
+    })
+  }
 
   const handleChangeDate = (date: Date[]) => {
     setFilter({
@@ -57,8 +75,16 @@ export default function HomeLeader() {
         description="Online sistem sebagai digitalisasi buku catatan Hyarihatto"
       />
 
-      <div className="col-span-12 space-y-6 xl:col-span-5 flex items-end justify-between mb-6">
-        <p className="text-title-md font-bold mb-2 dark:text-white">Hyarihatto</p>
+      <div className="col-span-12 xl:col-span-5 flex items-end justify-between mb-6">
+        <div>
+          <Label>Tipe Catatan</Label>
+          <Select
+            options={OPTIONS_TYPE}
+            defaultValue={filter.type}
+            className="w-[200px]"
+            onChange={handleChangeSelect}
+          />
+        </div>
         {/* ///filter/// */}
         <div className="flex gap-20">
           <div className="flex items-center gap-4">
@@ -88,6 +114,9 @@ export default function HomeLeader() {
 
       <div className="col-span-12 space-y-6 xl:col-span-7 mb-3 mt-2">
         <Metrics filter={filter}/>
+      </div>
+      <div className="col-span-12 space-y-6 mb-4">
+        <Leaderboard/>
       </div>
       <div className="col-span-12 space-y-6 xl:col-span-7  mb-4">
         <GraphLocationHyat filter={filter}/>

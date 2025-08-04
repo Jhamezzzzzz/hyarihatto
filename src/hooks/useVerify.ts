@@ -13,6 +13,8 @@ const useVerify = () => {
   const navigate = useNavigate()
   const { alertError } = useShowAlert()
   const isSuperAdmin = auth.roleName === "super admin"
+  const isSectionHead = auth.roleName === "section head"
+  const isLineHead = auth.roleName === "line head"
 
  
   const axiosJWT = axiosInstance.create()
@@ -105,6 +107,8 @@ const useVerify = () => {
   return {
     ...auth,
     isSuperAdmin,
+    isSectionHead,
+    isLineHead,
     axiosJWT,
     axiosTWIISJWT,
     setTokenAndDecode, // optional kalau mau set token manual juga

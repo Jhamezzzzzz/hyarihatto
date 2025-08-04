@@ -100,6 +100,25 @@ const StaticOptions = () => {
         "Ditolak"
     ]
 
+    const optionsStatus = [
+        {
+            value: "0",
+            label: "Diajukan"
+        },
+        {
+            value: "1",
+            label: "Dijadwalkan"
+        },
+        {
+            value: "2",
+            label: "Terselesaikan"
+        },
+        {
+            value: "3",
+            label: "Ditolak"
+        },
+    ]
+
     return{
         optionsShift,
         optionsHyarihattoHazardType,
@@ -109,7 +128,8 @@ const StaticOptions = () => {
         optionsHyarihattoHazardCategory,
         optionsHyarihattoAccidentType,
         errorMessageObject,
-        STATUS_SUBMISSION
+        STATUS_SUBMISSION,
+        optionsStatus
     }
 }
 

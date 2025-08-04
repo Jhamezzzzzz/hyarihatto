@@ -7,9 +7,9 @@ import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/QuestLeader/HomeLeader";
 import DetailHyarihatto from './pages/Dashboard/DetailHyarihatto';
 import DetailVoice from './pages/Dashboard/DetailVoice';
-import HyarihattoSummary from "./pages/Hyarihatto/Summary";
-import HyarihattoReview from "./pages/Hyarihatto/Review";
-import HyarihattoHistory from "./pages/Hyarihatto/History";
+// import HyarihattoSummary from "./pages/Hyarihatto/Summary";
+import HyarihattoSubmissions from "./pages/Hyarihatto/Submissions";
+// import HyarihattoHistory from "./pages/Hyarihatto/History";
 import VoiceMemberSummary from "./pages/VoiceMember/Summary";
 import VoiceMemberReview from "./pages/VoiceMember/Review";
 import VoiceMemberHistory from "./pages/VoiceMember/History";
@@ -49,11 +49,12 @@ export default function App() {
             <Route  path="/home" element={<Home />} />
             <Route path="/hyarihatto/:id" element={<DetailHyarihatto />} />
             <Route path="/voice-member/:id" element={<DetailVoice />} />
+            <Route path="/submissions" element={<HyarihattoSubmissions />} />
 
             {/* Hyarihatto */}
-            <Route path="/hyarihatto/summary" element={<HyarihattoSummary />} />
-            <Route path="/hyarihatto/review" element={<HyarihattoReview />} />
-            <Route path="/hyarihatto/history" element={<HyarihattoHistory />} />
+            {/* <Route path="/hyarihatto/summary" element={<HyarihattoSummary />} />
+            <Route path="/hyarihatto/review" element={<HyarihattoSubmissions />} />
+            <Route path="/hyarihatto/history" element={<HyarihattoHistory />} /> */}
             
             {/* Voice Member */}
             <Route path="/voice-member/summary" element={<VoiceMemberSummary />} />

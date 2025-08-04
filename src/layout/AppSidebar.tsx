@@ -6,7 +6,6 @@ import {
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  TableIcon,
 } from "../icons";
 import { useSidebar } from "../context/SidebarContext";
 import { FaBalanceScale, FaBookReader, FaDiagnoses, FaPeopleCarry, FaUserInjured } from "react-icons/fa";
@@ -36,14 +35,14 @@ const hyarihattoItems: NavItem[] = [
   // },
   {
     icon: <FaBookReader/>,
-    name: "Review",
-    path: "/hyarihatto/review",
+    name: "Submissions",
+    path: "/submissions",
   },
-  {
-    icon: <TableIcon />,
-    name: "History",
-    path: "/hyarihatto/history"
-  },
+  // {
+  //   icon: <TableIcon />,
+  //   name: "History",
+  //   path: "/hyarihatto/history"
+  // },
 ];
 
 const voiceMemberItems: NavItem[] = [
@@ -57,11 +56,11 @@ const voiceMemberItems: NavItem[] = [
     name: "Review",
     path: "/voice-member/review",
   },
-  {
-    icon: <TableIcon />,
-    name: "History",
-    path: "/voice-member/history"
-  },
+  // {
+  //   icon: <TableIcon />,
+  //   name: "History",
+  //   path: "/voice-member/history"
+  // },
 ];
 
 const masterItems: NavItem[] = [
@@ -366,29 +365,12 @@ const AppSidebar: React.FC = () => {
                 }`}
               >
                 {isExpanded || isHovered || isMobileOpen ? (
-                  "Hyarihatto"
+                  "Catatan"
                 ) : (
                   <HorizontaLDots className="size-6" />
                 )}
               </h2>
               {renderMenuItems(hyarihattoItems, "hyarihatto")}
-            </div>
-
-            <div>
-              <h2
-                className={`mb-4 text-xs uppercase flex leading-[20px] text-gray-400 ${
-                  !isExpanded && !isHovered
-                    ? "lg:justify-center"
-                    : "justify-start"
-                }`}
-              >
-                {isExpanded || isHovered || isMobileOpen ? (
-                  "Voice Member"
-                ) : (
-                  <HorizontaLDots className="size-6" />
-                )}
-              </h2>
-              {renderMenuItems(voiceMemberItems, "voice-member")}
             </div>
 
               {/* IF ROLE SUPER ADMIN */}

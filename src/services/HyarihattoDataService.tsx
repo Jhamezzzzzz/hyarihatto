@@ -35,9 +35,9 @@ const useHyarihattoDataService = () => {
         }
     }
 
-    const getAllSubmissions = async(month: string, year: number, page: string | number, limit: string | number, q: string) => {
+    const getAllSubmissions = async(type: string, lineId: number | string, sectionId: number | string, month: string, year: number, page: string | number, limit: string | number, q: string) => {
         try {
-            const response = await axiosJWT.get(`submissions?type=hyarihatto&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
+            const response = await axiosJWT.get(`submissions?type=${type}&lineId=${lineId}&sectionId=${sectionId}&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -61,9 +61,9 @@ const useHyarihattoDataService = () => {
         }
     }
 
-    const getSubmissionsRecent = async(month: string, year: number, page: string | number, limit: string | number, q: string) => {
+    const getSubmissionsRecent = async(type: string, month: string, year: number, page: string | number, limit: string | number, q: string) => {
         try {
-            const response = await axiosJWT.get(`dashboard/recents?type=hyarihatto&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
+            const response = await axiosJWT.get(`dashboard/recents?type=${type}&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },

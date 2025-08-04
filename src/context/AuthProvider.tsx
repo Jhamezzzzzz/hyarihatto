@@ -51,7 +51,6 @@ export const AuthProvider = ({ children }: { children: ReactNode}) => {
 
   const setAuthStates = () => {
     const storedToken = localStorage.getItem('accessToken')
-    console.log("storedToken:", storedToken)
     if (storedToken) {
         try {
             const decoded: DecodedToken = jwtDecode(storedToken)

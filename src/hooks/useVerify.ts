@@ -24,8 +24,6 @@ const useVerify = () => {
     async (config) => {
       const currentDate = new Date()
       if (auth.expire * 1000 < currentDate.getTime()) {
-        console.log('Token expired, refreshing...')
-        
         if (!isRefreshing) {
           isRefreshing = true
           refreshPromise = axiosTWIIS
@@ -67,8 +65,6 @@ const useVerify = () => {
     async (config) => {
       const currentDate = new Date()
       if (auth.expire * 1000 < currentDate.getTime()) {
-        console.log('Token expired, refreshing...')
-        
         if (!isRefreshing) {
           isRefreshing = true
           refreshPromise = axiosTWIIS

@@ -252,10 +252,10 @@ const HyarihattoSubmissions = () => {
             id='date'
             mode='range'
             onChange={handleChangeRangeDate}
-            defaultDate={{
-              filter.startDate,
-              filter.endDate,
-            }}
+            // defaultDate={{
+            //   filter.startDate,
+            //   filter.endDate,
+            // }}
           />
         </div>
         {/* <div className='flex gap-2'>

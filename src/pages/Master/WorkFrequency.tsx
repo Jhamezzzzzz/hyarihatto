@@ -286,9 +286,11 @@ const AccidentLevel = () => {
                         timeZone: 'Asia/Jakarta'
                     });
 
+                    const numberIndex = index+1 + ((pagination.currentPage-1)*pagination.limitPerPage)
+
                     return(
                       <TableRow key={index}>
-                        <TableCell>{index+1}</TableCell>
+                        <TableCell>{numberIndex}</TableCell>
                         <TableCell>{item.option}</TableCell>
                         <TableCell>{item.score}</TableCell>
                         <TableCell>

@@ -134,7 +134,7 @@ const HyarihattoSubmissions = () => {
 
   useEffect(()=>{
     fetchSubmissions()
-  }, [filter.startDate, filter.endDate, pagination.page, debouncedQ, filter.lineId, filter.sectionId, filter.type, filter.status, filter.shift])
+  }, [filter.startDate, filter.endDate, pagination.page, pagination.limit, debouncedQ, filter.lineId, filter.sectionId, filter.type, filter.status, filter.shift])
 
   const fetchOptionsLine = async() => {
     try {
@@ -221,20 +221,6 @@ const HyarihattoSubmissions = () => {
             />
           </div>
 
-          <div>
-            <Label>Line</Label>
-            <Select
-              options={optionsLine}
-              className='w-[200px]'
-              defaultValue={filter.lineId.toString()}
-              name='lineId'
-              onChange={handleChangeSelect}
-              placeholder='Pilih lane'
-              showSearch
-              isClearable
-            />
-          </div>
-
           { isSuperAdmin && (
             <div>
               <Label>Section</Label>
@@ -250,6 +236,20 @@ const HyarihattoSubmissions = () => {
               />
             </div>
           )}
+
+          <div>
+            <Label>Line</Label>
+            <Select
+              options={optionsLine}
+              className='w-[200px]'
+              defaultValue={filter.lineId.toString()}
+              name='lineId'
+              onChange={handleChangeSelect}
+              placeholder='Pilih lane'
+              showSearch
+              isClearable
+            />
+          </div>
         </div>
         {/* Period */}
         <div>
@@ -319,9 +319,10 @@ const HyarihattoSubmissions = () => {
               </TableHeader>
               <TableBody>
                 {(!loading.fetch  && dataSubmissions.length > 0) && dataSubmissions.map((item: DataSubmissions, index: number)=>{
+                  const numberIndex = index+1 + ((pagination.page-1)*pagination.limit)
                   return(
                     <TableRow key={index}>
-                      <TableCell>{index+1}</TableCell>
+                      <TableCell>{numberIndex}</TableCell>
                       <TableCell>{item.incidentDate}</TableCell>
                       <TableCell>{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
                       <TableCell>{item.user.name}</TableCell>
@@ -373,8 +374,8 @@ const HyarihattoSubmissions = () => {
               setPagination({...pagination, page: e})
             }}
             showLimit
-            onLimitChange={(e)=>{
-              setPagination({ ...pagination, limit: e, page: 1})
+            onLimitChange={(limit)=>{
+              setPagination({ ...pagination, limit: limit, page: 1})
             }}
             limitPerPage={pagination.limit}
             options={[10, 25, 50]}

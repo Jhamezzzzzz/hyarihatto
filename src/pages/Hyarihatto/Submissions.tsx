@@ -14,7 +14,6 @@ import Pagination from '../../components/ui/table/Pagination';
 import Badge from '../../components/ui/badge/Badge';
 import StaticOptions from '../../utils/StaticOptions';
 import Button from '../../components/ui/button/Button';
-import { useNavigate } from 'react-router';
 import Select from '../../components/form/Select';
 import useMasterDataService from '../../services/MasterDataService';
 import useVerify from '../../hooks/useVerify';
@@ -61,7 +60,7 @@ const HyarihattoSubmissions = () => {
     value: "hyarihatto",
     label: "Hyarihatto"
   },{
-    value: "voice-member",
+    value: "voice member",
     label: "Voice Member"
   }]
   const [loading, setLoading] = useState<Loading>({
@@ -92,9 +91,9 @@ const HyarihattoSubmissions = () => {
   const { getAllSubmissions } = useHyarihattoDataService()
   const { getMasterPublicData } = useMasterDataService()
   const { STATUS_SUBMISSION, optionsStatus, optionsShift } = StaticOptions()
-  const navigate = useNavigate()
   const [optionsLine, setOptionsLine] = useState([])
   const [optionsSection, setOptionsSection] = useState([])
+  const hrefType = filter.type === "hyarihatto" ? "hyarihatto" : filter.type === "voice member" ? "voice-member" : ""
 
   const fetchSubmissions = async() => {
     try {
@@ -204,7 +203,7 @@ const HyarihattoSubmissions = () => {
 
   return (
     <div>
-      <PageMeta title="Hyarihatto Review | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
+      <PageMeta title="Submissions | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <PageBreadcrumb pageTitle='Submissions'/>
 
       {/* Filters */}
@@ -355,7 +354,7 @@ const HyarihattoSubmissions = () => {
                       <TableCell>
                         <Button
                           className="px-4 py-1 text-sm font-medium text-dark bg-primary hover:bg-primary-dark rounded-md transition duration-200"
-                          onClick={() => navigate(`/hyarihatto/${item.id}`)} // Fungsi handleDetail opsional
+                          onClick={() => window.open(`/${hrefType}/${item.id}`)}
                         >
                           <FaClone/>
                         </Button>

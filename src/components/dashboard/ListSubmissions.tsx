@@ -44,6 +44,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
   })
   const [searchQ, setSearchQ] = useState<string>("")
   const debouncedQ = useDebounce(searchQ, 1000)
+  const hrefType = filter.type === "hyarihatto" ? "hyarihatto" : filter.type === "voice member" ? "voice-member" : ""
 
   const fetchDataSubmissions = async() => {
     try {
@@ -145,7 +146,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
                   <Button
                     size="sm"
                     className="px-4 py-1 text-sm font-medium text-dark bg-primary hover:bg-primary-dark rounded-md transition duration-200"
-                    onClick={() => window.open(`/hyarihatto/${item.id}`)} // Fungsi handleDetail opsional
+                    onClick={() => window.open(`/${hrefType}/${item.id}`)} // Fungsi handleDetail opsional
                   >
                     <FaClone/>
                   </Button>

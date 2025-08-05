@@ -57,6 +57,7 @@ const Step1FormHyarihatto = () => {
                 defaultDate={formattedDate}
                 onChange={handleChangeDate}
                 dateFormat="d-M-Y"
+                placeholder="Pilih tanggal kejadian"
                 className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
                 hint={errors.submissions?.incidentDate}
                 error={errors?.submissions?.incidentDate !== undefined}
@@ -68,6 +69,7 @@ const Step1FormHyarihatto = () => {
               </label>
               <DatePicker
                 id="incidentTime"
+                placeholder="Masukkan waktu kejadian"
                 mode="time"
                 dateFormat="H:i"
                 defaultDate={formData.submissions.incidentTime}

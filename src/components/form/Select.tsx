@@ -159,8 +159,8 @@ const Select: React.FC<SelectProps> = ({
                   key={option.value}
                   onClick={() => handleSelect(name, option)}
                   className={`px-4 py-2 cursor-pointer ${
-                    selectedLabel === option.label ? "bg-primary1-50" : ""
-                  } hover:bg-primary1-50/[0.5] dark:hover:bg-brand-800/30 text-gray-700 dark:text-gray-200`}
+                    selectedLabel === option.label ? "bg-brand-50 dark:text-gray-900" : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-200"
+                  }  `}
                 >
                   {option.label}
                 </li>

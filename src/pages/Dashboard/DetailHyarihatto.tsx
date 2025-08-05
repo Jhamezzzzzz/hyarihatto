@@ -2,11 +2,15 @@ import  { useRef,useState,useEffect} from 'react';
 import { useParams} from 'react-router-dom';
 import RadioGroupProgress from "../../components/form/input/RadioGroupProgress";
 import DatePicker from '../../components/form/date-picker'
-import ButtonSubmit from "./ButtonSubmit";
+import ButtonSubmit from "./ButtonSubmitDetail";
 import useHyarihattoDataService from "../../services/HyarihattoDataService";
 import StaticOptions from "../../utils/StaticOptions";
 import Badge from "../../components/ui/badge/Badge";
 import config from '../../utils/Config'
+import TextArea from "../../components/form/input/TextArea";
+import { useAuth } from '../../../src/context/AuthProvider'; // pastikan path-nya sesuai
+import { useFormErrors } from "../../../src/context/FormErrorContext";
+import { log } from 'console';
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 export type Submission = {
@@ -37,26 +41,45 @@ export type Submission = {
     accidentLevel: string;
     workingFrequency: string;
   }
+  Reviews:{
+  feedback: 'rejected' | 'counter-measured';
+  actionPic: string ;
+  thirdParty: string ;
+  actionPlan: string ;
+  actionDate: string ;
+  suggestion: string;
+  proof: string;
+  createdAt: string;
+  updatedAt: string;
+  }[];
   status: number;
   type: string;
   incidentDate: string;
   incidentTime: string;
   shift: string;
+  location: string;
 };
-
-
-
 
 export default function DetailHyarihatto() {
   const { id } = useParams<{ id: string }>();
-  const { getSubmissionById } = useHyarihattoDataService();
+  const { getSubmissionById,postRejectLeaderAction,postSolvedLeaderAction,postCounterMeasureAction} = useHyarihattoDataService();
   const [data, setData] = useState<Submission | null>(null);
+  const { auth } = useAuth();
+  const userRole = auth.roleName; // Misal: 'group' atau 'section'
+  const { errors, updateError } = useFormErrors()
+ // 'group' atau 'section'
+
+
   const { STATUS_SUBMISSION } = StaticOptions()
   // const catatan = dummyData.find(item => item.id === Number(id));
    const optionsProgress = ["Terima", "Tolak"];
-  const optionsUser = ["Oleh diri sendiri", "Bersama dalam SGA", "Pihak lain"];
-  const [selectedProgress, setSelectedProgress] = useState(""); // utk pilihan "Terima" atau lainnya
-  const [selectedPIC, setSelectedPIC] = useState(""); // utk pilihan user PIC
+  const optionsUser = ["Bisa oleh Diri sendiri", "Bersama2 dalam SGA", "Pihak lain"];
+  const [selectedProgress, setSelectedProgress] = useState("");
+  const [formattedDatePlanCM, setFormattedDatePlanCM] = useState(localStorage.getItem("formattedDatePlanCM") || "")
+  const [formattedDateFinishPlan, setFormattedDateFinishPlan] = useState(localStorage.getItem("formattedDateFinishPlan") || "") // utk pilihan "Terima" atau lainnya
+ 
+ 
+  // utk pilihan user PIC
   const [pihakLain, setPihakLain] = useState(""); // utk input pihak lain jika dipilih
   const fileInputRef = useRef<HTMLInputElement | null>(null);
    const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
@@ -65,7 +88,12 @@ export default function DetailHyarihatto() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [reason, setReason] =useState<string>('');;
+  const [reason, setReason] =useState<string>('');
+   const [selectedPIC, setSelectedPIC] = useState(""); 
+  const [planCM,setPlanCM ] =useState<Date | undefined>(undefined);
+  const [finishplan, setFinishplan] = useState<Date | null>(null);
+   const [suggestionsect, setSuggestionsect] =useState<string>('');
+    const [suggestiongroup, setSuggestiongroup] =useState<string>('');
   const isDisabled = isSubmitted; 
 
 
@@ -87,12 +115,39 @@ useEffect(() => {
     }
   }
 }, [id]);
+// ⛔ JANGAN TARUH DI BAWAH `if (!data)`!!
+useEffect(() => {
+  if (!data) return;
+
+  const acceptedReview = data.Reviews?.find((r) => r.feedback === "counter-measured");
+  const rejectedReview = data.Reviews?.find((r) => r.feedback === "rejected");
+
+  if (acceptedReview) {
+    setSelectedProgress("Terima");
+    setSelectedPIC(acceptedReview.actionPic);
+    setPlanCM(new Date(acceptedReview.actionPlan));
+    setFinishplan(new Date(acceptedReview.actionDate));
+    setSuggestiongroup(auth.roleName === 'line head' ? acceptedReview.suggestion : '');
+    setSuggestionsect(auth.roleName === 'section head' ? acceptedReview.suggestion : '');
+     if (!previewImage) {
+      setPreviewImage(`${config.BACKEND_URL}/${acceptedReview.proof}`);
+    }
+    setIsSubmitted(true);
+  }
+
+  if (rejectedReview) {
+    setSelectedProgress("Tolak");
+    setReason(rejectedReview.suggestion);
+    setIsSubmitted(true);
+  }
+}, [data]);
 
 
   if (!data) {
     return <p>Loading...</p>;
   }
 
+ 
 
    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -101,36 +156,26 @@ useEffect(() => {
     }
   };
 
-   const handleSubmitReject = () => {
-    // Simpan ke localStorage (sementara)
-    localStorage.setItem(
-      'tindakLanjut',
-      JSON.stringify({
-        progress: selectedProgress,
-        reason: reason,
-      })
-    );
+     const handleChangePlanCM  = (dateplan: Date[]) => {
+        const dateStringPlanCM = new Date(dateplan[0]).toLocaleDateString('en-CA')
+        const formattedDatePlanCM = new Date(dateplan[0]).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        }).replace(/ /g, '-');
 
-    setIsSubmitted(true); // disable textarea
-    alert('Tersimpan ke localStorage!');
-  };
+         setPlanCM(dateplan[0]); 
+    };
+     const handleChangeFinishPlan  = (date: Date[]) => {
+        const dateStringFinishPlan = new Date(date[0]).toLocaleDateString('en-CA')
+        const formattedDateFinishPlan = new Date(date[0]).toLocaleDateString("en-GB", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+        }).replace(/ /g, '-');
 
-  
-   const handleSubmitAccept = () => {
-    // Simpan ke localStorage (sementara)
-    localStorage.setItem(
-      'tindakLanjut',
-      JSON.stringify({
-        pic: selectedProgress,
-        // suggestionSect: reason,
-        // suggestionGroup: reason,
-        // imageProgress: reason,
-      })
-    );
-
-    setIsSubmitted(true); // disable textarea
-    alert('Tersimpan ke localStorage!');
-  };
+         setFinishplan(date[0]); 
+    };
 
 
   const startCamera = async () => {
@@ -182,10 +227,99 @@ useEffect(() => {
     setIsCameraModalOpen(false);
     stopCamera();
   };
-             {console.log("Image URL:", `${config.BACKEND_URL}/${data.HazardReport.proof}`)}
+ 
+
+
+
+const handleSubmitReject = async () => {
+  // if (selectedProgress === "Tolak" && reason.trim() === "") {
+  //   alertWarning("Silakan isi alasan penolakan.");
+  //   return;
+  // }
+
+  const body = {
+    submissionId: Number(id), // pastikan dikonversi ke number jika backend butuh angka
+    suggestion: reason.trim(),
+  };
+
+  setIsSubmitted(true);
+
+  try {
+    await postRejectLeaderAction(body);
+    const update = await getSubmissionById(Number(id));
+    setData(update);
+  } finally {
+    setIsSubmitted(false);
+  }
+};
+
+const handleSubmitAccept = async () => {
+  if (!id) return;
+
+  const submissionId = Number(id);
+
+  // Tentukan suggestion berdasarkan role user
+  let suggestion = '';
+  if (userRole === 'line head') {
+    suggestion = suggestiongroup.trim();
+  } else if (userRole === 'section head') {
+    suggestion = suggestionsect.trim();
+  }
+
+  // Jika suggestion kosong, bisa tambahkan validasi
+  // if (!suggestion) {
+  //   alertWarning("Silakan isi saran/usulan terlebih dahulu.");
+  //   return;
+  // }
+
+const counterMeasureBody = {
+  submissionId,
+  actionPic: selectedPIC,
+  actionPlan: planCM?.toISOString().split('T')[0] || '',
+  actionDate: finishplan?.toISOString().split('T')[0] || '',
+  suggestion,
+  ...(selectedPIC === 'Pihak lain' && pihakLain.trim() && {
+    thirdParty: pihakLain.trim(),
+  }),
+};
+console.log("Counter Measure Body:", counterMeasureBody);
+
+ const solvedForm = new FormData();
+solvedForm.append('submissionId', submissionId.toString());
+
+if (previewImage?.startsWith("data:image")) {
+  const res = await fetch(previewImage);
+  const blob = await res.blob();
+  const file = new File([blob], "proof.png", { type: "image/png" });
+  solvedForm.append('imageAction', file);
+
+console.log("oke:", file);
+} else{
+  console.warn("⚠️ No valid previewImage found!");
+}
+
+  setIsSubmitted(true);
+
+  try {
+    // 1. Submit countermeasure
+    await postCounterMeasureAction(counterMeasureBody);
+    // 2. Submit solve (gambar)
+    await postSolvedLeaderAction(solvedForm);
+
+     const updatedData = await getSubmissionById(submissionId);
+    setData(updatedData); 
+  } catch (error) {
+    // error sudah ditangani di masing-masing fungsi
+  } finally {
+    setIsSubmitted(false);
+  }
+};
+
+const acceptedReview = data?.Reviews?.find(r => r.feedback === "counter-measured");
+
 
   return (
-    
+
     <div className="grid grid-cols-12 gap-2 p-1">
       {/* <!-- Total Rank --> */}
     <div className="col-span-12 rounded-2xl border border-gray-200 bg-white px-5 py-2 shadow-md
@@ -195,42 +329,44 @@ useEffect(() => {
        <div className="grid grid-cols-4 gap-4">
         <div>
           <p className="font-medium">Nama</p>
-          <p className="text-md">{data.user?.name}</p>
+          <p className="text-lg">{data.user?.name}</p>
         </div>
 
         <div>
           <p className="font-medium">No.Reg</p>
-          <p className="text-md">{data.user?.username}</p>
+          <p className="text-lg">{data.user?.username}</p>
         </div>
 
         <div>
           <p className="font-medium">Shift</p>
-          <p className="text-md">{data.shift}</p>
+           <Badge color={data.shift === "non-shift" ? "light" : data.shift === "red" ? "error" : data.shift === "white" ? "dark" : "info"}>
+            {data.shift.toUpperCase()}
+            </Badge>
         </div>
-
-        <div>
-          <p className="font-medium">Nilai Rank</p>
-          <p className="text-md">{data.HazardEvaluation?.rank}</p>
-        </div>
-
         <div>
           <p className="font-medium">Catatan</p>
-          <p className="text-md">{data.type || "-"}</p>
+          <p className="text-lg">{data.type || "-"}</p>
+        </div>
+
+        <div>
+          <p className="font-medium">Lokasi</p>
+          <p className="text-lg">{data.location}</p>
         </div>
 
         <div>
           <p className="font-medium">Tanggal Kejadian</p>
-          <p className="text-md">{data.incidentDate}</p>
+          <p className="text-lg">{data.incidentDate}</p>
         </div>
 
         <div>
           <p className="font-medium">Waktu Kejadian</p>
-          <p className="text-lg">{new Date(data.incidentTime).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}</p>
+          <p className="text-lg">{new Date(data.incidentTime).toLocaleTimeString('en-GB', 
+            { hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Jakarta', })}</p>
         </div>
          <div>
           <p className="font-medium">Status</p>
           <Badge
-            size="sm"
+            size="md"
             variant="solid"
             color={
               data.status === 2
@@ -259,31 +395,31 @@ useEffect(() => {
         <div className="grid-cols-12  text-sm text-gray-700 dark:text-gray-300">
           {/* Baris 1 */}
           <div className='space-y-4'>
-           <div className="pb-4 border-b border-gray-300">
+           <div className="pb-2 border-b border-gray-300">
             <p className="font-medium">Apa yang sedang dilakukan?</p>
-              <p>{data.HazardAssessment?.currentActivity || "-"}</p>
+              <p className="text-lg">{data.HazardAssessment?.currentActivity || "-"}</p>
           </div>
          
           
-          <div className="pb-4 border-b border-gray-300">
+          <div className="pb-2 border-b border-gray-300">
             <p className="font-medium">Potensi bahaya apa yang akan timbul?</p>
-             <p>{data.HazardAssessment?.potentialHazard || "-"}</p>
+             <p className="text-lg">{data.HazardAssessment?.potentialHazard || "-"}</p>
           </div>
 
           {/* Baris 2 */}
-          <div className="pb-4 border-b border-gray-300">
+          <div className="pb-2 border-b border-gray-300">
             <p className="font-medium">Mengapa kondisinya berbahaya seperti itu?</p>
-            <p>{data.HazardAssessment?.hazardReason || "-"}</p>
+            <p className="text-lg">{data.HazardAssessment?.hazardReason || "-"}</p>
           </div>
-          <div className="pb-4 border-b border-gray-300">
+          <div className="pb-2 border-b border-gray-300">
             <p className="font-medium">Seharusnya kondisinya bagaimana?</p>
-            <p>
-              <span className="font-semibold">a. Harapan yang diinginkan:</span><br />
+             <span className="font-semibold">a. Harapan yang diinginkan:</span><br />
+            <p className="text-lg">
               {data.HazardAssessment?.expectedCondition || "-"}
               {/* {catatan?.penyebab} */}
             </p>
-            <p className="mt-1">
-              <span className="font-semibold">b. Usulan Perbaikan:</span><br />
+            <span className="font-semibold">b. Usulan Perbaikan:</span><br />
+            <p className="text-lg">
               {data.HazardAssessment?.improvementSuggestion || "-"}
               {/* {catatan?.penyebab} */}
             </p>
@@ -291,23 +427,23 @@ useEffect(() => {
           <div className='grid grid-cols-5 gap-4'>
             <div>
               <p className="font-medium">Jenis</p>
-              <p>{data.HazardReport?.pattern || "-"}</p>
+              <p className="text-lg">{data.HazardReport?.pattern || "-"}</p>
             </div>
               <div>
               <p className="font-medium">Sumber & Akibat</p>
-              <p>{data.HazardReport?.source || "-"}</p>
+              <p className="text-lg">{data.HazardReport?.source || "-"}</p>
             </div>
               <div>
               <p className="font-medium">Terluka</p>
-              <p>{data.HazardReport?.injured || "-"}</p>
+              <p className="text-lg">{data.HazardReport?.injured || "-"}</p>
             </div>
               <div>
               <p className="font-medium">Sebab</p>
-              <p>{data.HazardReport?.cause || "-"}</p>
+              <p className="text-lg">{data.HazardReport?.cause || "-"}</p>
             </div>
             <div>
               <p className="font-medium">Kategori</p>
-              <p>{data.HazardReport?.category || "-"}</p>
+              <p className="text-lg">{data.HazardReport?.category || "-"}</p>
             </div>
           </div>
           {/* Baris 3 */}
@@ -319,43 +455,49 @@ useEffect(() => {
             <div className="grid grid-cols-2 gap-4">
               
           <div>
-            <span className="font-semibold">a. Harapan yang diinginkan:</span><br />
+            <span className="font-semibold">a. Sebelum ditanggulangi</span><br />
             {/* <img src={data.HazardReport?.proof || "-"} className="w-8 h-8  mr-2" /> */}
            
            <img
             src={`${config.BACKEND_URL}/${data.HazardReport.proof}`} 
-            className="w-38 h-38 mr-2"
+            className="w-42 h-42 mr-2"
           />
 
           </div>
             <div>
-              <span className="font-semibold">b. Usulan Perbaikan:</span><br />
-              <img src="/images/harapan.png"  className="w-8 h-8 inline-block mr-2" />
-              {/* {catatan?.penyebab} */}
+              <span className="font-semibold">b. Setelah ditanggulangi</span><br />
+             {(previewImage || acceptedReview?.proof) ? (
+              <img
+                src={previewImage?.startsWith("data:image") ? previewImage : `${config.BACKEND_URL}/${previewImage}`}
+                className="w-42 h-42 inline-block mr-2"
+              />
+            ) : (
+              <span className="text-sm text-gray-500">belum ada penanggulangan</span>
+            )}
             </div>
             </div>
           </div>
           <div className="pb-4 border-b border-gray-300">
             <p className="font-medium">Tipe Kecelakaan [Stop 6 + alpha]</p>
-              <p>{data.HazardReport?.accidentType || "-"}</p>
+              <p className="text-lg">{data.HazardReport?.accidentType || "-"}</p>
           </div>
 
           <div className="grid grid-cols-3 gap-4">
              <div>
               <p className="font-medium">Level Kecelakaan</p>
-              <p>{data.HazardEvaluation?.accidentLevel || "-"}</p>
+              <p className="text-lg">{data.HazardEvaluation?.accidentLevel || "-"}</p>
               {/* <p>{catatan?.levelKecelakaan}</p> */}
             </div>
             <div>
               <p className="font-medium">Frekuensi Kerja</p>
-              <p>{data.HazardEvaluation?.workingFrequency || "-"}</p>
+              <p className="text-lg">{data.HazardEvaluation?.workingFrequency || "-"}</p>
               {/* <p>{catatan?.levelKecelakaan}</p> */}
             </div>
 
             {/* Baris 6 */}
             <div >
               <p className="font-medium">Level Pencegah Bahaya</p>
-              <p>{data.HazardEvaluation?.hazardControlLevel || "-"}</p>
+              <p className="text-lg">{data.HazardEvaluation?.hazardControlLevel || "-"}</p>
               {/* <p>{catatan?.levelPencegah}</p> */}
             </div>
           </div>
@@ -395,16 +537,17 @@ useEffect(() => {
                 />
                 </div>
                 {selectedProgress === "Tolak" && (
+                  isSubmitted ? (
                 <div>
                 <p className="mb-1 font-semibold">Alasan Menolak</p>
-                <textarea
+                <TextArea
                   rows={4}
                   placeholder="Silakan isi alasan menolak"
                    className={`w-full rounded-md border shadow-sm py-2 px-2 ${
                   isDisabled
                     ? 'bg-gray-100 text-gray-500 border-gray-300'
                     : 'border-gray-500 focus:ring-primary focus:border-primary'
-                }`}
+                 }`}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   disabled={isSubmitted}
@@ -414,15 +557,41 @@ useEffect(() => {
                   label="SUBMIT"
                   onClick={handleSubmitReject}
                   disabled={isSubmitted}
-                  //  showError={selectedProgress === "Tolak" && setReason.trim() === ""}
+                  showError={selectedProgress === "Tolak" && reason.trim() === ""}
+                />
+
+              </div>
+              </div>
+                ) : (
+                 <div>
+                <p className="mb-1 font-semibold">Alasan Menolak</p>
+                <TextArea
+                  rows={4}
+                  placeholder="Silakan isi alasan menolak"
+                   className={`w-full rounded-md border shadow-sm py-2 px-2 ${
+                  isDisabled
+                    ? 'bg-gray-100 text-gray-500 border-gray-300'
+                    : 'border-gray-500 focus:ring-primary focus:border-primary'
+                 }`}
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  disabled={isSubmitted}
+                />
+                <div className="text-center col-span-12">
+                <ButtonSubmit
+                  label="SUBMIT"
+                  onClick={handleSubmitReject}
+                  disabled={isSubmitted}
+                  showError={selectedProgress === "Tolak" && reason.trim() === ""}
                 />
               </div>
-              </div>
-              
-                )}
+              </div> 
+              )
+            )}
           </div>
           {/* <!-- Progress Tindak Lanjut--> */}
-          {selectedProgress === "Terima" && (
+          {selectedProgress === "Terima" &&  (  
+            isSubmitted?(
             <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
             <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Tindak Lanjut</h3>
               <div className="text-sm text-gray-700 dark:text-gray-300">
@@ -466,55 +635,73 @@ useEffect(() => {
                   <div>
                     <label className="block font-medium mb-1">Tanggal Plan C/M</label>
                      <DatePicker
-                        id='period'
-                        mode='single'
-                        placeholder='Semua periode'
-                        className='bg-white'
-                        disabled={isSubmitted}
-                      />
+                      id="plan-cm"
+                      mode="single"
+                      defaultDate={planCM}
+                      onChange={handleChangePlanCM}
+                      placeholder='dd-MMM-yyyy'
+                      dateFormat="d-M-Y"
+                      className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                      hint={errors.submissions?.incidentDate}
+                      error={errors?.submissions?.incidentDate !== undefined}
+                      disabled={isSubmitted}
+                    />
                   </div>
                   <div>
                     <label className="block font-medium mb-1">Tanggal Plan Selesai</label>
-                    <DatePicker
-                        id='period'
-                        mode='single'
-                        placeholder='Semua periode'
-                        className='bg-white'
-                        disabled={isSubmitted}
-                      />
+                  <DatePicker
+                    id="finish-plan"
+                    mode="single"
+                    defaultDate={finishplan ?? undefined}
+                    onChange={handleChangeFinishPlan}
+                    placeholder='dd-MMM-yyyy'
+                    dateFormat="d-M-Y"
+                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                    hint={errors.submissions?.incidentDate}
+                    error={errors?.submissions?.incidentDate !== undefined}
+                    disabled={isSubmitted}
+                  />
+
                   </div>
                 </div>
               </div>
+              {finishplan && (
+                <>
               <div className="md:col-span-2">
               <label className="block font-bold mb-1 mt-3">Saran & Usulan</label>
-              <div>
-                <label className="block mb-1">Section Head</label>
-                <textarea
+             <div>
+              <label className="block mb-1">Section Head</label>
+              <TextArea
                 rows={4}
-                disabled={isSubmitted}
+                value={suggestionsect}
+                onChange={(e) => setSuggestionsect(e.target.value)}
+                disabled={isSubmitted || auth.roleName !== 'section head'}
                 placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
-                 className={`w-full rounded-md border shadow-sm py-2 px-2 ${
-                  isDisabled
+                className={`w-full rounded-md border shadow-sm py-2 px-2 ${
+                  isSubmitted || auth.roleName !== 'section'
                     ? 'bg-gray-100 text-gray-500 border-gray-300'
                     : 'border-gray-500 focus:ring-primary focus:border-primary'
                 }`}
               />
-              </div>
-              <div>
-                <label className="block mb-1">Group Leader</label>
-                <textarea
-                  rows={4}
-                  disabled={isSubmitted}
-                  placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
-                   className={`w-full rounded-md border shadow-sm py-2 px-2 ${
-                  isDisabled
+            </div>
+
+            <div>
+              <label className="block mb-1">Group Leader</label>
+              <TextArea
+                rows={4}
+                value={suggestiongroup}
+                onChange={(e) => setSuggestiongroup(e.target.value)}
+                disabled={isSubmitted || auth.roleName !== 'line head'}
+                placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
+                className={`w-full rounded-md border shadow-sm py-2 px-2 ${
+                  isSubmitted || auth.roleName !== 'group'
                     ? 'bg-gray-100 text-gray-500 border-gray-300'
                     : 'border-gray-500 focus:ring-primary focus:border-primary'
                 }`}
-                />
+              />
+            </div>
+
               </div>
-              </div>
-           
               <div className="md:col-span-2">
               <label className="block font-bold mb-1 mt-2">Gambar</label>
                <div className="relative flex items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-48 cursor-pointer hover:border-primary">
@@ -642,8 +829,275 @@ useEffect(() => {
               </div>
             )}
         </div>
+        </>
+        )}
       </div>
       </div>
+      ) :(
+       <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Tindak Lanjut</h3>
+              <div className="text-sm text-gray-700 dark:text-gray-300">
+                {/* Saran dan Usulan */}
+                <div className="grid grid-cols-12 gap-2">
+                {/* Kolom 1: PIC */}
+                  <div className="col-span-6 md:col-span-8">
+                    <p className='mb-1 font-bold'>PIC Penanggulangan</p>
+                   <div className=" rounded-2xl border border-gray-400 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
+                    <RadioGroupProgress
+                      options={optionsUser}
+                      onChange={(value, group, name) => {
+                        setSelectedPIC(value);
+                        if (value !== "Pihak lain") {
+                        setPihakLain(''); // reset kalau bukan pihak lain
+                      }
+                      }}
+                      group="pic"
+                      name="picRadio" 
+                      value={selectedPIC}
+                      error={false}
+                      disabled={isSubmitted}
+                    />
+                     {selectedPIC === "Pihak lain" && (
+                      <div className="mt-3">
+                        <input
+                          type="text"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                          placeholder="Nama Pihak Lain"
+                          value={pihakLain}
+                          onChange={(e) => setPihakLain(e.target.value)}
+                          disabled={isSubmitted}
+                        />
+                      </div>
+                    )}
+                   </div>
+                </div>
+
+                {/* Kolom 2: Tanggal */}
+                <div className="col-span-6 md:col-span-4 space-y-4">
+                  <div>
+                    <label className="block font-medium mb-1">Tanggal Plan C/M</label>
+                     <DatePicker
+                      id="plan-cm"
+                      mode="single"
+                      defaultDate={planCM}
+                      onChange={handleChangePlanCM}
+                      placeholder='dd-MMM-yyyy'
+                      dateFormat="d-M-Y"
+                      className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                      hint={errors.submissions?.incidentDate}
+                      error={errors?.submissions?.incidentDate !== undefined}
+                      disabled={isSubmitted}
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-medium mb-1">Tanggal Plan Selesai</label>
+                  <DatePicker
+                    id="finish-plan"
+                    mode="single"
+                    defaultDate={finishplan ?? undefined}
+                    onChange={handleChangeFinishPlan}
+                    placeholder='dd-MMM-yyyy'
+                    dateFormat="d-M-Y"
+                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                    hint={errors.submissions?.incidentDate}
+                    error={errors?.submissions?.incidentDate !== undefined}
+                    disabled={isSubmitted}
+                  />
+                  </div>
+                </div>
+              </div>
+             {finishplan && (
+
+              <>
+              <div className="md:col-span-2">
+              <label className="block font-bold mb-1 mt-3">Saran & Usulan</label>
+             <div>
+              <label className="block mb-1">Section Head</label>
+              <TextArea
+                rows={4}
+                value={suggestionsect}
+                onChange={(e) => setSuggestionsect(e.target.value)}
+                disabled={isSubmitted || auth.roleName !== 'section head'}
+                placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
+                className={`w-full rounded-md border shadow-sm py-2 px-2 ${
+                  isSubmitted || auth.roleName !== 'section'
+                    ? 'bg-gray-100 text-gray-500 border-gray-300'
+                    : 'border-gray-500 focus:ring-primary focus:border-primary'
+                }`}
+              />
+            </div>
+
+            <div>
+              <label className="block mb-1">Group Leader</label>
+              <TextArea
+                rows={4}
+                value={suggestiongroup}
+                onChange={(e) => setSuggestiongroup(e.target.value)}
+                disabled={isSubmitted || auth.roleName !== 'line head'}
+                placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
+                className={`w-full rounded-md border shadow-sm py-2 px-2 ${
+                  isSubmitted || auth.roleName !== 'group'
+                    ? 'bg-gray-100 text-gray-500 border-gray-300'
+                    : 'border-gray-500 focus:ring-primary focus:border-primary'
+                }`}
+              />
+            </div>
+
+              </div>
+           
+              <div className="md:col-span-2">
+              <label className="block font-bold mb-1 mt-2">Gambar</label>
+               <div className="relative flex items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-48 cursor-pointer hover:border-primary">
+                {previewImage ? (
+                  <div className="relative w-full max-w-xs h-40 mx-auto">
+                    {/* Gambar Preview */}
+                    <img
+                      src={previewImage}
+                      alt="Preview"
+                      className="w-full h-full object-contain rounded-md border"
+                    />
+
+                    {/* Tombol X di pojok kanan atas gambar */}
+                    <button
+                      onClick={() => setPreviewImage(null)}
+                      className="absolute top-1 right-1 bg-white/80 hover:bg-white text-red-600 rounded-full p-1 shadow z-10"
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-4 w-4 text-red-500"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="mx-auto h-10 w-10 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    <p className="text-gray-500 mt-2">Tambahkan gambar bukti setelah perbaikan</p>
+                    <div className="flex justify-center gap-2 mt-3">
+                      <button
+                        className="text-primary text-sm underline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          fileInputRef.current?.click();
+                        }}
+                      >
+                        Galeri
+                      </button>
+                      <span className="text-gray-400">|</span>
+                      <button
+                        className="text-primary text-sm underline"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openCameraModal();
+                        }}
+                      >
+                        Kamera
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+            {/* Input Galeri */}
+            <input
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+            />
+
+            {/* Canvas untuk capture dari kamera */}
+            <canvas ref={canvasRef} style={{ display: 'none' }} />
+ 
+            {/* Tombol Submit */}
+         
+             {isCameraModalOpen && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center">
+                {/* BACKDROP BLUR & KLIK UNTUK CLOSE */}
+                <div
+                  className="absolute inset-0 bg-black/30 backdrop-blur-sm"
+                  onClick={closeCameraModal}
+                ></div>
+
+                {/* MODAL KAMERA */}
+                <div className="relative bg-white p-4 rounded-lg shadow-lg w-full max-w-md z-10">
+                  {/* Tombol Close Bulat */}
+                  <button
+                    onClick={closeCameraModal}
+                    className="absolute top-1 right-1 w-10 h-10 flex items-center justify-center
+                              text-red-500 hover:text-white text-2xl font-bold 
+                              border-2 border-red-500 hover:bg-red-500 
+                              rounded-full transition duration-300"
+                  >
+                    &times;
+                  </button>
+
+                  {/* Live Video */}
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    muted
+                    playsInline
+                    className="w-full h-auto rounded mb-1 mt-4"
+                  />
+
+                  {/* Tombol Ambil Foto */}
+                  <div className="text-center">
+                    <button
+                      onClick={capturePhoto}
+                      className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+                    >
+                      Ambil Foto
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+        </div>
+       </>
+      )}
+        <div className="text-center col-span-12">
+                {isSubmitted ? (
+                  <div className="flex justify-center items-center gap-2 mt-4">
+                    <svg className="animate-spin h-5 w-5 text-green-600" viewBox="0 0 24 24">
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8v8H4z"
+                      />
+                    </svg>
+                    <span className="text-gray-600 font-semibold">Menyimpan...</span>
+                  </div>
+                ) : (
+                  <ButtonSubmit label="SUBMIT" onClick={handleSubmitAccept} disabled={isSubmitted} />
+                )}
+              </div>
+      </div>
+      </div>
+
+    )
     )}
   </div> 
 

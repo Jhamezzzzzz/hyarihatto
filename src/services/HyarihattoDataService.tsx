@@ -119,7 +119,7 @@ const useHyarihattoDataService = () => {
             handleError(error)
         }
     };
-      const postCounterMeasureAction = async(body: {submissionId: number; actionPic: string ; thirdParty?: string ; actionPlan: string ; actionDate : string ; suggestion: string}) => {
+      const postCounterMeasureAction = async(body: {submissionId: number; actionPic: string ; thirdParty?: string ; actionPlan: string ; actionDate : string ; suggestionGL: string;suggestionSH: string}) => {
         try {
             const response = await axiosJWT.post(`/reviews/counter-measure`, body)
             alertSuccess(response?.data?.message)

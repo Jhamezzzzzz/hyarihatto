@@ -42,11 +42,13 @@ export type Submission = {
     workingFrequency: string;
   }
   Reviews:{
-  feedback: 'rejected' | 'counter-measured';
+  feedback: 'rejected' | 'counter-measured'| 'solved';
   actionPic: string ;
   thirdParty: string ;
   actionPlan: string ;
   actionDate: string ;
+  suggestionGL: string;
+  suggestionSH: string;
   suggestion: string;
   proof: string;
   createdAt: string;
@@ -84,6 +86,7 @@ export default function DetailHyarihatto() {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
    const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
+  const [fileImage,setFileImage] = useState<File | null>(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -95,7 +98,7 @@ export default function DetailHyarihatto() {
    const [suggestionsect, setSuggestionsect] =useState<string>('');
     const [suggestiongroup, setSuggestiongroup] =useState<string>('');
   const isDisabled = isSubmitted; 
-
+const imageSolved = data?.Reviews?.find(r => r.feedback === "solved" );
 
   //UseEffect Untuk mengambil data submission berdasarkan ID
 useEffect(() => {
@@ -121,16 +124,17 @@ useEffect(() => {
 
   const acceptedReview = data.Reviews?.find((r) => r.feedback === "counter-measured");
   const rejectedReview = data.Reviews?.find((r) => r.feedback === "rejected");
+  const imageSolved = data?.Reviews?.find(r => r.feedback === "solved" );
 
   if (acceptedReview) {
     setSelectedProgress("Terima");
     setSelectedPIC(acceptedReview.actionPic);
     setPlanCM(new Date(acceptedReview.actionPlan));
     setFinishplan(new Date(acceptedReview.actionDate));
-    setSuggestiongroup(auth.roleName === 'line head' ? acceptedReview.suggestion : '');
-    setSuggestionsect(auth.roleName === 'section head' ? acceptedReview.suggestion : '');
+    setSuggestiongroup(auth.roleName === 'line head' ? acceptedReview.suggestionGL : '');
+    setSuggestionsect(auth.roleName === 'section head' ? acceptedReview.suggestionSH : '');
      if (!previewImage) {
-      setPreviewImage(`${config.BACKEND_URL}/${acceptedReview.proof}`);
+      setPreviewImage(`${config.BACKEND_URL}/${imageSolved?.proof}`);
     }
     setIsSubmitted(true);
   }
@@ -152,6 +156,7 @@ useEffect(() => {
    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      setFileImage(file);
       setPreviewImage(URL.createObjectURL(file));
     }
   };
@@ -215,9 +220,14 @@ useEffect(() => {
 
     const imageDataUrl = canvas.toDataURL('image/png');
     setPreviewImage(imageDataUrl);
+
+    localStorage.setItem("hyarihatto.detail.image", imageDataUrl);
+    localStorage.setItem("hyarihatto.detail.imageFileName", `proof_${Date.now()}.png`);
     closeCameraModal();
     stopCamera(); // stop kamera setelah ambil gambar
   };
+
+
    const openCameraModal = () => {
     setIsCameraModalOpen(true);
     startCamera();
@@ -228,6 +238,18 @@ useEffect(() => {
     stopCamera();
   };
  
+  const base64ToFile = (base64: string, filename: string, mimeType: string): File => {
+  const arr = base64.split(",");
+  const mime = mimeType || arr[0].match(/:(.*?);/)?.[1] || "image/png";
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+  return new File([u8arr], filename, { type: mime });
+};
+
 
 
 
@@ -259,12 +281,7 @@ const handleSubmitAccept = async () => {
   const submissionId = Number(id);
 
   // Tentukan suggestion berdasarkan role user
-  let suggestion = '';
-  if (userRole === 'line head') {
-    suggestion = suggestiongroup.trim();
-  } else if (userRole === 'section head') {
-    suggestion = suggestionsect.trim();
-  }
+ 
 
   // Jika suggestion kosong, bisa tambahkan validasi
   // if (!suggestion) {
@@ -277,26 +294,31 @@ const counterMeasureBody = {
   actionPic: selectedPIC,
   actionPlan: planCM?.toISOString().split('T')[0] || '',
   actionDate: finishplan?.toISOString().split('T')[0] || '',
-  suggestion,
+  suggestionGL: suggestiongroup.trim(),
+  suggestionSH: suggestionsect.trim(),
   ...(selectedPIC === 'Pihak lain' && pihakLain.trim() && {
     thirdParty: pihakLain.trim(),
   }),
 };
 console.log("Counter Measure Body:", counterMeasureBody);
-
+const fieldData={submissionId: submissionId}
  const solvedForm = new FormData();
-solvedForm.append('submissionId', submissionId.toString());
+ 
+solvedForm.append('data', JSON.stringify(fieldData));
+solvedForm.append('image', fileImage as Blob );
 
-if (previewImage?.startsWith("data:image")) {
-  const res = await fetch(previewImage);
-  const blob = await res.blob();
-  const file = new File([blob], "proof.png", { type: "image/png" });
-  solvedForm.append('imageAction', file);
+// Ambil dari localStorage (pastikan sudah disimpan sebelumnya saat capture)
+const base64ImageLocal = localStorage.getItem("hyarihatto.detail.image") || "";
+const base64ImageFileNameLocal = localStorage.getItem("hyarihatto..detail.imageFileName") || "proof.png";
 
-console.log("oke:", file);
-} else{
-  console.warn("⚠️ No valid previewImage found!");
+if (base64ImageLocal.startsWith("data:image")) {
+  const fileImage = base64ToFile(base64ImageLocal, base64ImageFileNameLocal, "image/png");
+  solvedForm.append("image", fileImage); // ✅ Ganti 'image' sesuai field backend
+  console.log("📷 Image file ready:", fileImage);
+} else {
+  console.warn("⚠️ No valid base64 image found in localStorage!");
 }
+
 
   setIsSubmitted(true);
 
@@ -315,7 +337,8 @@ console.log("oke:", file);
   }
 };
 
-const acceptedReview = data?.Reviews?.find(r => r.feedback === "counter-measured");
+// const acceptedReview = data?.Reviews?.find(r => r.feedback === "counter-measured");
+
 
 
   return (
@@ -460,16 +483,16 @@ const acceptedReview = data?.Reviews?.find(r => r.feedback === "counter-measured
            
            <img
             src={`${config.BACKEND_URL}/${data.HazardReport.proof}`} 
-            className="w-42 h-42 mr-2"
+            className="w-45 h-42 mr-2"
           />
 
           </div>
             <div>
               <span className="font-semibold">b. Setelah ditanggulangi</span><br />
-             {(previewImage || acceptedReview?.proof) ? (
+             {(previewImage || imageSolved?.proof) ? (
               <img
-                src={previewImage?.startsWith("data:image") ? previewImage : `${config.BACKEND_URL}/${previewImage}`}
-                className="w-42 h-42 inline-block mr-2"
+                src={previewImage?.startsWith("data:image") ? previewImage : `${config.BACKEND_URL}/${imageSolved?.proof}`}
+                className="w-48 h-42 inline-block mr-2"
               />
             ) : (
               <span className="text-sm text-gray-500">belum ada penanggulangan</span>
@@ -715,20 +738,7 @@ const acceptedReview = data?.Reviews?.find(r => r.feedback === "counter-measured
                     />
 
                     {/* Tombol X di pojok kanan atas gambar */}
-                    <button
-                      onClick={() => setPreviewImage(null)}
-                      className="absolute top-1 right-1 bg-white/80 hover:bg-white text-red-600 rounded-full p-1 shadow z-10"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-red-500"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
+                   
                   </div>
                 ) : (
                   <div className="text-center">
@@ -834,6 +844,9 @@ const acceptedReview = data?.Reviews?.find(r => r.feedback === "counter-measured
       </div>
       </div>
       ) :(
+
+
+        //Buat Input
        <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
             <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Tindak Lanjut</h3>
               <div className="text-sm text-gray-700 dark:text-gray-300">

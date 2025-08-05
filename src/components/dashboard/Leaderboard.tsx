@@ -47,7 +47,7 @@ const Leaderboard = ({ filter } : { filter: Filter}) => {
   return (
     <div>
         <Card className='border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6 shadow-none'>
-            <h1 className='font-bold dark:text-gray-200'>Member Leaderboard</h1>
+            <h1 className='font-semibold text-gray-800 dark:text-gray-200'>Member Leaderboard</h1>
             <CardContent className=''>
                 {  (!loading && dataLeaderboard.length > 0 ) && dataLeaderboard.map((item, index)=>{
                     const barWidth = item.count / maxSubmission
@@ -83,7 +83,7 @@ const Leaderboard = ({ filter } : { filter: Filter}) => {
                                 </div>
                             </div>
                             <div className='flex col-span-9 items-center justify-between gap-2'>
-                                <div className={`h-[40px]`} style={{ backgroundColor: barColor, width: `${barWidth*100}%`}}></div>
+                                <div className={`h-[40px] transition-all duration-100`} style={{ backgroundColor: barColor, width: `${barWidth*100}%`}}></div>
                                 <p className='text-2xl dark:text-gray-200 font-bold'>{item.count}</p>
                             </div>
                         </div>

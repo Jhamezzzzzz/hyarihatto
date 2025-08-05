@@ -62,8 +62,6 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
   // Transform Response Data into Grouped By Month
   const transformDataForStackedBarChart = (rawData: ResponseChart[], targetMonth = '', targetYear: number) => {
     const transformedData: MonthYearData = {};
-    // Collect all unique line names from the raw data
-    // const allLineNames = Array.from(new Set(rawData.map(item => item.line.lineName)));
 
     const monthsToDisplay = [];
 
@@ -120,17 +118,12 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
   const fetchDashboardBarChart = async () => {
     try {
       setLoadingBar(true)
-      const response = await getDashboardBarChart(filter.year, filter.month);
+      const response = await getDashboardBarChart(filter.type, filter.year, filter.month);
       // console.log("response bar chart: ", response?.data?.data)
       const rawData = response?.data?.data;
       
       const transformed = transformDataForStackedBarChart(rawData, filter.month, filter.year);
       setDataBarChart(transformed);
-      
-      // Sort by descending count
-      // const sortedRaw = rawData.sort((a: { count: number; }, b: { count: number; }) => {
-      //   return b.count - a.count
-      // })
 
       // Extract unique line names to dynamically create Bar components
       const uniqueLineNames: string[] = Array.from(new Set(
@@ -182,8 +175,10 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
   // Call function
   useEffect(() => {
     fetchDashboardBarChart();
-    fetchDashboardPieChart();
-  }, [filter.year, filter.month]);
+    if(filter.type === 'hyarihatto'){
+      fetchDashboardPieChart();
+    }
+  }, [filter.year, filter.month, filter.type]);
 
 
   useEffect(()=>{
@@ -199,14 +194,17 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
 
   const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#a4de6c', '#d0ed57', '#83a6ed', '#8dd1e1', '#b5c5e0'];
 
+  const classNameHyarihatto = "xl:col-span-8 col-span-12"
+  const classNameVoiceMember = "col-span-12"
+
   return (
     <div className="grid grid-cols-12 gap-4 ">
-      <div className="xl:col-span-8 col-span-12">
+      <div className={filter.type === 'hyarihatto' ? classNameHyarihatto : classNameVoiceMember}>
         {/* Bar Chart */}
         <div className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
           <div className="min-h-120 h-120 pb-10">
-            <h2 className="text-lg font-semibold mb-4 dark:text-white">
-              Potensi Bahaya Ditemukan Tiap Line
+            <h2 className="text-lg font-semibold text-gray-800 mb-4 dark:text-white">
+              { filter.type === 'hyarihatto' ? "Potensi Bahaya" : "Voice Member"} Ditemukan Tiap Line
             </h2>
               { (loadingBar || dataBarChart.length === 0) ? (
                 <div className="flex h-full items-center justify-center">
@@ -255,67 +253,69 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
         </div>
       </div>
 
-      <div className="xl:col-span-4 col-span-12">
-        {/* Pie Chart */}
-        <div className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
-          <div className="min-h-120 h-120">
-            <h2 className="text-lg font-semibold mb-4 dark:text-white">
-              Persentase Potensi Bahaya
-            </h2>
-              { (loadingPie || dataPieChart.length === 0) ? (
-                <div className="flex h-full items-center justify-center">
-                  <NoDataOrLoading data={dataPieChart} loading={loadingPie}/>
-                </div>
-              ):(
-                <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Legend verticalAlign="top" />
-                  <Pie
-                    data={dataPieChart}
-                    dataKey="count"
-                    nameKey="name"
-                    // outerRadius={120}
-                    fill="#8884d8"
-                    labelLine={false}
-                    label={({
-                      cx,
-                      cy,
-                      midAngle,
-                      innerRadius, // Make sure to destructure innerRadius if you're using it
-                      outerRadius,
-                      percent
-                    }: PieLabelProps) => {
-                      const RADIAN = Math.PI / 180;
-                      const radius = innerRadius + (outerRadius - innerRadius) * 0.5; // Midpoint of the slice thickness
-                      if(midAngle && percent){
-                        const x = cx + radius * Math.cos(-midAngle * RADIAN);
-                        const y = cy + radius * Math.sin(-midAngle * RADIAN);
-                        return (
-                          <text
-                            x={x}
-                            y={y}
-                            fill="white" // Consider using a contrasting color for better readability inside slices
-                            textAnchor={x > cx ? "start" : "end"}
-                            dominantBaseline="central"
-                          >
-                            {`${(percent * 100).toFixed(0)}%`}
-                          </text>
-                        );
-                      }
+      { filter.type === 'hyarihatto' && (
+        <div className="xl:col-span-4 col-span-12">
+          {/* Pie Chart */}
+          <div className="rounded-2xl border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
+            <div className="min-h-120 h-120">
+              <h2 className="text-lg font-semibold mb-4 dark:text-white">
+                Persentase Potensi Bahaya
+              </h2>
+                { (loadingPie || dataPieChart.length === 0) ? (
+                  <div className="flex h-full items-center justify-center">
+                    <NoDataOrLoading data={dataPieChart} loading={loadingPie}/>
+                  </div>
+                ):(
+                  <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Legend verticalAlign="top" />
+                    <Pie
+                      data={dataPieChart}
+                      dataKey="count"
+                      nameKey="name"
+                      // outerRadius={120}
+                      fill="#8884d8"
+                      labelLine={false}
+                      label={({
+                        cx,
+                        cy,
+                        midAngle,
+                        innerRadius, // Make sure to destructure innerRadius if you're using it
+                        outerRadius,
+                        percent
+                      }: PieLabelProps) => {
+                        const RADIAN = Math.PI / 180;
+                        const radius = innerRadius + (outerRadius - innerRadius) * 0.5; // Midpoint of the slice thickness
+                        if(midAngle && percent){
+                          const x = cx + radius * Math.cos(-midAngle * RADIAN);
+                          const y = cy + radius * Math.sin(-midAngle * RADIAN);
+                          return (
+                            <text
+                              x={x}
+                              y={y}
+                              fill="white" // Consider using a contrasting color for better readability inside slices
+                              textAnchor={x > cx ? "start" : "end"}
+                              dominantBaseline="central"
+                            >
+                              {`${(percent * 100).toFixed(0)}%`}
+                            </text>
+                          );
+                        }
 
-                    }}
-                  >
-                    {dataPieChart.map((entry, index) => {
-                      return <Cell key={`cell-${index}-${entry}`} fill={COLORS[index % COLORS.length]} />;
-                    })}
-                  </Pie>
-                  <Tooltip/>
-                </PieChart>
-            </ResponsiveContainer>
-              )}
+                      }}
+                    >
+                      {dataPieChart.map((entry, index) => {
+                        return <Cell key={`cell-${index}-${entry}`} fill={COLORS[index % COLORS.length]} />;
+                      })}
+                    </Pie>
+                    <Tooltip/>
+                  </PieChart>
+              </ResponsiveContainer>
+                )}
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

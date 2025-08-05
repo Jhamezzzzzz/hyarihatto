@@ -6,7 +6,6 @@ import {
   TableRow,
 } from "../ui/table";
 import Badge from "../ui/badge/Badge";
-import { useNavigate } from "react-router-dom";
 import Input from "../form/input/InputField";
 import { FaClone, FaSearch } from "react-icons/fa";
 import { useEffect, useState } from "react";
@@ -34,7 +33,6 @@ type DataSubmissions = {
 }
 
 export default function ListSubmissions({ filter }:{ filter: Filter}) {
-  const navigate = useNavigate();
   const { STATUS_SUBMISSION } = StaticOptions()
   const [loading, setLoading] = useState(true)
   const [dataSubmissions, setDataSubmissions] = useState([])
@@ -53,7 +51,6 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
       const response = await getSubmissionsRecent(filter.type, filter.month, filter.year, pagination.page, pagination.limit, searchQ)
       const data = response?.data?.data
       const meta = response?.data?.meta
-      console.log("response data: ", data)
       setDataSubmissions(data)
       setPagination({
         page: meta?.page,
@@ -82,7 +79,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Catatan Hyarihatto Member
+            Catatan { filter.type === "hyarihatto" ? "Hyarihatto Member" : filter.type === "voice-member" ? "Voice Member" : ""}
           </h3>
         </div>
 

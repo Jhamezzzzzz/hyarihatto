@@ -52,7 +52,7 @@ export default function Metrics({ filter }: { filter: Filter}) {
 
   const fetchDashboardStatusReport = async() => {
     try {
-      const response = await getDashboardStatusReport(filter.year, filter.month)
+      const response = await getDashboardStatusReport(filter.type, filter.year, filter.month)
       const data = response?.data?.data
       console.log(data)
 
@@ -80,7 +80,7 @@ export default function Metrics({ filter }: { filter: Filter}) {
 
   useEffect(()=>{
     fetchDashboardStatusReport()
-  }, [filter.year, filter.month])
+  }, [filter.year, filter.month, filter.type])
 
   return (
     <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-5 md:gap-4">

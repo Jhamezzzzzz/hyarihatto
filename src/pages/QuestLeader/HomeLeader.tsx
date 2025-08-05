@@ -22,7 +22,7 @@ export default function HomeLeader() {
     value: 'hyarihatto',
     label: 'Hyarihatto'
   },{
-    value: 'voice-member',
+    value: 'voice member',
     label: 'Voice Member'
   }]
   const [filter, setFilter] = useState<Filter>({

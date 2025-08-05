@@ -11,7 +11,7 @@ const Step1FormHyarihatto = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
    const { formData, updateFormData } = useFormHyarihatto();
    const { errors, updateError } = useFormErrors()
-   const [formattedDate, setFormattedDate] = useState(localStorage.getItem("formattedDate") || "")
+   const [formattedDate, setFormattedDate] = useState(localStorage.getItem("hyarihatto.formattedDate") || "")
 
    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -30,7 +30,7 @@ const Step1FormHyarihatto = () => {
         updateError("submissions", "incidentDate", undefined)
         updateFormData("submissions", "incidentDate", dateString)
         setFormattedDate(formattedDate)
-        localStorage.setItem("formattedDate", formattedDate)
+        localStorage.setItem("hyarihatto.formattedDate", formattedDate)
     };
 
   const handleChangeTime = (date: Date[]) => {

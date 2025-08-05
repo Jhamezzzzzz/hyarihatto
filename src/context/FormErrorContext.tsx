@@ -44,6 +44,12 @@ type FormErrors = {
     hazardControlLevelId?: string;
     workingFrequencyId?: string;
   };
+
+  voiceMember?: {
+    currentActivity?: string;
+    issue?: string;
+    expectedCondition?: string;
+  }
 };
 
 // 2. Context type
@@ -105,6 +111,12 @@ export const FormErrorsProvider = ({ children }: { children: ReactNode }) => {
       accidentLevelId: undefined,
       hazardControlLevelId: undefined,
       workingFrequencyId: undefined,
+    },
+
+    voiceMember: {
+      currentActivity: undefined,
+      issue: undefined,
+      expectedCondition: undefined,
     }
   });
 

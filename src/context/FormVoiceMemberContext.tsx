@@ -24,35 +24,19 @@ type FormData = {
     location: string;
   };
 
-  hazardAssessment: {
+  voiceMember: {
     currentActivity: string;
-    potentialHazard: string;
-    hazardReason: string;
+    issue: string;
     expectedCondition: string;
-    improvementSuggestion: string;
-  };
-
-  hazardReport: {
-    pattern: string;
-    source: string;
-    injured: string;
-    cause: string;
-    category: string;
-    accidentType: string;
-  };
-
-  hazardEvaluation: {
-    accidentLevelId: number | null;
-    hazardControlLevelId: number | null;
-    workingFrequencyId: number | null;
-  };
+    improvementSuggestion?: string;
+  }
 };
 
 // 2. Context shape
 interface FormDataContextType {
   formData: FormData;
   setFormData: React.Dispatch<React.SetStateAction<FormData>>;
-  updateFormData: (section: keyof Pick<FormData, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation"> | null, key: string, value: string | number | null) => void;
+  updateFormData: (section: keyof Pick<FormData, "submissions" | "voiceMember"> | null, key: string, value: string | number | null) => void;
   clearAllLocal: () => void
 }
 
@@ -77,40 +61,24 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
       userId: Number(localStorage.getItem("submissions.userId")) || null,
       lineId: Number(localStorage.getItem("submissions.lineId")) || null,
       sectionId: Number(localStorage.getItem("submissions.sectionId")) || null,
-      type: "hyarihatto",
+      type: "voice member",
       shift: localStorage.getItem("submissions.shift") || "",
       incidentDate: localStorage.getItem("submissions.incidentDate") || "",
       incidentTime: localStorage.getItem("submissions.incidentTime") || "",
       location: localStorage.getItem("submissions.location") || "",
     },
 
-    hazardAssessment: {
-      currentActivity: localStorage.getItem("hazardAssessment.currentActivity") || "",
-      potentialHazard: localStorage.getItem("hazardAssessment.potentialHazard") || "",
-      hazardReason: localStorage.getItem("hazardAssessment.hazardReason") || "",
-      expectedCondition: localStorage.getItem("hazardAssessment.expectedCondition") || "",
-      improvementSuggestion: localStorage.getItem("hazardAssessment.improvementSuggestion") || "",
-    },
-
-    hazardReport: {
-      pattern: localStorage.getItem("hazardReport.pattern") || "",
-      source: localStorage.getItem("hazardReport.source") || "",
-      injured: localStorage.getItem("hazardReport.injured") || "",
-      cause: localStorage.getItem("hazardReport.cause") || "",
-      category: localStorage.getItem("hazardReport.category") || "",
-      accidentType: localStorage.getItem("hazardReport.accidentType") || "",
-    },
-
-    hazardEvaluation: {
-      accidentLevelId: Number(localStorage.getItem("hazardEvaluation.accidentLevelId")) || null,
-      hazardControlLevelId: Number(localStorage.getItem("hazardEvaluation.hazardControlLevelId")) || null,
-      workingFrequencyId: Number(localStorage.getItem("hazardEvaluation.workingFrequencyId")) || null,
-    },
+    voiceMember: {
+      currentActivity: localStorage.getItem('voiceMember.currentActivity') || "",
+      issue: localStorage.getItem('voiceMember.issue') || "",
+      expectedCondition: localStorage.getItem('voiceMember.expectedCondition') || "",
+      improvementSuggestion: localStorage.getItem('voiceMember.improvementSuggestion') || ""
+    }
   });
 
   // 5. Helper to update nested formData and localStorage
   const updateFormData = (
-    section: keyof Pick<FormData, "submissions" | "hazardAssessment" | "hazardReport" | "hazardEvaluation"> | null,
+    section: keyof Pick<FormData, "submissions" | "voiceMember"> | null,
     key: string,
     value: string | number | null
   ) => {
@@ -155,20 +123,10 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('submissions.incidentDate', "")
     localStorage.setItem('submissions.incidentTime', "")
     localStorage.setItem('submissions.location', "")
-    localStorage.setItem('hazardAssessment.currentActivity', "")
-    localStorage.setItem('hazardAssessment.potentialHazard', "")
-    localStorage.setItem('hazardAssessment.hazardReason', "")
-    localStorage.setItem('hazardAssessment.expectedCondition', "")
-    localStorage.setItem('hazardAssessment.improvementSuggestion', "")
-    localStorage.setItem('hazardReport.pattern', "")
-    localStorage.setItem('hazardReport.source', "")
-    localStorage.setItem('hazardReport.injured', "")
-    localStorage.setItem('hazardReport.cause', "")
-    localStorage.setItem('hazardReport.category', "")
-    localStorage.setItem('hazardReport.accidentType', "")
-    localStorage.setItem('hazardEvaluation.accidentLevelId', "")
-    localStorage.setItem('hazardEvaluation.hazardControlLevelId', "")
-    localStorage.setItem('hazardEvaluation.workingFrequencyId', "")
+    localStorage.setItem('voiceMember.currentActivity', "")
+    localStorage.setItem('voiceMember.issue', "")
+    localStorage.setItem('voiceMember.expectedCondition', "")
+    localStorage.setItem('voiceMember.improvementSuggestion', "")
   }
 
   return (

@@ -2,14 +2,17 @@ import TemplateVoiceMember from "./TemplateVoiceMember";
 import ButtonNavigation from "./ButtonVoice";
 import TextArea from "../../../components/form/input/TextArea";
 import { useFormData } from "../../../context/FormVoiceMemberContext";
+import { useFormErrors } from "../../../context/FormErrorContext";
 
 const Step2FormVoiceMember = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
   const { formData, updateFormData } = useFormData();
+  const { errors, updateError } = useFormErrors()
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    updateFormData("hazardAssessment", name, value)
+    updateError("voiceMember", name, undefined)
+    updateFormData("voiceMember", name, value)
   }
 
   return (
@@ -29,10 +32,10 @@ const Step2FormVoiceMember = () => {
               <TextArea
                 name="currentActivity"
                 className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={formData.hazardAssessment.currentActivity}
+                value={formData.voiceMember.currentActivity}
                 onChange={handleChangeInput}
-                // hint={errors.hazardAssessment?.currentActivity}
-                // error={errors?.hazardAssessment?.currentActivity !== undefined}
+                hint={errors?.voiceMember?.currentActivity}
+                error={errors?.voiceMember?.currentActivity !== undefined}
               />
             </div>
 
@@ -42,12 +45,12 @@ const Step2FormVoiceMember = () => {
                 <span className="text-red-500">*</span>
               </label>
               <TextArea
-                name="potentialHazard"
+                name="issue"
                 className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={formData.hazardAssessment.potentialHazard}
+                value={formData.voiceMember.issue}
                 onChange={handleChangeInput}
-                // hint={errors.hazardAssessment?.potentialHazard}
-                // error={errors?.hazardAssessment?.potentialHazard !== undefined}
+                hint={errors?.voiceMember?.issue}
+                error={errors?.voiceMember?.issue !== undefined}
               />
             </div>
             <div>
@@ -60,10 +63,10 @@ const Step2FormVoiceMember = () => {
               <TextArea
                 name="expectedCondition"
                 className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={formData.hazardAssessment.expectedCondition}
+                value={formData.voiceMember.expectedCondition}
                 onChange={handleChangeInput}
-                // hint={errors.hazardAssessment?.expectedCondition}
-                // error={errors?.hazardAssessment?.expectedCondition !== undefined}
+                hint={errors?.voiceMember?.expectedCondition}
+                error={errors?.voiceMember?.expectedCondition !== undefined}
               />
               <label className="block text-sm text-gray-500 mb-1">
                 b. Usulan yang diinginkan
@@ -71,7 +74,7 @@ const Step2FormVoiceMember = () => {
               <TextArea
                 name="improvementSuggestion"
                 className="w-full border rounded-md px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
-                value={formData.hazardAssessment.improvementSuggestion}
+                value={formData.voiceMember.improvementSuggestion}
                 onChange={handleChangeInput}
               />
             </div>

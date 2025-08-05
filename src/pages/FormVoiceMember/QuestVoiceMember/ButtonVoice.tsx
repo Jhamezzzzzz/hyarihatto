@@ -22,10 +22,9 @@ const ButtonVoice = () => {
         !formData.submissions.location;
 
     const step2NotComplete =
-        !formData.hazardAssessment.currentActivity ||
-        !formData.hazardAssessment.potentialHazard ||
-        !formData.hazardAssessment.hazardReason ||
-        !formData.hazardAssessment.expectedCondition 
+        !formData.voiceMember.currentActivity ||
+        !formData.voiceMember.issue ||
+        !formData.voiceMember.expectedCondition 
 
     const step3NotComplete = !formData.image;
 
@@ -46,7 +45,7 @@ const ButtonVoice = () => {
     }
 
     const setErrorForm = (step: number) => {
-        const requiredSections: (keyof typeof formData)[] = ["submissions", "submissions", "hazardAssessment", "image"];
+        const requiredSections: (keyof typeof formData)[] = ["submissions", "submissions", "voiceMember", "image"];
         const sectionForm = formData[requiredSections[step]]
         if(sectionForm === ""){
             const isEmpty = formData.image === "" || formData.image === null || formData.image === undefined
@@ -143,9 +142,7 @@ const ButtonVoice = () => {
                 const newFormData = new FormData()
                 const fieldData = {
                     submission: formData.submissions,
-                    hazardAssessment: formData.hazardAssessment,
-                    hazardReport: formData.hazardReport,
-                    hazardEvaluation: formData.hazardEvaluation,
+                    voiceMember: formData.voiceMember,
                 }
                 newFormData.append("data", JSON.stringify(fieldData))
                 newFormData.append("image", fileImage)

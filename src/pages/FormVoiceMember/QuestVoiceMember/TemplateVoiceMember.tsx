@@ -29,12 +29,11 @@ const step1NotComplete =
     !formData.submissions.location;
 
   const step2NotComplete =
-    !formData.hazardAssessment.currentActivity ||
-    !formData.hazardAssessment.potentialHazard ||
-    !formData.hazardAssessment.expectedCondition ||
-    !formData.hazardAssessment.improvementSuggestion;
+    !formData.voiceMember.currentActivity ||
+    !formData.voiceMember.issue ||
+    !formData.voiceMember.expectedCondition
 
-   const step3NotComplete = !formData.hazardAssessment.currentActivity ;
+   const step3NotComplete = !formData.image ;
 
 
 
@@ -50,7 +49,7 @@ const step1NotComplete =
   };
 
     const setErrorForm = (step: number) => {
-      const requiredSections: (keyof typeof formData)[] = ["submissions", "hazardAssessment"];
+      const requiredSections: (keyof typeof formData)[] = ["submissions", "voiceMember"];
       const sectionForm = formData[requiredSections[step-1]]
 
       Object.entries(sectionForm).forEach(([key, value]) => {

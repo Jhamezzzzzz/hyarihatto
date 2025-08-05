@@ -129,9 +129,9 @@ const useHyarihattoDataService = () => {
         }
     }
 
-    const getDashboardStatusReport = async(year: number, month: string) => {
+    const getDashboardStatusReport = async(type: string, year: number, month: string) => {
         try {
-            const response = await axiosJWT.get(`dashboard/by-status?type=hyarihatto&year=${year}&month=${month}`, {
+            const response = await axiosJWT.get(`dashboard/by-status?type=${type}&year=${year}&month=${month}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
@@ -142,9 +142,9 @@ const useHyarihattoDataService = () => {
         }
     }
 
-    const getDashboardBarChart = async(year: number, month: string) => {
+    const getDashboardBarChart = async(type: string, year: number, month: string) => {
         try {
-            const response = await axiosJWT.get(`dashboard/by-line?type=hyarihatto&year=${year}&month=${month}`, {
+            const response = await axiosJWT.get(`dashboard/by-line?type=${type}&year=${year}&month=${month}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }

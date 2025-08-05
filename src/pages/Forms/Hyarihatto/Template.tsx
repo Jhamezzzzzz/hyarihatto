@@ -43,7 +43,7 @@ const Template = ({
     !formData.hazardReport.cause ||
     !formData.hazardReport.category;
 
-  const step4NotComplete = !formData.hazardReport.pattern;
+  const step4NotComplete = !formData.image;
 
   const step5NotComplete = !formData.hazardReport.accidentType;
 

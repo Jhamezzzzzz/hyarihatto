@@ -131,7 +131,7 @@ export default function SignInLead() {
                     placeholder="Username"
                     value={form.username}
                     onChange={handleChangeInput}
-                    className="w-full outline-none bg-transparent dark:placeholder:text-gray-400"
+                    className="w-full outline-none bg-transparent dark:placeholder:text-gray-400 dark:text-gray-100"
                     autoComplete="username"
                   />
                 </div>
@@ -146,7 +146,7 @@ export default function SignInLead() {
                     placeholder="Password"
                     value={form.password}
                     onChange={handleChangeInput}
-                    className="w-full outline-none bg-transparent dark:placeholder:text-gray-400 autofill:bg-red-400"
+                    className="w-full outline-none bg-transparent dark:placeholder:text-gray-400 dark:text-gray-100 autofill:bg-red-400"
                     autoComplete="current-password"
                   />
                 </div>

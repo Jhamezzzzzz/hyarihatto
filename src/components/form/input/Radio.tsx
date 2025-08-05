@@ -24,7 +24,7 @@ const Radio: React.FC<RadioProps> = ({
       htmlFor={id}
       className={`relative flex justify-between cursor-pointer  select-none items-center gap-3 text-sm font-medium border-1 rounded-full p-2 ${
         disabled
-          ? "text-gray-300 dark:text-gray-600 cursor-not-allowed"
+          ? `text-gray-300 dark:text-gray-600  ${!checked && "hover:bg-transparent hover:border-transparent cursor-not-allowed!"}`
           : "text-gray-700 dark:text-gray-400"
       } ${checked ? "border-brand-500 bg-brand-50 dark:text-gray-700" : "border-transparent hover:border-brand-300 hover:bg-brand-50/10"} ${className}`}
     >

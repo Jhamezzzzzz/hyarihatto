@@ -4,7 +4,6 @@ import useHyarihattoDataService from '../../services/HyarihattoDataService';
 import PageMeta from '../../components/common/PageMeta';
 import Label from '../../components/form/Label';
 import DatePicker from '../../components/form/date-picker';
-import YearPicker from '../../components/form/year-picker';
 import Input from '../../components/form/input/InputField';
 import { FaClone, FaSearch } from 'react-icons/fa';
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '../../components/ui/table';
@@ -186,9 +185,17 @@ const HyarihattoSubmissions = () => {
       setFilter({
         ...filter,
         startDate: new Date(date[0]).toLocaleDateString('en-CA'),
-        endDate: new Date(date[0]).toLocaleDateString('en-CA'),
+        endDate: new Date(date[1]).toLocaleDateString('en-CA'),
       })
     }
+  }
+
+  const handleClearRangeDate = () => {
+    setFilter({
+      ...filter,
+      startDate: "",
+      endDate: ""
+    })
   }
 
   const handleChangeSelect = (name: string, value: string) => {
@@ -252,35 +259,14 @@ const HyarihattoSubmissions = () => {
             id='date'
             mode='range'
             onChange={handleChangeRangeDate}
-            // defaultDate={{
-            //   filter.startDate,
-            //   filter.endDate,
-            // }}
+            className='w-[300px]!'
+            placeholder='Semua periode'
+            isClearable
+            dateFormat="Y-m-d"
+            onClear={handleClearRangeDate}
+            defaultDate={[filter.startDate, filter.endDate]}
           />
         </div>
-        {/* <div className='flex gap-2'>
-          <div>
-            <Label>Bulan</Label>
-            <DatePicker
-              id='month'
-              placeholder='Pilih periode bulan'
-              defaultDate={filter.monthName}
-              dateFormat='M'
-              onChange={handleChangeMonth}
-              mode='month'
-              isClearable
-              onClear={handleClearMonth}
-            />
-          </div>
-          <div>
-            <Label>Tahun</Label>
-            <YearPicker
-              placeholder='Pilih periode tahun'
-              value={filter.year}
-              onChange={handleChangeYear}
-            />
-          </div>
-        </div> */}
       </div>
 
       {/* Table Data */}

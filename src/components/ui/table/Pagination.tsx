@@ -33,6 +33,7 @@ const Pagination: React.FC<PaginationComponent> = ({
     (_, i) => i + Math.max(currentPage - 1, 1)
   );
 
+
   return (
     <div className="flex justify-center gap-5">
       <div className="flex items-center ">
@@ -45,19 +46,23 @@ const Pagination: React.FC<PaginationComponent> = ({
         </button>
         <div className="flex items-center gap-2">
           {currentPage > 3 && <span className="px-2">...</span>}
-          {pagesAroundCurrent.map((page) => (
-            <button
-              key={page}
-              onClick={() => onPageChange(page)}
-              className={`px-4 py-2 rounded ${
-                currentPage === page
-                  ? "bg-primary1 dark:bg-brand-700 text-white"
-                  : "text-gray-700 dark:text-gray-400"
-              } flex w-10 items-center justify-center h-10 rounded-lg text-sm font-medium ${currentPage !== page && "hover:bg-primary1/[0.2] hover:text-primary1 dark:hover:text-primary1"}`}
-            >
-              {page}
-            </button>
-          ))}
+          {pagesAroundCurrent.map((page) => {
+            if(page <= totalPages){
+              return(
+                <button
+                  key={page}
+                  onClick={() => onPageChange(page)}
+                  className={`px-4 py-2 rounded ${
+                    currentPage === page
+                      ? "bg-primary1 dark:bg-brand-700 text-white"
+                      : "text-gray-700 dark:text-gray-400"
+                  } flex w-10 items-center justify-center h-10 rounded-lg text-sm font-medium ${currentPage !== page && "hover:bg-primary1/[0.2] hover:text-primary1 dark:hover:text-primary1"}`}
+                >
+                  {page}
+                </button>
+              )}
+            }
+          )}
           {currentPage < totalPages - 2 && <span className="px-2">...</span>}
         </div>
         <button

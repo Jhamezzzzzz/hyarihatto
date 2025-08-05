@@ -40,7 +40,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
   const [pagination, setPagination] = useState({
     page: 1,
     totalPages: 0,
-    limit: 10
+    limit: 5
   })
   const [searchQ, setSearchQ] = useState<string>("")
   const debouncedQ = useDebounce(searchQ, 1000)
@@ -80,7 +80,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
       <div className="flex flex-col gap-2 mb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Catatan { filter.type === "hyarihatto" ? "Hyarihatto Member" : filter.type === "voice-member" ? "Voice Member" : ""}
+            Catatan { filter.type === "hyarihatto" ? "Hyarihatto Member" : filter.type === "voice member" ? "Voice Member" : ""}
           </h3>
         </div>
 
@@ -98,6 +98,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
           {/* Table Header */}
           <TableHeader>
             <TableRow>
+              <TableCell>No</TableCell>
               <TableCell>Tanggal</TableCell>
               <TableCell>Waktu</TableCell>
               <TableCell>Nama</TableCell>
@@ -111,8 +112,9 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
 
           {/* Table Body */}
           <TableBody>
-            {(dataSubmissions.length > 0 && !loading) && dataSubmissions.map((item: DataSubmissions) => (
+            {(dataSubmissions.length > 0 && !loading) && dataSubmissions.map((item: DataSubmissions, index: number) => (
               <TableRow key={item.id}>
+                <TableCell>{index+1 + ((pagination.page-1)*pagination.limit)}</TableCell>
                 <TableCell>{item.incidentDate}</TableCell>
                 <TableCell>{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
                 <TableCell>{item.user.name}</TableCell>
@@ -168,7 +170,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
           setPagination({ ...pagination, limit: e, page: 1})
         }}
         limitPerPage={pagination.limit}
-        options={[10, 25, 50]}
+        options={[5, 25, 50]}
       />
     </div>
   );

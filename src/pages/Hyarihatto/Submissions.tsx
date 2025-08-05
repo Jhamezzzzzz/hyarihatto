@@ -378,7 +378,7 @@ const HyarihattoSubmissions = () => {
               setPagination({ ...pagination, limit: limit, page: 1})
             }}
             limitPerPage={pagination.limit}
-            options={[2, 10, 25, 50]}
+            options={[10, 25, 50]}
           />
         </CardContent>
       </Card>

@@ -79,6 +79,7 @@ const StaticOptions = () => {
         workProcess: "Line/Process",
         location: "Lokasi",
         currentActivity: "Temuan kejadian",
+        issue: "Isu kendala",
         potentialHazard: "Potensi bahaya",
         hazardReason: "Alasan berbahaya",
         expectedCondition: "Harapan",

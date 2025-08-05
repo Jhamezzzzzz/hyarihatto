@@ -1,15 +1,11 @@
+import { useState } from "react";
 import ListSubmissions from "../../components/dashboard/ListSubmissions";
 import DatePicker from "../../components/form/date-picker";
 import Label from "../../components/form/Label";
-// import Select from "../../components/form/Select";
-// import GraphLocationVoice from "../../components/common/GraphLocationVoice";
-// import VoiceMetrics from "../../components/ecommerce/VoiceMetrics";
-// import RecentVoice from "../../components/ecommerce/RecentVoice";
 import GraphLocationHyat from "../../components/dashboard/GraphLocation";
 import "react-datepicker/dist/react-datepicker.css";
 import PageMeta from "../../components/common/PageMeta";
 import Metrics from "../../components/dashboard/Metrics";
-import { useState } from "react";
 import YearPicker from "../../components/form/year-picker";
 import Select from "../../components/form/Select";
 import Leaderboard from "../../components/dashboard/Leaderboard";
@@ -36,10 +32,10 @@ export default function HomeLeader() {
     type: "hyarihatto"
   })
 
-  const handleChangeSelect = (value: string) => {
+  const handleChangeSelect = (name: string, value: string) => {
     setFilter({
       ...filter,
-      type: value
+      [name]: value
     })
   }
 
@@ -83,6 +79,7 @@ export default function HomeLeader() {
             defaultValue={filter.type}
             className="w-[200px]"
             onChange={handleChangeSelect}
+            name="type"
           />
         </div>
         {/* ///filter/// */}

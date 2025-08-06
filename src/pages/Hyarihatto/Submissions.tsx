@@ -74,15 +74,15 @@ const HyarihattoSubmissions = () => {
     submit: false
   })
   const [loadingOptions, setLoadingOptions] = useState({
-    line: true,
-    section: true
+    line: false,
+    section: false
   })
   const [filter, setFilter] = useState<Filters>({
-    startDate: "",
-    endDate: "",
-    type: "hyarihatto",
-    lineId: "",
-    sectionId: "",
+    startDate: localStorage.getItem("filter.startDate") || "",
+    endDate: localStorage.getItem("filter.endDate") || "",
+    type: localStorage.getItem("filter.type") || "hyarihatto",
+    lineId: localStorage.getItem("filter.lineId") || "",
+    sectionId: localStorage.getItem("filter.sectionId") || "",
     status: "",
     shift: ""
   })
@@ -148,7 +148,7 @@ const HyarihattoSubmissions = () => {
       const response = await getMasterPublicData('line-specific-public')
       const options = response?.data?.map((item: { id: number, lineName: string})=>{
         return{
-          value: item.id,
+          value: item.id.toString(),
           label: item.lineName
         }
       })
@@ -166,7 +166,7 @@ const HyarihattoSubmissions = () => {
       const response = await getMasterPublicData('section-public')
       const options = response?.data?.map((item: { id: number, sectionName: string})=>{
         return{
-          value: item.id,
+          value: item.id.toString(),
           label: item.sectionName
         }
       })
@@ -187,11 +187,15 @@ const HyarihattoSubmissions = () => {
 
   const handleChangeRangeDate = (date: Date[]) => {
     if(date.length === 2){
+      const formattedStartDate = new Date(date[0]).toLocaleDateString('en-CA')
+      const formattedEndDate = new Date(date[1]).toLocaleDateString('en-CA')
       setFilter({
         ...filter,
         startDate: new Date(date[0]).toLocaleDateString('en-CA'),
         endDate: new Date(date[1]).toLocaleDateString('en-CA'),
       })
+      localStorage.setItem("filter.startDate", formattedStartDate)
+      localStorage.setItem("filter.endDate", formattedEndDate)
     }
   }
 
@@ -201,10 +205,13 @@ const HyarihattoSubmissions = () => {
       startDate: "",
       endDate: ""
     })
+    localStorage.setItem("filter.startDate", "")
+    localStorage.setItem("filter.endDate", "")
   }
 
   const handleChangeSelect = (name: string, value: string) => {
     setFilter({ ...filter, [name]: value})
+    localStorage.setItem(`filter.${name}`, value.toString())
   }
 
   return (
@@ -239,6 +246,7 @@ const HyarihattoSubmissions = () => {
                 placeholder='Pilih section'
                 showSearch
                 isClearable
+                isLoading={loadingOptions.section}
               />
             </div>
           )}

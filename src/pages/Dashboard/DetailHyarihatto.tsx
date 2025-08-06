@@ -49,7 +49,7 @@ export type Submission = {
   actionDate: string ;
   suggestionGL: string;
   suggestionSH: string;
-  suggestion: string;
+
   proof: string;
   createdAt: string;
   updatedAt: string;
@@ -118,7 +118,7 @@ useEffect(() => {
     }
   }
 }, [id]);
-// ⛔ JANGAN TARUH DI BAWAH `if (!data)`!!
+
 useEffect(() => {
   if (!data) return;
 
@@ -129,6 +129,7 @@ useEffect(() => {
   if (acceptedReview) {
     setSelectedProgress("Terima");
     setSelectedPIC(acceptedReview.actionPic);
+    setPihakLain(acceptedReview.thirdParty || '');
     setPlanCM(new Date(acceptedReview.actionPlan));
     setFinishplan(new Date(acceptedReview.actionDate));
     setSuggestiongroup(auth.roleName === 'line head' ? acceptedReview.suggestionGL : '');
@@ -141,7 +142,7 @@ useEffect(() => {
 
   if (rejectedReview) {
     setSelectedProgress("Tolak");
-    setReason(rejectedReview.suggestion);
+    setReason(rejectedReview.suggestionGL || rejectedReview.suggestionSH);
     setIsSubmitted(true);
   }
 }, [data]);
@@ -238,17 +239,17 @@ useEffect(() => {
     stopCamera();
   };
  
-  const base64ToFile = (base64: string, filename: string, mimeType: string): File => {
-  const arr = base64.split(",");
-  const mime = mimeType || arr[0].match(/:(.*?);/)?.[1] || "image/png";
-  const bstr = atob(arr[1]);
-  let n = bstr.length;
-  const u8arr = new Uint8Array(n);
-  while (n--) {
-    u8arr[n] = bstr.charCodeAt(n);
-  }
-  return new File([u8arr], filename, { type: mime });
-};
+//   const base64ToFile = (base64: string, filename: string, mimeType: string): File => {
+//   const arr = base64.split(",");
+//   const mime = mimeType || arr[0].match(/:(.*?);/)?.[1] || "image/png";
+//   const bstr = atob(arr[1]);
+//   let n = bstr.length;
+//   const u8arr = new Uint8Array(n);
+//   while (n--) {
+//     u8arr[n] = bstr.charCodeAt(n);
+//   }
+//   return new File([u8arr], filename, { type: mime });
+// };
 
 
 
@@ -260,8 +261,9 @@ const handleSubmitReject = async () => {
   // }
 
   const body = {
-    submissionId: Number(id), // pastikan dikonversi ke number jika backend butuh angka
-    suggestion: reason.trim(),
+    submissionId: Number(id),
+    suggestionGL: auth.roleName === "line head" ? reason.trim() : "",
+    suggestionSH: auth.roleName === "section head" ? reason.trim() : "",
   };
 
   setIsSubmitted(true);
@@ -308,16 +310,16 @@ solvedForm.append('data', JSON.stringify(fieldData));
 solvedForm.append('image', fileImage as Blob );
 
 // Ambil dari localStorage (pastikan sudah disimpan sebelumnya saat capture)
-const base64ImageLocal = localStorage.getItem("hyarihatto.detail.image") || "";
-const base64ImageFileNameLocal = localStorage.getItem("hyarihatto..detail.imageFileName") || "proof.png";
+// const base64ImageLocal = localStorage.getItem("hyarihatto.detail.image") || "";
+// const base64ImageFileNameLocal = localStorage.getItem("hyarihatto..detail.imageFileName") || "proof.png";
 
-if (base64ImageLocal.startsWith("data:image")) {
-  const fileImage = base64ToFile(base64ImageLocal, base64ImageFileNameLocal, "image/png");
-  solvedForm.append("image", fileImage); // ✅ Ganti 'image' sesuai field backend
-  console.log("📷 Image file ready:", fileImage);
-} else {
-  console.warn("⚠️ No valid base64 image found in localStorage!");
-}
+// if (base64ImageLocal.startsWith("data:image")) {
+//   const fileImage = base64ToFile(base64ImageLocal, base64ImageFileNameLocal, "image/png");
+//   solvedForm.append("image", fileImage); // ✅ Ganti 'image' sesuai field backend
+//   console.log("📷 Image file ready:", fileImage);
+// } else {
+//   console.warn("⚠️ No valid base64 image found in localStorage!");
+// }
 
 
   setIsSubmitted(true);
@@ -565,7 +567,11 @@ if (base64ImageLocal.startsWith("data:image")) {
                 <p className="mb-1 font-semibold">Alasan Menolak</p>
                 <TextArea
                   rows={4}
-                  placeholder="Silakan isi alasan menolak"
+                  placeholder={
+                    auth.roleName === 'line head'
+                      ? 'Silakan isi alasan dari Group Leader'
+                      : 'Silakan isi alasan dari Section Head'
+                  }
                    className={`w-full rounded-md border shadow-sm py-2 px-2 ${
                   isDisabled
                     ? 'bg-gray-100 text-gray-500 border-gray-300'
@@ -590,7 +596,11 @@ if (base64ImageLocal.startsWith("data:image")) {
                 <p className="mb-1 font-semibold">Alasan Menolak</p>
                 <TextArea
                   rows={4}
-                  placeholder="Silakan isi alasan menolak"
+                   placeholder={
+                    auth.roleName === 'line head'
+                      ? 'Silakan isi alasan dari Group Leader'
+                      : 'Silakan isi alasan dari Section Head'
+                  }
                    className={`w-full rounded-md border shadow-sm py-2 px-2 ${
                   isDisabled
                     ? 'bg-gray-100 text-gray-500 border-gray-300'

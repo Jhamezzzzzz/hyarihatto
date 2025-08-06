@@ -97,7 +97,7 @@ const useHyarihattoDataService = () => {
         }
     }
 
-       const postRejectLeaderAction = async (body: { submissionId: number; suggestion: string }) => {
+       const postRejectLeaderAction = async (body: { submissionId: number; suggestionGL: string; suggestionSH: string}) => {
         try {
             const response = await axiosJWT.post(`reviews/reject`, body)
             alertSuccess(response?.data?.message)

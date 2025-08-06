@@ -29,7 +29,13 @@ type DataSubmissions = {
   status: number;
   line: {
     lineName: string;
-  }
+  };
+  HazardAssessment?: {
+    potentialHazard?: string;
+  };
+  VoiceMember?: {
+    issue?: string;
+  };
 }
 
 export default function ListSubmissions({ filter }:{ filter: Filter}) {
@@ -51,6 +57,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
       setLoading(true)
       const response = await getSubmissionsRecent(filter.type, filter.month, filter.year, pagination.page, pagination.limit, searchQ)
       const data = response?.data?.data
+      console.log("dashboard table: ", data)
       const meta = response?.data?.meta
       setDataSubmissions(data)
       setPagination({
@@ -86,7 +93,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
 
         <div className="flex items-center gap-3">
           <Input
-            placeholder="Cari nama atau no reg"
+            placeholder="Cari nama, no reg, atau issue"
             endIcon={<FaSearch/>}
             onChange={(e)=>setSearchQ(e.target.value)}
             value={searchQ}
@@ -101,11 +108,12 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
               <TableCell>No</TableCell>
               <TableCell>Tanggal</TableCell>
               <TableCell>Waktu</TableCell>
+              <TableCell>Issue</TableCell>
               <TableCell>Nama</TableCell>
               <TableCell>No Reg</TableCell>
               <TableCell>Shift</TableCell>
               <TableCell>Line</TableCell>
-              <TableCell>Status</TableCell>
+              <TableCell>Status</TableCell>  
               <TableCell>Detail</TableCell>
             </TableRow>
           </TableHeader>
@@ -117,6 +125,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
                 <TableCell>{index+1 + ((pagination.page-1)*pagination.limit)}</TableCell>
                 <TableCell>{item.incidentDate}</TableCell>
                 <TableCell>{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
+                <TableCell>{item?.HazardAssessment?.potentialHazard || item?.VoiceMember?.issue}</TableCell>
                 <TableCell>{item.user.name}</TableCell>
                 <TableCell>{0+item.user.username}</TableCell>
                 <TableCell>
@@ -124,7 +133,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
                     {item.shift.toUpperCase()}
                   </Badge>
                 </TableCell>
-                <TableCell>{item?.line?.lineName}</TableCell>
+                <TableCell>{item?.line?.lineName || "-"}</TableCell>
                 <TableCell>
                   <Badge
                     size="sm"

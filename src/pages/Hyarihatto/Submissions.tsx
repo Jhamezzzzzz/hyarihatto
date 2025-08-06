@@ -301,7 +301,7 @@ const HyarihattoSubmissions = () => {
             </div>
             <div className='xl:col-span-8 lg:col-span-6 col-span-12'>
               <Input
-                placeholder='Cari nama atau no reg'
+                placeholder={`Cari nama, no reg, atau issue`}
                 endIcon={<FaSearch/>}
                 value={searchQ}
                 onChange={(e)=>setSearchQ(e.target.value)}
@@ -315,7 +315,7 @@ const HyarihattoSubmissions = () => {
                   <TableCell>No</TableCell>
                   <TableCell>Tanggal</TableCell>
                   <TableCell>Waktu</TableCell>
-                  <TableCell>{filter.type === "hyarihatto" ? "Potensi Bahaya" : filter.type === "voice member" ? "Kendala" : ""}</TableCell>
+                  <TableCell>Issue</TableCell>
                   <TableCell>Nama</TableCell>
                   <TableCell>No Reg</TableCell>
                   <TableCell>Shift</TableCell>

@@ -93,7 +93,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
 
         <div className="flex items-center gap-3">
           <Input
-            placeholder="Cari nama atau no reg"
+            placeholder="Cari nama, no reg, atau issue"
             endIcon={<FaSearch/>}
             onChange={(e)=>setSearchQ(e.target.value)}
             value={searchQ}
@@ -108,8 +108,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
               <TableCell>No</TableCell>
               <TableCell>Tanggal</TableCell>
               <TableCell>Waktu</TableCell>
-              {/* <TableCell>Aktivitas</TableCell> */}
-              <TableCell>{filter.type === "hyarihatto" ? "Potensi Bahaya" : filter.type === "voice member" ? "Kendala" : ""}</TableCell>
+              <TableCell>Issue</TableCell>
               <TableCell>Nama</TableCell>
               <TableCell>No Reg</TableCell>
               <TableCell>Shift</TableCell>
@@ -126,7 +125,6 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
                 <TableCell>{index+1 + ((pagination.page-1)*pagination.limit)}</TableCell>
                 <TableCell>{item.incidentDate}</TableCell>
                 <TableCell>{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
-                {/* <TableCell>{""}</TableCell> */}
                 <TableCell>{item?.HazardAssessment?.potentialHazard || item?.VoiceMember?.issue}</TableCell>
                 <TableCell>{item.user.name}</TableCell>
                 <TableCell>{0+item.user.username}</TableCell>

@@ -258,13 +258,13 @@ const HyarihattoSubmissions = () => {
           </div>
         </div>
         {/* Period */}
-        <div className='w-full xs:w-auto'>
+        <div className='w-full sm:w-auto'>
           <Label>Periode</Label>
           <DatePicker
             id='date'
             mode='range'
             onChange={handleChangeRangeDate}
-            className='xs:w-[300px]!'
+            className='sm:w-[300px]!'
             placeholder='Semua periode'
             isClearable
             dateFormat="Y-m-d"

@@ -52,6 +52,12 @@ interface DataSubmissions{
     lineName: string;
   }
   status: number;
+  HazardAssessment?: {
+    potentialHazard?: string;
+  };
+  VoiceMember?: {
+    issue?: string;
+  };
 }
 
 const HyarihattoSubmissions = () => {
@@ -207,14 +213,14 @@ const HyarihattoSubmissions = () => {
       <PageBreadcrumb pageTitle='Submissions'/>
 
       {/* Filters */}
-      <div className='flex gap-2 justify-between'>
-        <div className='flex gap-2'>
+      <div className='flex gap-2 justify-between flex-wrap'>
+        <div className='flex flex-wrap gap-2 justify-between w-full md:w-fit'>
           {/* Type */}
-          <div>
+          <div className='w-full sm:w-auto'>
             <Label>Tipe</Label>
             <Select
               options={OPTIONS_TYPE}
-              className='w-[200px]'
+              className='sm:w-[200px] '
               defaultValue={filter.type}
               name='type'
               onChange={handleChangeSelect}
@@ -222,11 +228,11 @@ const HyarihattoSubmissions = () => {
           </div>
 
           { isSuperAdmin && (
-            <div>
+            <div className='w-full sm:w-auto'>
               <Label>Section</Label>
               <Select
                 options={optionsSection}
-                className='w-[200px]'
+                className='sm:w-[200px]'
                 defaultValue={filter.sectionId.toString()}
                 name='sectionId'
                 onChange={handleChangeSelect}
@@ -237,11 +243,11 @@ const HyarihattoSubmissions = () => {
             </div>
           )}
 
-          <div>
+          <div className='w-full sm:w-auto'>
             <Label>Line</Label>
             <Select
               options={optionsLine}
-              className='w-[200px]'
+              className='sm:w-[200px]'
               defaultValue={filter.lineId.toString()}
               name='lineId'
               onChange={handleChangeSelect}
@@ -252,13 +258,13 @@ const HyarihattoSubmissions = () => {
           </div>
         </div>
         {/* Period */}
-        <div>
+        <div className='w-full xs:w-auto'>
           <Label>Periode</Label>
           <DatePicker
             id='date'
             mode='range'
             onChange={handleChangeRangeDate}
-            className='w-[300px]!'
+            className='xs:w-[300px]!'
             placeholder='Semua periode'
             isClearable
             dateFormat="Y-m-d"
@@ -273,7 +279,7 @@ const HyarihattoSubmissions = () => {
         <CardContent className='border border-gray-300 dark:border-gray-700 rounded-lg'>
           {/* Search */}
           <div className='grid grid-cols-12 gap-4'>
-            <div className='col-span-2'>
+            <div className='xl:col-span-2 lg:col-span-3 col-span-6'>
               <Select
                 options={optionsShift}
                 placeholder='Pilih shift'
@@ -283,7 +289,7 @@ const HyarihattoSubmissions = () => {
                 isClearable
               />
             </div>
-            <div className='col-span-2'>
+            <div className='xl:col-span-2 lg:col-span-3 col-span-6'>
               <Select
                 options={optionsStatus}
                 placeholder='Pilih status'
@@ -293,7 +299,7 @@ const HyarihattoSubmissions = () => {
                 isClearable
               />
             </div>
-            <div className='col-span-8'>
+            <div className='xl:col-span-8 lg:col-span-6 col-span-12'>
               <Input
                 placeholder='Cari nama atau no reg'
                 endIcon={<FaSearch/>}
@@ -309,6 +315,7 @@ const HyarihattoSubmissions = () => {
                   <TableCell>No</TableCell>
                   <TableCell>Tanggal</TableCell>
                   <TableCell>Waktu</TableCell>
+                  <TableCell>{filter.type === "hyarihatto" ? "Potensi Bahaya" : filter.type === "voice member" ? "Kendala" : ""}</TableCell>
                   <TableCell>Nama</TableCell>
                   <TableCell>No Reg</TableCell>
                   <TableCell>Shift</TableCell>
@@ -325,6 +332,7 @@ const HyarihattoSubmissions = () => {
                       <TableCell>{numberIndex}</TableCell>
                       <TableCell>{item.incidentDate}</TableCell>
                       <TableCell>{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
+                      <TableCell>{item?.HazardAssessment?.potentialHazard || item?.VoiceMember?.issue}</TableCell>
                       <TableCell>{item.user.name}</TableCell>
                       <TableCell>{0+item.user.username}</TableCell>
                       <TableCell>

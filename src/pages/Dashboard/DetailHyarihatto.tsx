@@ -70,8 +70,6 @@ export default function DetailHyarihatto() {
   const userRole = auth.roleName; // Misal: 'group' atau 'section'
   const { errors, updateError } = useFormErrors()
  // 'group' atau 'section'
-
-
   const { STATUS_SUBMISSION } = StaticOptions()
   // const catatan = dummyData.find(item => item.id === Number(id));
    const optionsProgress = ["Terima", "Tolak"];
@@ -79,12 +77,10 @@ export default function DetailHyarihatto() {
   const [selectedProgress, setSelectedProgress] = useState("");
   const [formattedDatePlanCM, setFormattedDatePlanCM] = useState(localStorage.getItem("formattedDatePlanCM") || "")
   const [formattedDateFinishPlan, setFormattedDateFinishPlan] = useState(localStorage.getItem("formattedDateFinishPlan") || "") // utk pilihan "Terima" atau lainnya
- 
- 
   // utk pilihan user PIC
   const [pihakLain, setPihakLain] = useState(""); // utk input pihak lain jika dipilih
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-   const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
+  const [isCameraModalOpen, setIsCameraModalOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [fileImage,setFileImage] = useState<File | null>(null);
   const [isCameraActive, setIsCameraActive] = useState(false);
@@ -92,13 +88,14 @@ export default function DetailHyarihatto() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [reason, setReason] =useState<string>('');
-   const [selectedPIC, setSelectedPIC] = useState(""); 
+  const [selectedPIC, setSelectedPIC] = useState(""); 
   const [planCM,setPlanCM ] =useState<Date | undefined>(undefined);
   const [finishplan, setFinishplan] = useState<Date | null>(null);
-   const [suggestionsect, setSuggestionsect] =useState<string>('');
-    const [suggestiongroup, setSuggestiongroup] =useState<string>('');
+  const [suggestionsect, setSuggestionsect] =useState<string>('');
+  const [suggestiongroup, setSuggestiongroup] =useState<string>('');
   const isDisabled = isSubmitted; 
-const imageSolved = data?.Reviews?.find(r => r.feedback === "solved" );
+  const imageSolved = data?.Reviews?.find(r => r.feedback === "solved" );
+  const [isSubmittedData, setIsSubmittedData] = useState(false);
 
   //UseEffect Untuk mengambil data submission berdasarkan ID
 useEffect(() => {
@@ -125,6 +122,11 @@ useEffect(() => {
   const acceptedReview = data.Reviews?.find((r) => r.feedback === "counter-measured");
   const rejectedReview = data.Reviews?.find((r) => r.feedback === "rejected");
   const imageSolved = data?.Reviews?.find(r => r.feedback === "solved" );
+   if (acceptedReview || rejectedReview || imageSolved) {
+    setIsSubmittedData(true);
+  } else {
+    setIsSubmittedData(false);
+  }
 
   if (acceptedReview) {
     setSelectedProgress("Terima");
@@ -583,7 +585,7 @@ solvedForm.append('image', fileImage as Blob );
                 />
                 <div className="text-center col-span-12">
                 <ButtonSubmit
-                  label="SUBMIT"
+                label={isSubmittedData ? "UPDATE" : "SUBMIT"}
                   onClick={handleSubmitReject}
                   disabled={isSubmitted}
                   showError={selectedProgress === "Tolak" && reason.trim() === ""}
@@ -612,7 +614,7 @@ solvedForm.append('image', fileImage as Blob );
                 />
                 <div className="text-center col-span-12">
                 <ButtonSubmit
-                  label="SUBMIT"
+                  label={isSubmittedData ? "UPDATE" : "SUBMIT"}
                   onClick={handleSubmitReject}
                   disabled={isSubmitted}
                   showError={selectedProgress === "Tolak" && reason.trim() === ""}
@@ -1114,7 +1116,13 @@ solvedForm.append('image', fileImage as Blob );
                     <span className="text-gray-600 font-semibold">Menyimpan...</span>
                   </div>
                 ) : (
-                  <ButtonSubmit label="SUBMIT" onClick={handleSubmitAccept} disabled={isSubmitted} />
+                <ButtonSubmit 
+                label="SUBMIT" 
+                onClick={handleSubmitAccept} 
+                disabled={isSubmitted}
+                showError={selectedProgress === "Terima" && !fileImage}
+              />
+
                 )}
               </div>
       </div>

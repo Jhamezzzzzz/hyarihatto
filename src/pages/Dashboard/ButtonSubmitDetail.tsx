@@ -22,7 +22,7 @@ const ButtonSubmit: React.FC<ButtonSubmitProps> = ({ label, onClick, disabled, s
       </button>
       {showError && (
         <p className="mt-1 text-sm text-red-600 font-medium">
-          Harap isi alasan sebelum mengirim
+          Harap isi Kolom sebelum mengirim
         </p>
       )}
     </div>

@@ -34,7 +34,7 @@ import IdentityFormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Id
 import Step1FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step1Voice";
 import Step2FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step2Voice";
 import Step3FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step3Voice";
-import VoiceMemberFinish from "./pages/Forms/Hyarihatto/Finish";
+import VoiceMemberFinish from "./pages/FormVoiceMember/QuestVoiceMember/FinishVoice";
 
 
 

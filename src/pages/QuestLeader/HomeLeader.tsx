@@ -26,10 +26,10 @@ export default function HomeLeader() {
     label: 'Voice Member'
   }]
   const [filter, setFilter] = useState<Filter>({
-    year: new Date().getFullYear(),
-    month: "",
-    monthName: "",
-    type: "hyarihatto"
+    year: Number(localStorage.getItem("filter.year")) || new Date().getFullYear(),
+    month: localStorage.getItem("filter.month") || "",
+    monthName: localStorage.getItem("filter.monthName") || "",
+    type: localStorage.getItem("filter.type") || "hyarihatto"
   })
 
   const handleChangeSelect = (name: string, value: string) => {
@@ -37,16 +37,21 @@ export default function HomeLeader() {
       ...filter,
       [name]: value
     })
+    localStorage.setItem(`filter.${name}`, value)
   }
 
   const handleChangeDate = (date: Date[]) => {
-    setFilter({
-      ...filter,
-      month: new Date(date[0]).toLocaleDateString('en-CA').slice(5, 7),
-      monthName: new Date(date[0]).toLocaleDateString('en-CA', {
+    const formattedMonth = new Date(date[0]).toLocaleDateString('en-CA').slice(5, 7)
+    const formattedMonthName = new Date(date[0]).toLocaleDateString('en-CA', {
         month: "short"
       })
+    setFilter({
+      ...filter,
+      month: formattedMonth,
+      monthName: formattedMonthName
     })
+    localStorage.setItem(`filter.month`, formattedMonth)
+    localStorage.setItem(`filter.monthName`, formattedMonthName)
   }
 
   const handleChangeYear = (year: number) => {
@@ -54,6 +59,7 @@ export default function HomeLeader() {
       ...filter,
       year: year
     })
+    localStorage.setItem(`filter.year`, year.toString())
   }
 
   const handleClearMonth = () => {
@@ -62,6 +68,8 @@ export default function HomeLeader() {
       month: "",
       monthName: ""
     })
+    localStorage.setItem("filter.month", "")
+    localStorage.setItem("filter.monthName", "")
   }
 
   return (

@@ -25,6 +25,7 @@ const IdentityFormHyarihatto: React.FC = () => {
   const handleChangeNoreg = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
+    updateError(null, "noreg", undefined);
     updateError("submissions", "userId", undefined);
     updateError("submissions", "sectionId", undefined);
     updateFormData(null, "noreg", value);
@@ -74,13 +75,27 @@ const IdentityFormHyarihatto: React.FC = () => {
       localStorage.setItem("section", "");
     }
   };
+
+  const clearIdentityForm = () => {
+    updateError(null, "noreg", "Noreg tidak valid!");
+    setName("");
+    setLine("");
+    setSection("");
+    updateFormData("submissions", "userId", "");
+    updateFormData("submissions", "lineId", "");
+    updateFormData("submissions", "sectionId", "");
+    localStorage.setItem("name", "");
+    localStorage.setItem("line", "");
+    localStorage.setItem("section", "");
+
+  }
   
 
   useEffect(() => {
     if (formData.noreg !== "" && formData.noreg.length === 8) {
       fetchUserLineSection();
-    } else if (formData.noreg !== "") {
-      updateError(null, "noreg", "Noreg tidak valid!");
+    } else if (formData.noreg !== "" && formData.noreg.length !== 8) {
+      clearIdentityForm()
     }
   }, [debouncedNoreg]);
 
@@ -140,8 +155,10 @@ const IdentityFormHyarihatto: React.FC = () => {
                 placeholder="Nomor Registrasi"
                 value={formData.noreg}
                 onChange={handleChangeNoreg}
-                hint={errors.submissions?.userId}
-                error={errors.submissions?.userId !== undefined}
+                // hint={errors.submissions?.userId}
+                // error={errors.submissions?.userId !== undefined}
+                hint={errors.noreg}
+                error={errors.noreg !== undefined}
               />
             </div>
 

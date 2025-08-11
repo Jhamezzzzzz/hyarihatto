@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import { Card, CardContent } from '../ui/card/card'
 import { FaCrown, FaUser } from 'react-icons/fa'
 import useHyarihattoDataService from '../../services/HyarihattoDataService'

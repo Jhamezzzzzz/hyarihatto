@@ -10,7 +10,7 @@ import config from '../../utils/Config'
 import TextArea from "../../components/form/input/TextArea";
 import { useAuth } from '../../../src/context/AuthProvider'; // pastikan path-nya sesuai
 import { useFormErrors } from "../../../src/context/FormErrorContext";
-import { log } from 'console';
+
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 export type Submission = {
@@ -66,17 +66,15 @@ export default function DetailHyarihatto() {
   const { id } = useParams<{ id: string }>();
   const { getSubmissionById,postRejectLeaderAction,postSolvedLeaderAction,postCounterMeasureAction} = useHyarihattoDataService();
   const [data, setData] = useState<Submission | null>(null);
-  const { auth } = useAuth();
-  const userRole = auth.roleName; // Misal: 'group' atau 'section'
-  const { errors, updateError } = useFormErrors()
+  const { auth } = useAuth();// Misal: 'group' atau 'section'
+  const { errors } = useFormErrors()
  // 'group' atau 'section'
   const { STATUS_SUBMISSION } = StaticOptions()
   // const catatan = dummyData.find(item => item.id === Number(id));
    const optionsProgress = ["Terima", "Tolak"];
   const optionsUser = ["Bisa oleh Diri sendiri", "Bersama2 dalam SGA", "Pihak lain"];
   const [selectedProgress, setSelectedProgress] = useState("");
-  const [formattedDatePlanCM, setFormattedDatePlanCM] = useState(localStorage.getItem("formattedDatePlanCM") || "")
-  const [formattedDateFinishPlan, setFormattedDateFinishPlan] = useState(localStorage.getItem("formattedDateFinishPlan") || "") // utk pilihan "Terima" atau lainnya
+
   // utk pilihan user PIC
   const [pihakLain, setPihakLain] = useState(""); // utk input pihak lain jika dipilih
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -165,28 +163,27 @@ useEffect(() => {
   };
 
      const handleChangePlanCM  = (dateplan: Date[]) => {
-        const dateStringPlanCM = new Date(dateplan[0]).toLocaleDateString('en-CA')
         const formattedDatePlanCM = new Date(dateplan[0]).toLocaleDateString("en-GB", {
             day: "2-digit",
             month: "short",
             year: "numeric",
         }).replace(/ /g, '-');
-
+        console.log("Formatted Date Plan CM:", formattedDatePlanCM);
          setPlanCM(dateplan[0]); 
     };
      const handleChangeFinishPlan  = (date: Date[]) => {
-        const dateStringFinishPlan = new Date(date[0]).toLocaleDateString('en-CA')
         const formattedDateFinishPlan = new Date(date[0]).toLocaleDateString("en-GB", {
             day: "2-digit",
             month: "short",
             year: "numeric",
         }).replace(/ /g, '-');
-
+          console.log("Formatted Date Plan CM:", formattedDateFinishPlan);
          setFinishplan(date[0]); 
     };
 
 
   const startCamera = async () => {
+    console.log(isCameraActive, "isCameraActive");
     setIsCameraActive(true);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -553,7 +550,7 @@ solvedForm.append('image', fileImage as Blob );
                  
                 <RadioGroupProgress
                   options={optionsProgress}
-                  onChange={(value, group, name) => {
+                  onChange={(value) => {
                     setSelectedProgress(value);
                   }}
                   group="pic"
@@ -638,7 +635,7 @@ solvedForm.append('image', fileImage as Blob );
                    <div className=" rounded-2xl border border-gray-400 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
                     <RadioGroupProgress
                       options={optionsUser}
-                      onChange={(value, group, name) => {
+                      onChange={(value) => {
                         setSelectedPIC(value);
                         if (value !== "Pihak lain") {
                         setPihakLain(''); // reset kalau bukan pihak lain
@@ -870,7 +867,7 @@ solvedForm.append('image', fileImage as Blob );
                    <div className=" rounded-2xl border border-gray-400 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
                     <RadioGroupProgress
                       options={optionsUser}
-                      onChange={(value, group, name) => {
+                      onChange={(value) => {
                         setSelectedPIC(value);
                         if (value !== "Pihak lain") {
                         setPihakLain(''); // reset kalau bukan pihak lain

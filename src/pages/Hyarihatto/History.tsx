@@ -11,7 +11,7 @@ import StaticOptions from "../../utils/StaticOptions";
 import Badge from "../../components/ui/badge/Badge";
 import { FaClone, FaSearch } from "react-icons/fa";
 import Button from "../../components/ui/button/Button";
-import useHyarihattoDataService from '../../services/HyarihattoDataService'
+// import useHyarihattoDataService from '../../services/HyarihattoDataService'
 import { useDebounce } from '../../hooks/useDebonce'
 import YearPicker from '../../components/form/year-picker'
 import Input from '../../components/form/input/InputField'
@@ -55,21 +55,21 @@ const HyarihattoHistory = () => {
   const [searchQ, setSearchQ] = useState<string>("")
   const debouncedQ = useDebounce(searchQ, 1000)
 
-  const { getAllSubmissions } = useHyarihattoDataService()
+  // const { getAllSubmissions } = useHyarihattoDataService()
 
   const fetchAllSubmissions = async() => {
     try {
-      setLoading({ ...loading, fetch: true})
-      const response = await getAllSubmissions(filters.month, filters.year, pagination.page, pagination.limit, searchQ)
-      console.log("response history: ", response)
-      const data = response?.data?.data
-      const meta = response?.data?.meta
-      setDataSubmissions(data)
-      setPagination({
-        ...pagination,
-        page: meta.page,
-        totalPages: meta.totalPages
-      })
+      // setLoading({ ...loading, fetch: true})
+      // const response = await getAllSubmissions(filters.month, filters.year, pagination.page, pagination.limit, searchQ)
+      // console.log("response history: ", response)
+      // const data = response?.data?.data
+      // const meta = response?.data?.meta
+      // setDataSubmissions(data)
+      // setPagination({
+      //   ...pagination,
+      //   page: meta.page,
+      //   totalPages: meta.totalPages
+      // })
     } catch (error) {
       console.error(error)
       setDataSubmissions([])

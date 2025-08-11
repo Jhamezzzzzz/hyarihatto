@@ -77,8 +77,8 @@ export default function SignInLead() {
 
   return (
     <div className="login-page ">
-      <div className="absolute top-3 right-20 flex items-center gap-3">
-        <p className='text-gray-100 dark:text-gray-700'>{theme[0].toUpperCase()+theme.slice(1)} Mode</p>
+      <div className="absolute top-3 right-20 flex items-center gap-3 z-5">
+        <p className='text-green-800 dark:text-green-100'>{theme[0].toUpperCase()+theme.slice(1)} Mode</p>
         <ThemeToggleButton/>
       </div>
       <div className="absolute top-1 right-2 z-5">

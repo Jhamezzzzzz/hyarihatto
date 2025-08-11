@@ -20,11 +20,11 @@ const RadioGroupProgress: React.FC<RadioGroupProgressProps> = ({
   error = false,
   disabled = false,
 }) => {
-  const handleRadioChange = (selected: string) => {
-    if (!disabled) {
-      onChange(selected, group, name);
-    }
-  };
+  // const handleRadioChange = (selected: string) => {
+  //   if (!disabled) {
+  //     onChange(selected, group, name);
+  //   }
+  // };
 
  return (
   <div className={`flex flex-col gap-2 ${error ? 'border border-red-500 p-2 rounded' : ''}`}>

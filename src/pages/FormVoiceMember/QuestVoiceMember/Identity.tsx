@@ -97,7 +97,7 @@ const IdentityFormVoiceMember: React.FC = () => {
               <li>
                 <a
                   href="/"
-                  className="text-brand-600 hover:underline font-medium"
+                  className="text-blue-600 hover:underline font-medium"
                 >
                   Home
                 </a>
@@ -106,7 +106,7 @@ const IdentityFormVoiceMember: React.FC = () => {
                 <span className="mx-2">{">"}</span>
                 <a
                   href="/member"
-                  className="text-brand-600 hover:underline font-medium"
+                  className="text-blue-600 hover:underline font-medium"
                 >
                   Warehouse Member
                 </a>

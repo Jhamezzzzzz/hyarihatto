@@ -23,7 +23,7 @@ const LimitPerPage: React.FC<LimitPerPageProps> = ({
             <Select
                 defaultValue={limit?.toString()}
                 options={optionsLimit}
-                onChange={(name, value) => onChangeLimit ? onChangeLimit(Number(value)) : ()=>{}}
+                onChange={(value) => onChangeLimit ? onChangeLimit(Number(value)) : ()=>{}}
                 showPlaceholder={false}
                 className="py-0"
             />

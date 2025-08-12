@@ -128,6 +128,15 @@ const useHyarihattoDataService = () => {
             handleError(error)
         }
     }
+      const postSectionSuggesstion = async(body: {submissionId: number;suggestionSH: string}) => {
+        try {
+            const response = await axiosJWT.post(`/reviews/section-suggestion`, body)
+            alertSuccess(response?.data?.message)
+            return response
+        } catch (error) {
+            handleError(error)
+        }
+    }
 
     const getDashboardStatusReport = async(type: string, year: number, month: string) => {
         try {
@@ -194,7 +203,8 @@ const useHyarihattoDataService = () => {
         getDashboardLeaderboard,
         postRejectLeaderAction,
         postSolvedLeaderAction,
-        postCounterMeasureAction
+        postCounterMeasureAction,
+        postSectionSuggesstion
     }
   
 }

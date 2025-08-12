@@ -1,5 +1,7 @@
 
 import { useNavigate } from 'react-router';
+import { ThemeToggleButton } from '../../../components/common/ThemeToggleButton';
+import { useTheme } from '../../../context/ThemeContext';
 
 type TitleFormHyarihatto = {
     showBack: boolean;
@@ -7,6 +9,7 @@ type TitleFormHyarihatto = {
 
 const TitleFormHyarihatto = ({ showBack }: TitleFormHyarihatto) => {
     const navigate = useNavigate()
+    const { theme } = useTheme()
     
     const handleBackMainPage = () => {
         navigate("/member"); // atau "/dashboard", "/user", dst
@@ -37,9 +40,13 @@ const TitleFormHyarihatto = ({ showBack }: TitleFormHyarihatto) => {
                 Kembali
             </button>
         )}
+        <div className="absolute top-3 right-20 flex items-center gap-3">
+            <p className='dark:text-gray-300'>{theme[0].toUpperCase()+theme.slice(1)} Mode</p>
+            <ThemeToggleButton/>
+        </div>
         <div className="mb-2 text-center">
-            <h2 className="text-3xl font-extrabold text-gray-900 mb-2">Voice Member</h2>
-            <p className="text-lg text-gray-600">“Pekerjaan Yang baik dimulai dari Ber-Improvement”</p>
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-2 dark:text-gray-200">Voice Member</h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300">“Pekerjaan Yang baik dimulai dari Ber-Improvement”</p>
         </div>
     </div>
   )

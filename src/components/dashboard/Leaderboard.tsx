@@ -77,7 +77,7 @@ const Leaderboard = ({ filter } : { filter: Filter}) => {
                     console.log(`imagenya ${item.user.name}: ${item.user.img}`)
                     return(
                         <div key={index} className='grid grid-cols-12 border dark:border-gray-700 rounded-md mb-3 p-5'>
-                            <div className='flex gap-3 items-center col-span-3 '>
+                            <div className='flex gap-3 items-center lg:col-span-3 md:col-span-6 col-span-12 '>
                                 <div className='dark:text-gray-400'>
                                     {index+1}
                                 </div>
@@ -104,7 +104,7 @@ const Leaderboard = ({ filter } : { filter: Filter}) => {
                                     <p className='text-sm text-gray-500'>{0+item.user.username}</p>
                                 </div>
                             </div>
-                            <div className='flex col-span-9 items-center justify-between gap-2'>
+                            <div className='flex lg:col-span-9 md:col-span-6 col-span-12 md:mt-0 mt-4 md:pl-0 pl-4 items-center justify-between gap-2'>
                                 <div className={`h-[40px] transition-all duration-100`} style={{ backgroundColor: barColor, width: `${barWidth*100}%`}}></div>
                                 <p className='text-2xl dark:text-gray-200 font-bold'>{item.count}</p>
                             </div>

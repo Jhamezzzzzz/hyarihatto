@@ -79,26 +79,26 @@ export default function HomeLeader() {
         description="Online sistem sebagai digitalisasi buku catatan Hyarihatto"
       />
 
-      <div className="col-span-12 xl:col-span-5 flex items-end justify-between mb-6">
-        <div>
+      <div className="grid grid-cols-12 items-start justify-between mb-6 ">
+        <div className="col-span-12 sm:mb-0 mb-3 sm:col-span-8 w-full sm-w-auto">
           <Label>Tipe Catatan</Label>
           <Select
             options={OPTIONS_TYPE}
             defaultValue={filter.type}
-            className="w-[200px]"
+            className="sm:w-[200px]"
             onChange={handleChangeSelect}
             name="type"
           />
         </div>
         {/* ///filter/// */}
-        <div className="flex gap-4">
-          <div className="">
+        <div className="col-span-12 sm:col-span-4 flex gap-4  justify-end">
+          <div className="w-full sm:w-auto">
             <Label>Bulan </Label>
             <DatePicker
               id="month"
               mode="month"
               placeholder="Semua periode"
-              className="bg-white w-[200px]!"
+              className="bg-white sm:w-[200px]!"
               onChange={handleChangeDate}
               dateFormat="M"
               defaultDate={filter.monthName}
@@ -106,13 +106,13 @@ export default function HomeLeader() {
               onClear={handleClearMonth}
             />
           </div>
-          <div className="">
+          <div className="w-full sm:w-auto">
             <Label>Tahun </Label>
             <YearPicker
               placeholder="Pilih tahun"
               onChange={handleChangeYear}
               value={filter.year}
-              className="w-[200px]!"
+              className="sm:w-[200px]!"
             />
           </div>
         </div>
@@ -130,50 +130,6 @@ export default function HomeLeader() {
       <div className="col-span-12 xl:col-span-7 mb-4">
         <ListSubmissions filter={filter} />
       </div>
-
-      {/* ----------------------------------VOICE MEMBER-------------------------------- */}
-      {/* <div className="col-span-12 space-y-6 xl:col-span-7 mt-10">
-        <p className="text-title-md font-bold">Voice Member</p>
-      </div>
-      <div className="flex gap-4">
-        <div>
-          <Label>Periode</Label>
-          <DatePicker
-            id="period"
-            mode="month"
-            placeholder="Semua periode"
-            className="bg-white"
-          />
-        </div>
-        <div>
-          <Label>Rank</Label>
-          <Select
-            placeholder="Semua rank"
-            options={[]}
-            onChange={() => {}}
-            className="min-w-[200px]"
-          />
-        </div>
-        <div>
-          <Label>Member</Label>
-          <Select
-            placeholder="Semua member"
-            options={[]}
-            onChange={() => {}}
-            className="min-w-[200px]"
-          />
-        </div>
-      </div>
-
-      <div className="col-span-12 space-y-6 xl:col-span-7 mt-4">
-        <VoiceMetrics />
-      </div>
-      <div className="col-span-12 space-y-6 xl:col-span-7 mt-3">
-        <GraphLocationVoice />
-      </div>
-      <div className="col-span-12 xl:col-span-7 mt-4">
-        <RecentVoice />
-      </div> */}
     </>
   );
 }

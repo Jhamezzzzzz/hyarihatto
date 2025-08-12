@@ -54,15 +54,12 @@ export default function Metrics({ filter }: { filter: Filter}) {
     try {
       const response = await getDashboardStatusReport(filter.type, filter.year, filter.month)
       const data = response?.data?.data
-      console.log(data)
 
       dataMetrics[0].number = data.total
       dataMetrics[1].number = data?.grouped?.find((item: {status: number, count: number})=>item.status === 0)?.count || 0
       dataMetrics[2].number = data?.grouped?.find((item: {status: number, count: number})=>item.status === 1)?.count || 0
       dataMetrics[3].number = data?.grouped?.find((item: {status: number, count: number})=>item.status === 2)?.count || 0
       dataMetrics[4].number = data?.grouped?.find((item: {status: number, count: number})=>item.status === 3)?.count || 0
-
-      console.log("DATA METRICS: ", dataMetrics)
 
       setDataStatusReport(dataMetrics)
     } catch (error) {
@@ -83,7 +80,7 @@ export default function Metrics({ filter }: { filter: Filter}) {
   }, [filter.year, filter.month, filter.type])
 
   return (
-    <div className="grid grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-5 md:gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 lg:grid-cols-3 xl:grid-cols-5 md:gap-4">
       { dataStatusReport?.map((item, index)=>{
         return(
           <div key={index} className="rounded-2xl border border-gray-300 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">

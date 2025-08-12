@@ -85,9 +85,9 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
     // Step 3: Populate with actual data from rawData, applying filters
     // Instead of initializing with 0, we'll only add line counts if data exists
     rawData.forEach(item => {
-      const monthYear = item.month; // "YYYY-MM"
-      const lineName = item.line.lineName;
-      const count = item.count;
+      const monthYear = item?.month; // "YYYY-MM"
+      const lineName = item?.line?.lineName || "Lainnya";
+      const count = item?.count;
 
       const [itemYear, itemMonth] = monthYear.split('-');
 

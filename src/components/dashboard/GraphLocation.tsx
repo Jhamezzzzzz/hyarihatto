@@ -119,7 +119,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
     try {
       setLoadingBar(true)
       const response = await getDashboardBarChart(filter.type, filter.year, filter.month);
-      // console.log("response bar chart: ", response?.data?.data)
+      console.log("response bar chart: ", response?.data?.data)
       const rawData = response?.data?.data;
       
       const transformed = transformDataForStackedBarChart(rawData, filter.month, filter.year);
@@ -193,6 +193,22 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
 
 
   const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#a4de6c', '#d0ed57', '#83a6ed', '#8dd1e1', '#b5c5e0'];
+  const COLORS_PIE = [
+  '#9370DB', // Medium Purple
+  '#66CDAA', // Medium Aquamarine
+  '#FFB600', // Bright Orange
+  '#AEE56A', // Soft Lime
+  '#FFDDA0', // Pale Gold
+  '#87CEFA', // Light Sky Blue
+  '#40E0D0', // Turquoise
+  '#BA80D8', // Medium Lavender
+  '#FF69B4', // Hot Pink
+  '#FA8072', // Salmon
+  '#E6C26D', // Soft Mustard
+  '#00BFFF', // Deep Sky Blue
+  '#FFA07A', // Light Salmon
+  '#77A3D2'  // Medium Blue-Gray
+];
 
   const classNameHyarihatto = "xl:col-span-8 col-span-12"
   const classNameVoiceMember = "col-span-12"
@@ -305,7 +321,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                       }}
                     >
                       {dataPieChart.map((entry, index) => {
-                        return <Cell key={`cell-${index}-${entry}`} fill={COLORS[index % COLORS.length]} />;
+                        return <Cell key={`cell-${index}-${entry}`} fill={COLORS_PIE[index % COLORS_PIE.length]} />;
                       })}
                     </Pie>
                     <Tooltip/>

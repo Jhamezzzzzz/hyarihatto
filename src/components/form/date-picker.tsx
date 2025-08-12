@@ -97,9 +97,6 @@ export default function DatePicker({
     }
   }
 
-  useEffect(()=>{
-    console.log("defaultDate: ", defaultDate)
-  }, [defaultDate])
   return (
     <div>
       {label && <Label htmlFor={id}>{label}</Label>}

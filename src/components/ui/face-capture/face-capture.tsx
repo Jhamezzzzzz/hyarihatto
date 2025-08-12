@@ -1,4 +1,4 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import Webcam from "react-webcam";
 import Button from "../button/Button";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -21,29 +21,10 @@ export default function FaceCapture({
   const { alertError } = useShowAlert()
   const [deviceError, setDeviceError] = useState<boolean>(false)
   const [imageWebcam, setImageWebcam] = useState<string | null>(null)
-  
-  // State to hold the list of video devices
-  const [videoDevices, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
-  // State to track the currently selected device ID
-  const [selectedDeviceId, setSelectedDeviceId] = useState<string | null>(null);
 
-  // useEffect to get the list of camera devices when the component mounts
-  useEffect(() => {
-    const getDevices = async () => {
-      try {
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const videoInputs = devices.filter((device) => device.kind === 'videoinput');
-        setVideoDevices(videoInputs);
-        if (videoInputs.length > 0) {
-          // Set the first camera as the default
-          setSelectedDeviceId(videoInputs[0].deviceId);
-        }
-      } catch (error) {
-        console.error("Error enumerating devices:", error);
-      }
-    };
-    getDevices();
-  }, []);
+  const [selectedFacingMode, setSelectedFacingMode] = useState<string>("environment")
+
+
 
   const captureImage = () => {
     // Corrected: Add an optional chaining operator to safely call getScreenshot
@@ -65,48 +46,42 @@ export default function FaceCapture({
     alertError("Can't use camera device over HTTP!")
   }
 
-  // Handle camera selection change
-  const handleDeviceChange = (_name: unknown, value: string) => {
-    setSelectedDeviceId(value);
-  };
 
-  // Video constraints now depend on the selectedDeviceId state
-  const videoConstraints = {
-    deviceId: selectedDeviceId || undefined, // Use selectedDeviceId or let the browser choose
-  };
+  const optionFacingModes = [{
+    value: "user",
+    label: "Kamera Depan",
+  }, {
+    value: "environment",
+    label: "Kamera Belakang"
+  }]
   
-  // Format the video devices for the Select component
-  const cameraOptions = videoDevices.map(device => ({
-    value: device.deviceId,
-    label: device.label || `Camera ${videoDevices.indexOf(device) + 1}`
-  }));
+
+  const handleChangeFacingMode = (_name: unknown, value: string) => {
+    setSelectedFacingMode(value)
+  }
 
   return (
     <div>
       {(!imageWebcam && !deviceError) && (
         <div className="flex justify-center flex-col items-center">
           {/* We only render the Webcam if there is a selectedDeviceId */}
-          {selectedDeviceId && (
             <Webcam
               ref={webcamRef}
               audio={false}
               screenshotFormat="image/jpeg"
               width={500}
-              videoConstraints={videoConstraints}
+              videoConstraints={{ facingMode: selectedFacingMode}}
               onUserMediaError={handleError}
             />
-          )}
           
           {/* Select component to switch between cameras */}
-          {videoDevices.length > 1 && (
             <Select
               placeholder="Pilih kamera"
               className="w-full mt-4"
-              options={cameraOptions}
-              defaultValue={selectedDeviceId?.toString()}
-              onChange={handleDeviceChange}
+              options={optionFacingModes}
+              defaultValue={selectedFacingMode}
+              onChange={handleChangeFacingMode}
             />
-          )}
 
           <Button className="w-full mt-4" variant="blue" onClick={captureImage}>Ambil</Button>
         </div>

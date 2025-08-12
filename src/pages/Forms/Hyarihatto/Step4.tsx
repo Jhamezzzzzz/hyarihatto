@@ -5,16 +5,16 @@ import { FaCamera, FaImage, FaTimes } from "react-icons/fa";
 import { useFormErrors } from "../../../context/FormErrorContext";
 // import { useFormData } from "../../../context/FormVoiceMemberContext";
 import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
+import FaceCapture from "../../../components/ui/face-capture/face-capture";
 
 const Step4FormHyarihatto = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
   const { errors, updateError } = useFormErrors()
   const { formData, updateFormData } = useFormHyarihatto()
   const [showCameraModal, setShowCameraModal] = useState<boolean>(false);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
   const galleryInputRef = useRef<HTMLInputElement | null>(null);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+
+  const [previewImage, setPreviewImage] = useState<string | null>(null)
 
   const handleRemoveImage = () => {
         updateFormData(null, "image", "")
@@ -44,46 +44,17 @@ const Step4FormHyarihatto = () => {
 
     };
 
- const handleCameraOpen = async () => {
-  try {
-    const mediaStream = await navigator.mediaDevices.getUserMedia({
-      video: { facingMode: "environment" }, // atau "user" untuk kamera depan
-      audio: false
-    });
+    const handleSubmitCapture = async(image: string | null) => {
+      updateFormData(null, "image", image)
+      localStorage.setItem("hyarihatto.imageFileName", `hyarihatto-proof-${new Date()}`)
+      setShowCameraModal(false)
+    }
 
-    setStream(mediaStream);
-    setShowCameraModal(true); // Tampilkan modal setelah dapat stream
-
-    // Tunggu hingga videoRef sudah ter-render
-    setTimeout(() => {
-      if (videoRef.current) {
-        videoRef.current.srcObject = mediaStream;
-      }
-    }, 100);
-  } catch (err) {
-    console.error("Gagal membuka kamera:", err);
-    alert("Tidak bisa mengakses kamera. Pastikan akses kamera diizinkan dan gunakan HTTPS atau localhost.");
-  }
-};
-    const handleCaptureImage = () => {
-        const video = videoRef.current;
-        const canvas = canvasRef.current;
-        if (video && canvas) {
-         const ctx = canvas.getContext('2d');
-        if (!ctx) return;
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            ctx.drawImage(video, 0, 0);
-            const imageData = canvas.toDataURL('image/png');
-            updateFormData(null, "image", imageData);
-
-            handleCloseCamera();
-        }
+    const handleCameraOpen = async () => {
+        setShowCameraModal(true); // Tampilkan modal setelah dapat stream
     };
-    const handleCloseCamera = () => {
-        stream?.getTracks().forEach((track) => track.stop());
-        setShowCameraModal(false);
-    };
+    
+    
 
     const handleGalleryInput = () => {
         galleryInputRef.current?.click();
@@ -153,7 +124,7 @@ const Step4FormHyarihatto = () => {
               className="hidden"
               onChange={handleFileChange}
             />
-
+            
             {/* Modal Kamera */}
             {showCameraModal && (
               <div className="fixed inset-0 bg-opacity-40 backdrop-blur-sm z-25 flex items-center justify-center">
@@ -161,35 +132,14 @@ const Step4FormHyarihatto = () => {
                   <div className="flex justify-between items-center px-4 py-3 border-b">
                     <h5 className="text-lg font-medium">Ambil Foto</h5>
                     <button
-                      onClick={handleCloseCamera}
+                      onClick={()=>setShowCameraModal(false)}
                       className="text-gray-500 hover:text-red-500"
                     >
                       ✕
                     </button>
                   </div>
-                  <div className="p-4 text-center">
-                    <video
-                      ref={videoRef}
-                      autoPlay
-                      playsInline
-                      muted
-                      className="w-full max-h-90 rounded-md"
-                    />
-                    <canvas ref={canvasRef} className="hidden" />
-                  </div>
-                  <div className="flex justify-between px-4 py-3 border-t">
-                    <button
-                      className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded"
-                      onClick={handleCloseCamera}
-                    >
-                      Batal
-                    </button>
-                    <button
-                      className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
-                      onClick={handleCaptureImage}
-                    >
-                      Simpan Gambar
-                    </button>
+                  <div className="p-5">
+                    <FaceCapture setImageFile={setPreviewImage} handleSubmit={()=>handleSubmitCapture(previewImage)} />
                   </div>
                 </div>
               </div>

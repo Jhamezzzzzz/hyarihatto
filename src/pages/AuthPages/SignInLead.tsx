@@ -31,6 +31,21 @@ export default function SignInLead() {
   })
   const navigate = useNavigate();
   const { login } = useAuthService();
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const handleResize = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+    };
+
+    handleResize();
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -76,7 +91,7 @@ export default function SignInLead() {
   }, [name])
 
   return (
-    <div className="login-page ">
+    <div className={`${isMobile ? "relative min-h-screen flex justify-center items-center overflow-hidden bg-white dark:bg-gray-900" : "login-page"}`}>
       <div className="absolute top-3 right-20 flex items-center gap-3 z-5">
         <p className='text-green-800 dark:text-green-100'>{theme[0].toUpperCase()+theme.slice(1)} Mode</p>
         <ThemeToggleButton/>
@@ -102,7 +117,7 @@ export default function SignInLead() {
             </svg>
                 Kembali
             </button>
-        <div className="w-full max-w-4xl bg-white dark:bg-gray-900  shadow-xl rounded-2xl flex flex-col md:flex-row overflow-hidden z-4">
+        <div className="w-full max-w-4xl bg-white dark:bg-gray-900  md:shadow-xl rounded-2xl flex flex-col md:flex-row overflow-hidden z-4">
           {/* KIRI */}
           <div className="w-full md:w-1/2 p-8 flex flex-col justif-start items-center text-start ">
             <div>
@@ -111,7 +126,7 @@ export default function SignInLead() {
               <h5 className="text-2xl font-semibold text-green-600 mb-4 text-center">
                 Dashboard Leader
               </h5>
-              <img src={imageSafety} alt="Safety" className="w-4/5 mx-auto" />
+              <img src={imageSafety} alt="Safety" className="md:w-4/5 sm:w-1/3 w-1/2 mx-auto" />
             </div>
           </div>
 
@@ -167,9 +182,9 @@ export default function SignInLead() {
           </div>
         </div>
       </div>
-      <div className="absolute bottom-1 left-2">
-                <LabelMark />
-              </div>
+      <div className="absolute bottom-1 left-1/2 -translate-x-1/2 z-10">
+        <LabelMark />
+      </div>
     </div>
   );
 }

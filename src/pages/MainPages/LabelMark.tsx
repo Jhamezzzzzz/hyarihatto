@@ -1,8 +1,7 @@
 export default function LabelMark() {
     return(
-    <p className="text-gray-700 text-lg  italic text-start">
-        @DX Warehouse TMMIN 2025
-    </p>
-
+        <div className=' p-4 text-center dark:text-gray-300'>
+            <h1>©2025 DX Warehouse TMMIN</h1>
+        </div>
     )
 }

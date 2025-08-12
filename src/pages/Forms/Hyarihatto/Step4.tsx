@@ -77,6 +77,7 @@ const Step4FormHyarihatto = () => {
                   <p className="text-secondary1 text-center">
                     Silakan upload gambar kejadian
                   </p>
+                  <p className="text-secondary1">Pastikan ukuran gambar tidak lebih dari 10MB</p>
                 </div>
                 { errors.image !== undefined && <p className="ml-6 text-error-500">Gambar tidak boleh kosong!</p>}
               </>

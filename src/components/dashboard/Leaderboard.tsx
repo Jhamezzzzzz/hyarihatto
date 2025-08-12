@@ -15,10 +15,11 @@ interface DataLeaderboard{
 }
 
 const Leaderboard = ({ filter } : { filter: Filter}) => {
+    const { getDashboardLeaderboard } = useHyarihattoDataService()
     const [loading, setLoading] = useState(true)
     const [maxSubmission, setMaxSubmission] = useState<number>(0)
     const [dataLeaderboard, setDataLeaderboard] = useState<DataLeaderboard[]>([])
-    const { getDashboardLeaderboard } = useHyarihattoDataService()
+    const [imgErrors, setImgErrors] = useState<Record<string, boolean>>({})
 
     const fetchLeaderboard = async() => {
         try {
@@ -44,6 +45,13 @@ const Leaderboard = ({ filter } : { filter: Filter}) => {
         fetchLeaderboard()
     }, [filter.type, filter.month, filter.year])
 
+    const handleImgErrors = (id: string) => {
+        setImgErrors({
+            ...imgErrors,
+            [id]: true
+        })
+    }
+
   return (
     <div>
         <Card className='border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6 shadow-none'>
@@ -65,6 +73,8 @@ const Leaderboard = ({ filter } : { filter: Filter}) => {
                                 : barWidth >= 0.25
                                     ? "#B9BB36"
                                     : "#F5FF2F"
+                    
+                    console.log(`imagenya ${item.user.name}: ${item.user.img}`)
                     return(
                         <div key={index} className='grid grid-cols-12 border dark:border-gray-700 rounded-md mb-3 p-5'>
                             <div className='flex gap-3 items-center col-span-3 '>
@@ -73,7 +83,19 @@ const Leaderboard = ({ filter } : { filter: Filter}) => {
                                 </div>
                                 <div className=' rounded-full border size-[50px] flex items-center justify-center relative'>
                                     <div className='overflow-hidden rounded-full border size-[50px]'>
-                                        { item.user.img ? <img src={item.user.img}/> : <FaUser className='text-gray-400'/>}
+                                        {imgErrors[item.user.username] ? (
+                                            <div className='flex items-center justify-center h-full'>
+                                                <FaUser className='text-gray-400'/>
+                                            </div>
+                                        ) : (
+                                            item.user.img ? (
+                                                <img src={item.user.img} onError={()=>handleImgErrors(item.user.username)}/>
+                                            ) : (
+                                                <div className='flex items-center justify-center h-full'>
+                                                    <FaUser className='text-gray-400'/>
+                                                </div>
+                                            )
+                                        )}
                                     </div>
                                     { index+1 <= 3 && <FaCrown className='absolute -top-5 text-3xl' style={{ color: colorCrown}}/>}
                                 </div>

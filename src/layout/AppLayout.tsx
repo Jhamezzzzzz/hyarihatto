@@ -12,6 +12,7 @@ import useShowAlert from "../hooks/useShowAlert";
 import Spinner from "../components/ui/spinner";
 import { useAuth } from "../context/AuthProvider";
 import { FaExclamationCircle } from "react-icons/fa";
+import AppFooter from "./AppFooter";
 
 const LayoutContent: React.FC = () => {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
@@ -81,6 +82,7 @@ const LayoutContent: React.FC = () => {
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6 mt-20">
           <Outlet />
         </div>
+        <AppFooter/>
       </div>
     </div>
   );

@@ -18,14 +18,14 @@ const Step2FormVoiceMember = () => {
   return (
     <div>
       <TemplateVoiceMember showStep step={2}>
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl overflow-hidden">
+        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 border dark:border-gray-700 shadow-lg rounded-xl overflow-hidden">
           <div className="bg-blue-600 text-white text-center py-3">
             <h5 className="text-lg font-semibold">Catatan</h5>
           </div>
 
           <div className="p-6 space-y-4">
              <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400">
                 Apa yang sedang dilakukan?{" "}
                 <span className="text-red-500">*</span>
               </label>
@@ -40,7 +40,7 @@ const Step2FormVoiceMember = () => {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400">
                 Apa kendala yang dihadapi?*{" "}
                 <span className="text-red-500">*</span>
               </label>
@@ -54,10 +54,10 @@ const Step2FormVoiceMember = () => {
               />
             </div>
             <div>
-              <p className="block text-sm font-medium text-gray-700 mb-1">
+              <p className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400">
                 Seharusnya kondisinya bagaimana?{" "}
               </p>
-              <label className="block text-sm text-gray-500 mb-1">
+              <label className="block text-sm text-gray-500 mb-1 dark:text-gray-500">
                 a. Harapan yang diinginkan <span className="text-red-500">*</span>
               </label>
               <TextArea
@@ -68,7 +68,7 @@ const Step2FormVoiceMember = () => {
                 hint={errors?.voiceMember?.expectedCondition}
                 error={errors?.voiceMember?.expectedCondition !== undefined}
               />
-              <label className="block text-sm text-gray-500 mb-1">
+              <label className="block text-sm text-gray-500 mb-1 dark:text-gray-500">
                 b. Usulan yang diinginkan
               </label>
               <TextArea

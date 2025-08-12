@@ -10,7 +10,6 @@ type TitleFormHyarihatto = {
 const TitleFormHyarihatto = ({ showBack, backToHome }: TitleFormHyarihatto) => {
     const navigate = useNavigate()
     const { theme } = useTheme()
-    console.log(theme)
     
     const handleBackMainPage = () => {
         if(backToHome){

@@ -11,7 +11,7 @@ const Finish = () => {
     <div>
         <Template>
             <div className='flex flex-col items-center justify-center gap-3'>
-                <h1 className=''>Terima kasih telah mengisi catatan Voice Member!</h1>
+                <h1 className='dark:text-gray-400'>Terima kasih telah mengisi catatan Voice Member!</h1>
                 <button
                 className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md shadow-sm transition"
                 onClick={handleToHome}

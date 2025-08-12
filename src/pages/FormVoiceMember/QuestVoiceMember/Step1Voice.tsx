@@ -41,14 +41,14 @@ const Step1FormVoiceMember = () => {
   return (
     <div>
       <Template showStep step={1}>
-        <div className="w-full max-w-2xl bg-white shadow-lg rounded-xl">
+        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 border dark:border-gray-700 shadow-lg rounded-xl">
           <div className="bg-blue-600 text-white text-center py-3 rounded-t-xl">
             <h5 className="text-lg font-semibold">Waktu & Lokasi</h5>
           </div>
 
           <div className="p-6 space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Tanggal:<span className="text-red-500">*</span>
               </label>
               <DatePicker
@@ -62,7 +62,7 @@ const Step1FormVoiceMember = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400">
                 Waktu:<span className="text-red-500">*</span>
               </label>
               <DatePicker
@@ -76,7 +76,7 @@ const Step1FormVoiceMember = () => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400">
                 Lokasi:<span className="text-red-500">*</span>
               </label>
               <Input

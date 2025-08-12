@@ -155,8 +155,6 @@ const IdentityFormHyarihatto: React.FC = () => {
                 placeholder="Nomor Registrasi"
                 value={formData.noreg}
                 onChange={handleChangeNoreg}
-                // hint={errors.submissions?.userId}
-                // error={errors.submissions?.userId !== undefined}
                 hint={errors.noreg}
                 error={errors.noreg !== undefined}
               />

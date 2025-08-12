@@ -26,6 +26,7 @@ const IdentityFormVoiceMember: React.FC = () => {
   const handleChangeNoreg = (e: React.ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target;
   
+      updateError(null, "noreg", undefined);
       updateError("submissions", "userId", undefined);
       updateError("submissions", "sectionId", undefined);
       updateFormData(null, "noreg", value);
@@ -75,16 +76,27 @@ const IdentityFormVoiceMember: React.FC = () => {
         localStorage.setItem("section", "");
       }
     };
-    
+
+    const clearIdentityForm = () => {
+      updateError(null, "noreg", "Noreg tidak valid!");
+      setName("");
+      setLine("");
+      setSection("");
+      updateFormData("submissions", "userId", "");
+      updateFormData("submissions", "lineId", "");
+      updateFormData("submissions", "sectionId", "");
+      localStorage.setItem("name", "");
+      localStorage.setItem("line", "");
+      localStorage.setItem("section", "");
+    }
   
     useEffect(() => {
-      if (formData.noreg !== "" && formData.noreg.length === 8) {
-        fetchUserLineSection();
-      } else if (formData.noreg !== "") {
-        updateError(null, "noreg", "Noreg tidak valid!");
-      }
-    }, [debouncedNoreg]);
-  
+        if (formData.noreg !== "" && formData.noreg.length === 8) {
+          fetchUserLineSection();
+        } else if (formData.noreg !== "" && formData.noreg.length !== 8) {
+          clearIdentityForm()
+        }
+      }, [debouncedNoreg]);
   return (
     <div>
       <TemplateVoiceMember showBack>
@@ -113,16 +125,16 @@ const IdentityFormVoiceMember: React.FC = () => {
               </li>
               <li>
                 <span className="mx-2">{">"}</span>
-                <span className="text-gray-800 font-semibold">
+                <span className="text-gray-800 font-semibold dark:text-gray-300">
                   Voice Member
                 </span>
               </li>
             </ol>
           </nav>
         </div>
-        <div className="bg-white shadow-lg rounded-lg p-6">
+        <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 shadow-lg rounded-lg p-6">
           <div className="border-b border-gray-200 pb-4 mb-6 text-center">
-            <h5 className="text-xl font-semibold text-gray-800">
+            <h5 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
               Identitas Member
             </h5>
           </div>
@@ -130,7 +142,7 @@ const IdentityFormVoiceMember: React.FC = () => {
             <div>
               <label
                 htmlFor="noreg"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400"
               >
                 No.Reg<span className="text-red-500">*</span>
               </label>
@@ -142,15 +154,15 @@ const IdentityFormVoiceMember: React.FC = () => {
                 placeholder="Nomor Registrasi"
                 value={formData.noreg}
                 onChange={handleChangeNoreg}
-                error={errors.submissions?.userId !== undefined}
-                hint={errors.submissions?.userId}
+                hint={errors.noreg}
+                error={errors.noreg !== undefined}
               />
             </div>
 
             <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400"
               >
                 Nama<span className="text-red-500">*</span>
               </label>
@@ -167,7 +179,7 @@ const IdentityFormVoiceMember: React.FC = () => {
               <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400"
               >
                 Line<span className="text-red-500">*</span>
               </label>
@@ -184,7 +196,7 @@ const IdentityFormVoiceMember: React.FC = () => {
               <div>
               <label
                 htmlFor="name"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400"
               >
                 Section<span className="text-red-500">*</span>
               </label>
@@ -203,12 +215,13 @@ const IdentityFormVoiceMember: React.FC = () => {
             <div>
               <label
                 htmlFor="shift"
-                className="block text-sm font-medium text-gray-700 mb-1"
+                className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400" 
               >
                 Shift<span className="text-red-500">*</span>
               </label>
               <Select
                 name="shift"
+                placeholder="Pilih shift"
                 options={optionsShift}
                 onChange={handleChangeSelect}
                 defaultValue={formData.submissions.shift}

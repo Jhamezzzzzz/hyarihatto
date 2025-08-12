@@ -1,5 +1,4 @@
 import React, { ReactNode, useState } from "react";
-import WaveBackground from "../../../components/image/Wave-Background.png";
 import TitleFormHyarihatto from "./Title";
 import { useNavigate } from "react-router";
 import { useFormData } from "../../../context/FormVoiceMemberContext";
@@ -105,8 +104,7 @@ const step1NotComplete =
   return (
     <div>
       <div
-        className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center"
-        style={{ backgroundImage: `url(${WaveBackground})` }}
+        className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center bg-[url(components/image/Wave-Background.png)] dark:bg-[url(components/image/Wave-Background-Dark.png)]"
       >
         <div className="w-full max-w-2xl">
           <TitleFormHyarihatto showBack={showBack || false} />

@@ -3,6 +3,8 @@ import { useFormData } from '../../../context/FormVoiceMemberContext';
 import usePublicDataService from '../../../services/PublicService';
 import { useFormErrors } from '../../../context/FormErrorContext';
 import StaticOptions from '../../../utils/StaticOptions';
+import { useState } from 'react';
+import Spinner from '../../../components/ui/spinner';
 
 const ButtonVoice = () => {
     const navigate = useNavigate()
@@ -118,8 +120,10 @@ const ButtonVoice = () => {
     }
 
     const ButtonSubmit = () => {
+        const [loading, setLoading] = useState<boolean>(false)
         const handleSubmit = async() => {
             try {
+                setLoading(true)
                 if(step3NotComplete){
                     setErrorForm(3)
                     return
@@ -138,7 +142,7 @@ const ButtonVoice = () => {
                 const base64ImageLocal = localStorage.getItem("image") || ""
                 const base64ImageFileNameLocal = localStorage.getItem("imageFileName") || ""
                 const fileImage = base64ToFile(base64ImageLocal, base64ImageFileNameLocal, "image/png")
-    
+                
                 const newFormData = new FormData()
                 const fieldData = {
                     submission: formData.submissions,
@@ -151,27 +155,30 @@ const ButtonVoice = () => {
                 navigate('/member/voice-member/submitted')
             } catch (error) {
                 console.error(error)
+            } finally{
+                setLoading(false)
             }
 
         }
 
         return (
-          <div>
+            <div>
               <div className="mt-8 text-right">
                   <button
-                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm
-                     text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700
-                      focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 
-                      disabled:cursor-not-allowed"
+                    className="flex items-center gap-2 justify-center py-2 px-4 border border-transparent shadow-sm
+                        text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700
+                        focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 
+                        disabled:cursor-not-allowed"
                     onClick={handleSubmit}
-                  >
-                      Submit
+                    disabled={loading}
+                    >
+                      {loading && <Spinner/>} Submit
                   </button>
               </div>
           </div>
         )
     }
-
+    
     return{ ButtonPrevious, ButtonNext, ButtonSubmit}
 
 }

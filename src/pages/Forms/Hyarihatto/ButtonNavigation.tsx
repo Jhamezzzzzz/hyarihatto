@@ -4,6 +4,8 @@ import { useFormHyarihatto } from '../../../context/FormHyarihattoContext';
 import usePublicDataService from '../../../services/PublicService';
 import { useFormErrors } from '../../../context/FormErrorContext';
 import StaticOptions from '../../../utils/StaticOptions';
+import { useState } from 'react';
+import Spinner from '../../../components/ui/spinner';
 
 const ButtonNavigation = () => {
     const navigate = useNavigate()
@@ -133,8 +135,11 @@ const ButtonNavigation = () => {
     }
 
     const ButtonSubmit = () => {
+        const [loading, setLoading] = useState<boolean>(false)
+
         const handleSubmit = async() => {
             try {
+                setLoading(true)
                 if(step6NotComplete){
                     setErrorForm(6)
                     return
@@ -168,6 +173,8 @@ const ButtonNavigation = () => {
                 navigate('/member/hyarihatto/submitted')
             } catch (error) {
                 console.error(error)
+            } finally{
+                setLoading(false)
             }
 
         }
@@ -176,10 +183,11 @@ const ButtonNavigation = () => {
           <div>
               <div className="mt-8 text-right">
                   <button
-                    className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="items-center gap-2 flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={handleSubmit}
+                    disabled={loading}
                   >
-                      Submit
+                     {loading && <Spinner/>} Submit
                   </button>
               </div>
           </div>

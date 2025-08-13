@@ -17,6 +17,7 @@ import Button from '../../components/ui/button/Button';
 import Select from '../../components/form/Select';
 import useMasterDataService from '../../services/MasterDataService';
 import useVerify from '../../hooks/useVerify';
+import { useSidebar } from '../../context/SidebarContext';
 
 interface Loading{
   fetch: boolean;
@@ -100,6 +101,7 @@ const HyarihattoSubmissions = () => {
   const [optionsLine, setOptionsLine] = useState([])
   const [optionsSection, setOptionsSection] = useState([])
   const hrefType = filter.type === "hyarihatto" ? "hyarihatto" : filter.type === "voice member" ? "voice-member" : ""
+  const { isMobile } = useSidebar()
 
   const fetchSubmissions = async() => {
     try {
@@ -118,7 +120,6 @@ const HyarihattoSubmissions = () => {
       )
       const data = response?.data?.data
       const meta = response?.data?.meta
-      console.log(data)
       setDataSubmissions(data)
       setPagination({
         page: meta?.page,
@@ -317,6 +318,101 @@ const HyarihattoSubmissions = () => {
             </div>
           </div>
           <div className='overflow-x-auto mt-4'>
+            { isMobile ? (
+              <div>
+                {(!loading.fetch && dataSubmissions.length > 0) && dataSubmissions.map((item: DataSubmissions, index: number) => {
+                  const numberIndex = index+1 + ((pagination.page-1)*pagination.limit)
+                  return(
+                    <Card className='border dark:border-gray-700 shadow-none mb-3 relative'>
+                      <CardContent>
+                        <div className=''>
+                          <p className=' absolute right-4 top-4 border bg-brand-50 dark:bg-brand-800 dark:text-gray-300 dark:border-gray-700 rounded-md size-10  flex items-center justify-center'>{numberIndex}</p>
+                          <div className='w-full'>
+                            <Table className='shadow-none'>
+                              <TableBody>
+                                <TableRow>
+                                  <TableCell className='border-0!'>Tanggal</TableCell>
+                                  <TableCell className='border-0!'>:</TableCell>
+                                  <TableCell className='border-0!'>{item.incidentDate}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className='border-0!'>Waktu</TableCell>
+                                  <TableCell className='border-0!'>:</TableCell>
+                                  <TableCell className='border-0!'>{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className='border-0!'>Issue</TableCell>
+                                  <TableCell className='border-0!'>:</TableCell>
+                                  <TableCell className='border-0!'>{item?.HazardAssessment?.potentialHazard || item?.VoiceMember?.issue}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className='border-0!'>Name</TableCell>
+                                  <TableCell className='border-0!'>:</TableCell>
+                                  <TableCell className='border-0!'>{item?.user.name}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className='border-0!'>Noreg</TableCell>
+                                  <TableCell className='border-0!'>:</TableCell>
+                                  <TableCell className='border-0!'>{item?.user.name}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className='border-0!'>Shift</TableCell>
+                                  <TableCell className='border-0!'>:</TableCell>
+                                  <TableCell className='border-0!'>
+                                    <Badge color={item.shift === "non-shift" ? "light" : item.shift === "red" ? "error" : item.shift === "white" ? "dark" : "info"}>
+                                      {item.shift.toUpperCase()}
+                                    </Badge>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className='border-0!'>Line</TableCell>
+                                  <TableCell className='border-0!'>:</TableCell>
+                                  <TableCell className='border-0!'>{item?.line?.lineName || "-"}</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell className='border-0!'>Status</TableCell>
+                                  <TableCell className='border-0!'>:</TableCell>
+                                  <TableCell className='border-0!'>
+                                     <Badge
+                                      size="sm"
+                                      variant="solid"
+                                      color={
+                                        item.status === 2
+                                          ? "success"
+                                          : item.status === 0
+                                          ? "warning"
+                                          : item.status === 1
+                                          ? "info"
+                                          : item.status === 3
+                                          ? "error"
+                                          : "error"
+                                      }
+                                    >
+                                      {STATUS_SUBMISSION[item.status].toUpperCase() || ""}
+                                    </Badge>
+                                  </TableCell>
+                                </TableRow>
+                                <TableRow>
+                                  <TableCell colSpan={3} className='border-0!'>
+                                    <Button 
+                                      onClick={() => window.open(`/${hrefType}/${item.id}`)} 
+                                      startIcon={<FaClone/>} 
+                                      className='w-full'
+                                      >
+                                        Buka Catatan
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )
+                })}
+              </div>
+            ):(
             <Table>
               <TableHeader>
                 <TableRow>
@@ -381,6 +477,9 @@ const HyarihattoSubmissions = () => {
                 })} 
               </TableBody>
             </Table>
+            )}
+
+
           </div>
           <NoDataOrLoading data={dataSubmissions} loading={loading.fetch}/>
           <Pagination

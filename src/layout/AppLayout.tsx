@@ -28,6 +28,7 @@ const LayoutContent: React.FC = () => {
       setLoading(true)
       const response = await logout()
       navigate("/")
+      closeModal()
       alertSuccess(response?.data?.message)
       
     } catch (error) {

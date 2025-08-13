@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import imageSafety from "../../components/image/8069845.jpg";
+import imageSafety from "../../components/image/8069845.png";
 import useAuthService from "../../services/AuthService";
 import "../../css/home.css";
 import PageMeta from "../../components/common/PageMeta";

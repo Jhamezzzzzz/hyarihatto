@@ -147,7 +147,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
                                   <TableCell className='border-0!'>:</TableCell>
                                   <TableCell className='border-0!'>
                                     <Badge color={item.shift === "non-shift" ? "light" : item.shift === "red" ? "error" : item.shift === "white" ? "dark" : "info"}>
-                                      {item.shift.toUpperCase()}
+                                      <span className="px-2">{item.shift.toUpperCase()}</span>
                                     </Badge>
                                   </TableCell>
                                 </TableRow>
@@ -229,7 +229,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
                   <TableCell>{0+item.user.username}</TableCell>
                   <TableCell>
                     <Badge color={item.shift === "non-shift" ? "light" : item.shift === "red" ? "error" : item.shift === "white" ? "dark" : "info"}>
-                      {item.shift.toUpperCase()}
+                      <span className="w-20 text-center">{item.shift.toUpperCase()}</span>
                     </Badge>
                   </TableCell>
                   <TableCell>{item?.line?.lineName || "-"}</TableCell>

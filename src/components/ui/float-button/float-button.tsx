@@ -18,7 +18,7 @@ const FloatButton = () => {
         >
             <FaArrowUp/>
         </Button>
-        Kembali ke Atas
+       <p className='dark:text-gray-300'>Kembali ke Atas</p>
     </div>
   )
 }

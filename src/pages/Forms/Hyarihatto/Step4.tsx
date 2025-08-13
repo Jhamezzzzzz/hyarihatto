@@ -141,9 +141,9 @@ const Step4FormHyarihatto = () => {
             {/* Modal Kamera */}
             {showCameraModal && (
               <div className="fixed inset-0 bg-opacity-40 backdrop-blur-sm z-25 flex items-center justify-center">
-                <div className="bg-white w-full max-w-3xl rounded-lg shadow-lg overflow-hidden">
-                  <div className="flex justify-between items-center px-4 py-3 border-b">
-                    <h5 className="text-lg font-medium">Ambil Foto</h5>
+                <div className="bg-white dark:bg-gray-900 w-full max-w-3xl rounded-lg shadow-lg overflow-hidden">
+                  <div className="flex justify-between items-center px-4 py-3 border-b dark:border-gray-700">
+                    <h5 className="text-lg font-medium dark:text-gray-200">Ambil Foto</h5>
                     <button
                       onClick={()=>setShowCameraModal(false)}
                       className="text-gray-500 hover:text-red-500"

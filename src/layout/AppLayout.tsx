@@ -65,7 +65,7 @@ const LayoutContent: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen xl:flex">
+    <div className="min-h-screen xl:flex xl:flex-col">
       <div>
         {renderModalConfirmation()}
       </div>
@@ -82,8 +82,8 @@ const LayoutContent: React.FC = () => {
         <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6 mt-20">
           <Outlet />
         </div>
-        <AppFooter/>
       </div>
+          <AppFooter/>
     </div>
   );
 };

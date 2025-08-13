@@ -13,9 +13,10 @@ import Spinner from "../components/ui/spinner";
 import { useAuth } from "../context/AuthProvider";
 import { FaExclamationCircle } from "react-icons/fa";
 import AppFooter from "./AppFooter";
+import FloatButton from "../components/ui/float-button/float-button";
 
 const LayoutContent: React.FC = () => {
-  const { isExpanded, isHovered, isMobileOpen } = useSidebar();
+  const { isExpanded, isHovered, isMobileOpen, isMobile } = useSidebar();
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
   const { modalIsOpen, closeModal } = useAuth()
@@ -79,8 +80,11 @@ const LayoutContent: React.FC = () => {
         } ${isMobileOpen ? "ml-0" : ""}`}
       >
         <AppHeader />
-        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6 mt-20">
+        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6 mt-20 relative">
           <Outlet />
+          { isMobile && (
+            <FloatButton/>
+          )}
         </div>
       </div>
           <AppFooter/>

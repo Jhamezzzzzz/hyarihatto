@@ -94,7 +94,7 @@ const Select: React.FC<SelectProps> = ({
     onChange(name, "")
   }
 
-  const errorClass = " text-error-800 border-error-500 focus:ring-3 focus:ring-error-500/10  dark:text-error-400 dark:border-error-500";
+  const errorClass = " text-error-800 border-error-500! focus:ring-3 focus:ring-error-500/10  dark:text-error-400 dark:border-error-500!";
 
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
@@ -103,7 +103,7 @@ const Select: React.FC<SelectProps> = ({
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         disabled={isDisable}
-        className={`${error && errorClass} ${isClearable && "pr-14"}  overflow-y-hidden disabled:cursor-not-allowed disabled:bg-gray-100 h-11 w-full cursor-pointer appearance-none rounded-lg border bg-white px-4 py-2.5 text-left text-sm shadow-theme-xs focus:border-primary1-300 focus:outline-hidden focus:ring-3 focus:ring-primary1/30 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 ${selectedLabel ? "text-gray-800 dark:text-white/90" : "text-gray-400 dark:text-gray-400"}`}
+        className={`${error && errorClass} ${isClearable && "pr-14"} relative overflow-y-hidden disabled:cursor-not-allowed disabled:bg-gray-100 h-11 w-full cursor-pointer appearance-none rounded-lg border bg-white px-4 py-2.5 text-left text-sm shadow-theme-xs focus:border-primary1-300 focus:outline-hidden focus:ring-3 focus:ring-primary1/30 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90 ${selectedLabel ? "text-gray-800 dark:text-white/90" : "text-gray-400 dark:text-gray-400"}`}
       >
         <span className="line-clamp-1">
           {selectedLabel || (showPlaceholder ? placeholder : "")}

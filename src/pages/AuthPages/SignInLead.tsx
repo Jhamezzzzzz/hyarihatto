@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
-import imageSafety from "../../components/image/8069845.jpg";
+import imageSafety from "../../components/image/8069845.png";
 import useAuthService from "../../services/AuthService";
 import "../../css/home.css";
 import PageMeta from "../../components/common/PageMeta";
@@ -91,7 +91,7 @@ export default function SignInLead() {
   }, [name])
 
   return (
-    <div className={`${isMobile ? "relative min-h-screen flex justify-center items-center overflow-hidden bg-white dark:bg-gray-900" : "login-page"}`}>
+    <div className={`relative min-h-screen flex justify-center items-center overflow-hidden ${isMobile ? "bg-white dark:bg-gray-900" : "after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-full after:h-[150px] after:bg-[#ffffffcb] dark:after:bg-gray-900 after:rounded-tl-[50%_100%] after:rounded-tr-[50%_100%] after:z-0 bg-gradient-to-b from-[#b5e48c] to-[#52b69a] dark:from-[#839c52] dark:to-[#038d66]"}`}>
       <div className="absolute top-3 right-20 flex items-center gap-3 z-5">
         <p className='text-green-800 dark:text-green-100'>{theme[0].toUpperCase()+theme.slice(1)} Mode</p>
         <ThemeToggleButton/>

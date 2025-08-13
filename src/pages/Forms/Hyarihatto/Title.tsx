@@ -43,7 +43,7 @@ const TitleFormHyarihatto = ({ showBack, backToHome }: TitleFormHyarihatto) => {
                 Kembali
             </button>
         )}
-        <div className="absolute top-3 right-20 flex items-center gap-3">
+        <div className="absolute top-3 right-4 flex items-center gap-3">
             <p className='dark:text-gray-300'>{theme[0].toUpperCase()+theme.slice(1)} Mode</p>
             <ThemeToggleButton/>
         </div>

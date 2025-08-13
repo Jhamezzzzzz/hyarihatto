@@ -104,7 +104,7 @@ const step1NotComplete =
   return (
     <div>
       <div
-        className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center bg-[url(components/image/Wave-Background.png)] dark:bg-[url(components/image/Wave-Dark-Background.png)]"
+        className="min-h-screen flex items-center justify-center p-4 py-30  bg-no-repeat bg-cover bg-center bg-[url(components/image/Wave-Background.png)] dark:bg-[url(components/image/Wave-Dark-Background.png)]"
       >
         <div className="w-full max-w-2xl">
           <TitleFormHyarihatto showBack={showBack || false} />

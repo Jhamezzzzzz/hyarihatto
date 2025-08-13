@@ -12,7 +12,7 @@ const HyarihattoFinish = () => {
     <div>
         <Template>
             <div className='flex flex-col items-center justify-center gap-3'>
-                <h1 className='dark:text-gray-400'>Terima kasih telah mengisi catatan Hyarihatto!</h1>
+                <h1 className='dark:text-gray-200'>Terima kasih telah mengisi catatan Hyarihatto!</h1>
                 <Button onClick={handleToHome} size='sm'>Kembali ke Halaman Utama</Button>
             </div>
         </Template>

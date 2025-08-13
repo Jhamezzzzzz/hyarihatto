@@ -127,7 +127,7 @@ const Template = ({
     <div>
       <PageMeta title="Form Hyarihatto | Online Hyarihatto & Voice Member" description="Online sistem sebagai digitalisasi buku catatan Hyarihatto" />
       <div
-        className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center bg-[url(components/image/Wave-Background-Hyat.png)] dark:bg-[url(components/image/Wave-Dark-Background-Hyat.jpg)]"
+        className="min-h-screen flex items-center justify-center p-4  bg-no-repeat bg-cover bg-center bg-[url(components/image/Wave-Background-Hyat.png)] dark:bg-[url(components/image/Wave-Dark-Background-Hyat.png)]"
       >
         <div className="w-full max-w-2xl">
           <TitleFormHyarihatto showBack={showBack || false} backToHome={backToHome}/>

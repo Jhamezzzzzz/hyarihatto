@@ -9,11 +9,13 @@ import Select from "../../form/Select";
 // Define the type for the Webcam component instance to use with the ref
 
 type FaceCapture = {
+  type: "hyarihatto" | "voice-member";
   setImageFile: (image: string | null) => void,
   handleSubmit: () => void
 }
 
 export default function FaceCapture({
+  type,
   setImageFile,
   handleSubmit
 }: FaceCapture) {
@@ -27,9 +29,19 @@ export default function FaceCapture({
 
 
   const captureImage = () => {
-    // Corrected: Add an optional chaining operator to safely call getScreenshot
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
+      // Check the size of the base64 string
+      const base64String = imageSrc.split(',')[1];
+      const sizeInBytes = (base64String.length * 0.75) - 2; // Estimate actual size in bytes
+      const sizeInMB = sizeInBytes / (1024 * 1024);
+
+      // Check if it's more than 10MB
+      if (sizeInMB > 10) {
+        alertError("Ukuran capture melebihi 10MB!");
+        return;
+      }
+      
       setImageFile(imageSrc);
       setImageWebcam(imageSrc);
     }
@@ -99,7 +111,7 @@ export default function FaceCapture({
           </div>
           <div className="flex items-center justify-between gap-4 mt-4">
             <Button variant="outline" className="w-full" onClick={retakeImage}>Ambil ulang</Button>
-            <Button variant="primary" className="w-full" onClick={handleSubmit}>Submit</Button>
+            <Button variant={type === "hyarihatto" ? "primary" : "blue"} className="w-full" onClick={handleSubmit}>Submit</Button>
           </div>
         </>
       )}

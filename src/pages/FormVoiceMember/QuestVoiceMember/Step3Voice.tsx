@@ -140,7 +140,7 @@ const Step3FormVoiceMember = () => {
                     </button>
                   </div>
                   <div className="p-4 text-center">
-                    <FaceCapture setImageFile={setPreviewImage} handleSubmit={()=>handleSubmitCapture(previewImage)} />
+                    <FaceCapture type="voice-member" setImageFile={setPreviewImage} handleSubmit={()=>handleSubmitCapture(previewImage)} />
                   </div>
                 </div>
               </div>

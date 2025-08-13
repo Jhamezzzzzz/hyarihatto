@@ -1,15 +1,12 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router";
 import SignInLead from "./pages/AuthPages/SignInLead";
-import SignUp from "./pages/AuthPages/SignUp";
 import NotFound from "./pages/OtherPage/NotFound";
 import AppLayout from "./layout/AppLayout";
 import { ScrollToTop } from "./components/common/ScrollToTop";
 import Home from "./pages/QuestLeader/HomeLeader";
 import DetailHyarihatto from './pages/Dashboard/DetailHyarihatto';
 import DetailVoice from './pages/Dashboard/DetailVoice';
-// import HyarihattoSummary from "./pages/Hyarihatto/Summary";
 import HyarihattoSubmissions from "./pages/Hyarihatto/Submissions";
-// import HyarihattoHistory from "./pages/Hyarihatto/History";
 import VoiceMemberSummary from "./pages/VoiceMember/Summary";
 import VoiceMemberReview from "./pages/VoiceMember/Review";
 import VoiceMemberHistory from "./pages/VoiceMember/History";
@@ -18,8 +15,6 @@ import HazardLevel from "./pages/Master/HazardLevel";
 import WorkFrequency from "./pages/Master/WorkFrequency";
 import ScoreRank from "./pages/Master/ScoreRank";
 import Homepage from "./pages/MainPages/MainHome"
-// import QuestUser from "./pages/QuestUser/QuestUserTest"
-// import QuestUserTest from "./pages/QuestUser/QuestUserTest"
 import ChoiceUser from "./pages/MainPages/MainUser"
 import PanduanHyat from "./pages/Panduan/PanduanHyat"
 import IdentityFormHyarihatto from "./pages/Forms/Hyarihatto/Identity";
@@ -51,11 +46,6 @@ export default function App() {
             <Route path="/voice-member/:id" element={<DetailVoice />} />
             <Route path="/submissions" element={<HyarihattoSubmissions />} />
 
-            {/* Hyarihatto */}
-            {/* <Route path="/hyarihatto/summary" element={<HyarihattoSummary />} />
-            <Route path="/hyarihatto/review" element={<HyarihattoSubmissions />} />
-            <Route path="/hyarihatto/history" element={<HyarihattoHistory />} /> */}
-            
             {/* Voice Member */}
             <Route path="/voice-member/summary" element={<VoiceMemberSummary />} />
             <Route path="/voice-member/review" element={<VoiceMemberReview />} />
@@ -71,7 +61,6 @@ export default function App() {
           {/* Auth Layout */}
           <Route index path="/" element={<Homepage />} />
           <Route path="/signin" element={<SignInLead />} />
-          <Route path="/signup" element={<SignUp />} />
       
           {/* Member */}
           <Route path="/member" element={<ChoiceUser />} />

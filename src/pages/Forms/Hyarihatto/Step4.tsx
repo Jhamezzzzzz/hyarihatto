@@ -3,9 +3,9 @@ import ButtonNavigation from "./ButtonNavigation";
 import { useRef, useState } from "react";
 import { FaCamera, FaImage, FaTimes } from "react-icons/fa";
 import { useFormErrors } from "../../../context/FormErrorContext";
-// import { useFormData } from "../../../context/FormVoiceMemberContext";
 import { useFormHyarihatto } from "../../../context/FormHyarihattoContext";
 import FaceCapture from "../../../components/ui/face-capture/face-capture";
+import useShowAlert from "../../../hooks/useShowAlert";
 
 const Step4FormHyarihatto = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
@@ -13,6 +13,7 @@ const Step4FormHyarihatto = () => {
   const { formData, updateFormData } = useFormHyarihatto()
   const [showCameraModal, setShowCameraModal] = useState<boolean>(false);
   const galleryInputRef = useRef<HTMLInputElement | null>(null);
+  const { alertError } = useShowAlert()
 
   const [previewImage, setPreviewImage] = useState<string | null>(null)
 
@@ -25,7 +26,18 @@ const Step4FormHyarihatto = () => {
 
         updateError(null, "image", undefined)
         const file = e.target.files[0];
-        // const imageUrl = URL.createObjectURL(file);
+
+        // Check the size of the file directly
+        const sizeInMB = file.size / (1024 * 1024);
+        
+        const MAX_SIZE_MB = 10;
+
+        if (sizeInMB > MAX_SIZE_MB) {
+            alertError("Ukuran file gambar tidak boleh lebih dari 10MB.");
+            // Optionally, reset the input to clear the selected file
+            e.target.value = ""; 
+            return;
+        }
 
         // Convert to Base64 and store
         const toBase64 = (file: File): Promise<string> =>
@@ -63,7 +75,7 @@ const Step4FormHyarihatto = () => {
   return (
     <div>
       <Template showStep step={4}>
-        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 shadow-lg rounded-xl overflow-hidden">
+        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 border dark:border-gray-700 shadow-lg rounded-xl overflow-hidden">
           <div className="bg-green-600 text-white text-center py-3">
             <h5 className="text-lg font-semibold">Bukti Kejadian</h5>
           </div>
@@ -140,7 +152,7 @@ const Step4FormHyarihatto = () => {
                     </button>
                   </div>
                   <div className="p-5">
-                    <FaceCapture setImageFile={setPreviewImage} handleSubmit={()=>handleSubmitCapture(previewImage)} />
+                    <FaceCapture type="hyarihatto" setImageFile={setPreviewImage} handleSubmit={()=>handleSubmitCapture(previewImage)} />
                   </div>
                 </div>
               </div>

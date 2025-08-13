@@ -15,9 +15,9 @@ const IdentityFormHyarihatto: React.FC = () => {
   const { formData, updateFormData } = useFormHyarihatto();
   const { errors, updateError } = useFormErrors();
 
-  const [name, setName] = useState(localStorage.getItem("name") || "");
-  const [line, setLine] = useState(localStorage.getItem("line") || "");
-  const [section, setSection] = useState(localStorage.getItem("section") || "");
+  const [name, setName] = useState(localStorage.getItem("hyarihatto.name") || "");
+  const [line, setLine] = useState(localStorage.getItem("hyarihatto.line") || "");
+  const [section, setSection] = useState(localStorage.getItem("hyarihatto.section") || "");
   const debouncedNoreg = useDebounce(formData.noreg, 1000);
   const { getUserByNoreg } = usePublicDataService();
   const { optionsShift } = StaticOptions();
@@ -42,24 +42,23 @@ const IdentityFormHyarihatto: React.FC = () => {
       setLine("Loading");
       setSection("Loading");
       const response = await getUserByNoreg(formData.noreg);
-      console.log("response noreg: ", response)
 
       const data = response?.data
       setName(data?.name);
       setSection(data?.Organization?.Section?.sectionName)
-      localStorage.setItem("name", data?.name);
-      localStorage.setItem("section", data?.Organization?.Section?.sectionName);
+      localStorage.setItem("hyarihatto.name", data?.name);
+      localStorage.setItem("hyarihatto.section", data?.Organization?.Section?.sectionName);
       updateFormData("submissions", "userId", data?.id);
       updateFormData("submissions", "sectionId", data?.Organization?.sectionId);
 
       // Line
       if(!data?.Organization?.Line){
         setLine("-")
-        localStorage.setItem("line", "-");
+        localStorage.setItem("hyarihatto.line", "-");
         updateFormData("submissions", "lineId", null);
       }else{
         setLine(data?.Organization?.Line?.lineName)
-        localStorage.setItem("line", data?.Organization?.Line?.lineName);
+        localStorage.setItem("hyarihatto.line", data?.Organization?.Line?.lineName);
         updateFormData("submissions", "lineId", data?.Organization?.lineId);
       }
     } catch (error) {
@@ -70,9 +69,9 @@ const IdentityFormHyarihatto: React.FC = () => {
       updateFormData("submissions", "userId", "");
       updateFormData("submissions", "lineId", "");
       updateFormData("submissions", "sectionId", "");
-      localStorage.setItem("name", "");
-      localStorage.setItem("line", "");
-      localStorage.setItem("section", "");
+      localStorage.setItem("hyarihatto.name", "");
+      localStorage.setItem("hyarihatto.line", "");
+      localStorage.setItem("hyarihatto.section", "");
     }
   };
 
@@ -214,6 +213,7 @@ const IdentityFormHyarihatto: React.FC = () => {
               </label>
               <Select
                 name="shift"
+                placeholder="Pilih shift"
                 options={optionsShift}
                 onChange={handleChangeSelect}
                 defaultValue={formData.submissions.shift}

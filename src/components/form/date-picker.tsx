@@ -64,17 +64,34 @@ export default function DatePicker({
       dateFormat: dateFormat || "Y-m-d",
       defaultDate,
       onChange,
-
       autoFillDefaultTime: false,
       // minDate: 'today',
       disableMobile: true,
-      position: 'above right',
+      position: 'above left',
       ...(isMonthMode && {
         plugins: [new MonthSelectPlugin({
           shorthand: true,
           dateFormat: dateFormat || "Y-m",
         })]
       }),
+      onOpen: (_selectedDates, _dateStr, instance) => {
+        // Only apply on mobile
+        if (window.innerWidth <= 768) {
+          // Add padding so page can scroll above keyboard
+          document.body.style.paddingBottom = "300px";
+
+          // Delay to let keyboard animation finish
+          setTimeout(() => {
+            instance._input.scrollIntoView({
+              behavior: "smooth",
+              block: "center"
+            });
+          }, 400);
+        }
+      },
+      onClose: () => {
+        document.body.style.paddingBottom = "0";
+      }
     });
 
     flatpickrInstance.current = flatPickr

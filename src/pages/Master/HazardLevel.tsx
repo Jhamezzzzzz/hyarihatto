@@ -15,6 +15,7 @@ import NoDataOrLoading from '../../components/ui/table/NoDataOrLoading'
 import Pagination from '../../components/ui/table/Pagination'
 import { useDebounce } from '../../hooks/useDebonce'
 import PageMeta from '../../components/common/PageMeta'
+import { FaSearch } from 'react-icons/fa'
 
 interface MasterDataProps{
   id?: number;
@@ -259,6 +260,8 @@ const HazardLevel = () => {
               <Input
                 placeholder='Cari'
                 onChange={(e)=>setSearchQ(e.target.value)}
+                value={searchQ}
+                endIcon={<FaSearch/>}
               />
             </div>
             <Table className='mt-10'>

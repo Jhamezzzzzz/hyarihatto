@@ -143,7 +143,7 @@ export default function SignInLead() {
                   <input
                     type="text"
                     name="username"
-                    placeholder="Username"
+                    placeholder="7 Digit No Reg. "
                     value={form.username}
                     onChange={handleChangeInput}
                     className="w-full outline-none bg-transparent dark:placeholder:text-gray-400 dark:text-gray-100"

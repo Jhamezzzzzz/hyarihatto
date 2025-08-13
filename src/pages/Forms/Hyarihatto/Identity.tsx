@@ -146,7 +146,7 @@ const IdentityFormHyarihatto: React.FC = () => {
                 htmlFor="noreg"
                 className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1"
               >
-                No.Reg<span className="text-red-500">*</span>
+                No.Reg (8 digit)<span className="text-red-500">*</span>
               </label>
               <Input
                 id="noreg"

@@ -63,7 +63,7 @@ const Step4FormHyarihatto = () => {
   return (
     <div>
       <Template showStep step={4}>
-        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 shadow-lg rounded-xl overflow-hidden">
+        <div className="w-full max-w-2xl bg-white dark:bg-gray-900 border dark:border-gray-700 shadow-lg rounded-xl overflow-hidden">
           <div className="bg-green-600 text-white text-center py-3">
             <h5 className="text-lg font-semibold">Bukti Kejadian</h5>
           </div>

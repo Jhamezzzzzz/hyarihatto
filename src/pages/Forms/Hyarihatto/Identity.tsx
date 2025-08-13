@@ -134,7 +134,7 @@ const IdentityFormHyarihatto: React.FC = () => {
             </ol>
           </nav>
         </div>
-        <div className="bg-white dark:bg-gray-900 shadow-lg rounded-lg p-6">
+        <div className="bg-white dark:bg-gray-900 border dark:border-gray-700 shadow-lg rounded-lg p-6">
           <div className="border-b border-gray-200 pb-4 mb-6 text-center">
             <h5 className="text-xl font-semibold text-gray-800 dark:text-gray-200">
               Identitas Member

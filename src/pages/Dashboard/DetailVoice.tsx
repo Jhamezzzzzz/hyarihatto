@@ -27,7 +27,7 @@ export type Submission = {
 
   }
    Reviews:{
-  feedback: 'rejected' | 'counter-measured'| 'solved';
+   feedback: 'rejected' | 'counter-measured'| 'solved'|'section suggestion';
   actionPic: string ;
   thirdParty: string ;
   actionPlan: string ;
@@ -49,7 +49,11 @@ export type Submission = {
 
 export default function DetailVoiceMember() {
   const { id } = useParams<{ id: string }>();
-  const { getSubmissionById,postRejectLeaderAction,postSolvedLeaderAction,postCounterMeasureAction} = useHyarihattoDataService();
+   const { getSubmissionById,
+          postRejectLeaderAction,
+          postSolvedLeaderAction,
+          postCounterMeasureAction,
+          postSectionSuggesstion} = useHyarihattoDataService();
   const [data, setData] = useState<Submission | null>(null);
   const { auth } = useAuth(); // Misal: 'group' atau 'section'
   const { errors } = useFormErrors()
@@ -70,15 +74,26 @@ export default function DetailVoiceMember() {
   const [isCameraActive, setIsCameraActive] = useState(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [isSubmitted, setIsSubmitted] = useState(false);
+
   const [reason, setReason] =useState<string>('');
    const [selectedPIC, setSelectedPIC] = useState(""); 
   const [planCM,setPlanCM ] =useState<Date | undefined>(undefined);
-  const [finishplan, setFinishplan] = useState<Date | null>(null);
+  const [finishplan, setFinishplan] = useState<Date | undefined>(undefined);
    const [suggestionsect, setSuggestionsect] =useState<string>('');
     const [suggestiongroup, setSuggestiongroup] =useState<string>('');
-  const isDisabled = isSubmitted; 
+   
 const imageSolved = data?.Reviews?.find(r => r.feedback === "solved" );
+  const [isSubmittedGL, setIsSubmittedGL] = useState(false);
+  const [isSubmittedSH, setIsSubmittedSH] = useState(false);
+  const [isLoadingSubmit, setIsLoadingSubmit] = useState(false); // ini khusus animasi "Menyimpan..."
+ const [isSubmittedData, setIsSubmittedData] = useState(false);
+  const [isCounterFromGL, setIsCounterFromGL] = useState(false);
+  const [isLoadingUpdate, setIsLoadingUpdate] = useState(false);
+  const [isSubmitSuccess, setIsSubmitSuccess] = useState(false);
+  const [isUpdateSuccess, setIsUpdateSuccess] = useState(false);
+  const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
+const [isUpdateDisabled, setIsUpdateDisabled] = useState(true);
+const isDisabled = isSubmittedGL || isSubmittedSH;
 
   //UseEffect Untuk mengambil data submission berdasarkan ID
 useEffect(() => {
@@ -102,30 +117,74 @@ useEffect(() => {
 useEffect(() => {
   if (!data) return;
 
-  const acceptedReview = data.Reviews?.find((r) => r.feedback === "counter-measured");
-  const rejectedReview = data.Reviews?.find((r) => r.feedback === "rejected");
-  const imageSolved = data?.Reviews?.find(r => r.feedback === "solved" );
+  // Cari review berdasarkan feedback
+  const reviewCounter = data.Reviews.find(r => r.feedback === "counter-measured");
+  const reviewSectionSuggestion = data.Reviews.find(r => r.feedback === "section suggestion");
+  const rejectedReview = data.Reviews.find(r => r.feedback === "rejected");
+  const imageSolved = data.Reviews.find(r => r.feedback === "solved");
 
-  if (acceptedReview) {
+  setIsCounterFromGL(Boolean(reviewCounter));
+
+  // Set status submitted kalau ada salah satu review
+  setIsSubmittedData(Boolean(reviewCounter || reviewSectionSuggestion || rejectedReview || imageSolved));
+
+  if (reviewCounter) {
     setSelectedProgress("Terima");
-    setSelectedPIC(acceptedReview.actionPic);
-     setPihakLain(acceptedReview.thirdParty || '');
-    setPlanCM(new Date(acceptedReview.actionPlan));
-    setFinishplan(new Date(acceptedReview.actionDate));
-    setSuggestiongroup(auth.roleName === 'line head' ? acceptedReview.suggestionGL : '');
-    setSuggestionsect(auth.roleName === 'section head' ? acceptedReview.suggestionSH : '');
-     if (!previewImage) {
-      setPreviewImage(`${config.BACKEND_URL}/${imageSolved?.proof}`);
-    }
-    setIsSubmitted(true);
+    setSelectedPIC(reviewCounter.actionPic || "");
+    setPihakLain(reviewCounter.thirdParty || "");
+    setPlanCM(new Date(reviewCounter.actionPlan));
+    setFinishplan(new Date(reviewCounter.actionDate));
+    setSuggestiongroup(reviewCounter.suggestionGL || "");
+    setSuggestionsect(
+      reviewSectionSuggestion?.suggestionSH || reviewCounter.suggestionSH || ""
+    );
+    setIsSubmittedGL(true);
+    setIsSubmittedSH(Boolean(reviewSectionSuggestion?.suggestionSH || reviewCounter.suggestionSH));
+  } else {
+    // Reset state kalau tidak ada review counter-measured
+    setSelectedProgress("");
+    setSelectedPIC("");
+    setPihakLain("");
+    setPlanCM(undefined);
+    setFinishplan(undefined);
+    setSuggestiongroup("");
+    setSuggestionsect("");
+    setIsSubmittedGL(false);
+    setIsSubmittedSH(false);
   }
 
+  // Preview gambar proof solved
+  if (imageSolved?.proof && !previewImage) {
+    setPreviewImage(`${config.BACKEND_URL}/${imageSolved.proof}`);
+  }
+
+  // Kalau ada review rejected
   if (rejectedReview) {
     setSelectedProgress("Tolak");
     setReason(rejectedReview.suggestionGL || rejectedReview.suggestionSH || "");
-    setIsSubmitted(true);
+    setIsSubmittedGL(true);
+    setIsSubmittedSH(true);
   }
+
+  // ====== Logic Disable Tombol ======
+  let submitDisabled = false;
+  let updateDisabled = true;
+
+  // Kalau sudah submit GL (counter-measured) → disable submit, enable update
+  if (reviewCounter) {
+    submitDisabled = true;
+    updateDisabled = false;
+  }
+
+  // Kalau sudah solved atau sudah ada suggestion SH → disable update juga
+  if (imageSolved || reviewSectionSuggestion) {
+    updateDisabled = true;
+  }
+
+  setIsSubmitDisabled(submitDisabled);
+  setIsUpdateDisabled(updateDisabled);
 }, [data]);
+
 
 
   if (!data) {
@@ -245,86 +304,162 @@ const handleSubmitReject = async () => {
     suggestionSH: auth.roleName === "section head" ? reason.trim() : "",
   };
 
-  setIsSubmitted(true);
+  setIsSubmittedGL(true);
+   if (auth.roleName === 'section head') {
+      setIsSubmittedSH(true);
+    }
 
   try {
     await postRejectLeaderAction(body);
     const update = await getSubmissionById(Number(id));
     setData(update);
   } finally {
-    setIsSubmitted(false);
+     setIsSubmittedGL(true);
+     if (auth.roleName === 'section head') {
+      setIsSubmittedSH(true);
+    }
   }
 };
 
-const handleSubmitAccept = async () => {
+
+
+const handleSubmitCounterMeasure = async () => {
   if (!id) return;
+  setIsLoadingSubmit(true);
 
   const submissionId = Number(id);
 
-  // Tentukan suggestion berdasarkan role user
- 
-
-  // Jika suggestion kosong, bisa tambahkan validasi
-  // if (!suggestion) {
-  //   alertWarning("Silakan isi saran/usulan terlebih dahulu.");
-  //   return;
-  // }
-
-const counterMeasureBody = {
-  submissionId,
-  actionPic: selectedPIC,
-  actionPlan: planCM?.toISOString().split('T')[0] || '',
-  actionDate: finishplan?.toISOString().split('T')[0] || '',
-  suggestionGL: suggestiongroup.trim(),
-  suggestionSH: suggestionsect.trim(),
-  ...(selectedPIC === 'Pihak lain' && pihakLain.trim() && {
-    thirdParty: pihakLain.trim(),
-  }),
-};
-console.log("Counter Measure Body:", counterMeasureBody);
-const fieldData={submissionId: submissionId}
- const solvedForm = new FormData();
- 
-solvedForm.append('data', JSON.stringify(fieldData));
-solvedForm.append('image', fileImage as Blob );
-
-// Ambil dari localStorage (pastikan sudah disimpan sebelumnya saat capture)
-// const base64ImageLocal = localStorage.getItem("hyarihatto.detail.image") || "";
-// const base64ImageFileNameLocal = localStorage.getItem("hyarihatto..detail.imageFileName") || "proof.png";
-
-// if (base64ImageLocal.startsWith("data:image")) {
-//   const fileImage = base64ToFile(base64ImageLocal, base64ImageFileNameLocal, "image/png");
-//   solvedForm.append("image", fileImage); // ✅ Ganti 'image' sesuai field backend
-//   console.log("📷 Image file ready:", fileImage);
-// } else {
-//   console.warn("⚠️ No valid base64 image found in localStorage!");
-// }
-
-
-  setIsSubmitted(true);
-
   try {
-    // 1. Submit countermeasure
-    await postCounterMeasureAction(counterMeasureBody);
-    // 2. Submit solve (gambar)
-    await postSolvedLeaderAction(solvedForm);
+    const body: any = {
+      submissionId,
+      actionPic: selectedPIC,
+      actionPlan: planCM ? new Date(planCM).toISOString().split("T")[0] : "",
+      actionDate: finishplan ? new Date(finishplan).toISOString().split("T")[0] : "",
+    };
 
-     const updatedData = await getSubmissionById(submissionId);
-    setData(updatedData); 
+    if (auth.roleName === "line head") {
+      body.suggestionGL = suggestiongroup.trim();
+    } else if (auth.roleName === "section head") {
+      body.suggestionSH = suggestionsect.trim();
+      body.suggestionGL = ""; // Optional kosongin supaya gak null
+    }
+
+    if (selectedPIC === "Pihak lain" && pihakLain.trim()) {
+      body.thirdParty = pihakLain.trim();
+    }
+
+    await postCounterMeasureAction(body);
+
+    if (auth.roleName === "line head") setIsSubmittedGL(true);
+    if (auth.roleName === "section head") setIsSubmittedSH(true);
+
   } catch (error) {
-    // error sudah ditangani di masing-masing fungsi
+    console.error(error);
   } finally {
-    setIsSubmitted(false);
+    setIsLoadingSubmit(false);
   }
 };
 
-// const acceptedReview = data?.Reviews?.find(r => r.feedback === "counter-measured");
+const handleSubmitSolved = async () => {
+  if (!id || !fileImage) return;
+  setIsLoadingSubmit(true);
+
+  const submissionId = Number(id);
+
+  try {
+    const solvedForm = new FormData();
+    solvedForm.append("data", JSON.stringify({ submissionId }));
+    solvedForm.append("image", fileImage as Blob);
+    await postSolvedLeaderAction(solvedForm);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setIsLoadingSubmit(false);
+  }
+};
 
 
+const handleSubmitSuggestion = async () => {
+  if (!id) return;
+  setIsLoadingSubmit(true);
+
+  const submissionId = Number(id);
+
+  try {
+    await postSectionSuggesstion({
+      submissionId,
+      suggestionSH: suggestionsect.trim(),
+    });
+    setIsSubmittedSH(true);
+
+    // Fetch ulang data terbaru biar suggestionSH gak null di state
+    const updatedData = await getSubmissionById(submissionId);
+    setData(updatedData);
+
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setIsLoadingSubmit(false);
+  }
+};
+
+const handleSubmitCounter = async () => {
+  if (!id) return;
+  setIsLoadingSubmit(true);
+  setIsSubmitSuccess(false);
+
+  try {
+    await handleSubmitCounterMeasure();
+    if (fileImage) {
+      await handleSubmitSolved();
+    }
+    setIsSubmitSuccess(true);
+
+    const updatedData = await getSubmissionById(Number(id));
+    setData(updatedData);
+
+    setIsSubmitDisabled(true);   // matikan submit
+    setIsUpdateDisabled(false);  // hidupkan update
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setIsLoadingSubmit(false);
+  }
+};
+
+const handleUpdateData = async () => {
+  if (!id) return;
+  setIsLoadingUpdate(true);
+  setIsUpdateSuccess(false);
+
+  try {
+    if (auth.roleName === "section head") {
+      if (fileImage) {
+        await handleSubmitSolved();
+      }
+      await handleSubmitSuggestion();
+    } else if (auth.roleName === "line head") {
+      if (fileImage) {
+        await handleSubmitSolved();
+      }
+    }
+
+    setIsUpdateSuccess(true);
+
+    const updatedData = await getSubmissionById(Number(id));
+    setData(updatedData);
+
+    setIsUpdateDisabled(true); // matikan update setelah klik
+  } catch (err) {
+    console.error(err);
+  } finally {
+    setIsLoadingUpdate(false);
+  }
+};
+console.log (isUpdateSuccess,isCounterFromGL,isSubmitSuccess)
 
   return (
-
-    <div className="grid grid-cols-12 gap-2 p-1">
+ <div className="grid grid-cols-12 gap-2 p-1">
       {/* <!-- Total Rank --> */}
     <div className="col-span-12 rounded-2xl border border-gray-200 bg-white px-5 py-2 shadow-md
      dark:border-gray-800 dark:bg-white/[0.03] space-y-4 h-[220px]">
@@ -471,16 +606,16 @@ solvedForm.append('image', fileImage as Blob );
                   name="picRadio"
                   value={selectedProgress}
                   error={false}
-                  disabled={isSubmitted}
+                  disabled={isDisabled}
                 />
                 </div>
                 {selectedProgress === "Tolak" && (
-                  isSubmitted ? (
+                  isSubmittedGL || isSubmittedSH ? (
                 <div>
                 <p className="mb-1 font-semibold">Alasan Menolak</p>
                 <TextArea
                   rows={4}
-                   placeholder={
+                  placeholder={
                     auth.roleName === 'line head'
                       ? 'Silakan isi alasan dari Group Leader'
                       : 'Silakan isi alasan dari Section Head'
@@ -492,15 +627,16 @@ solvedForm.append('image', fileImage as Blob );
                  }`}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  disabled={isSubmitted}
+                  disabled={isDisabled}
                 />
                 <div className="text-center col-span-12">
                 <ButtonSubmit
-                  label="SUBMIT"
+                label={isSubmittedData ? "UPDATE" : "SUBMIT"}
                   onClick={handleSubmitReject}
-                  disabled={isSubmitted}
+                  disabled={isDisabled}
                   showError={selectedProgress === "Tolak" && reason.trim() === ""}
                 />
+
               </div>
               </div>
                 ) : (
@@ -520,13 +656,13 @@ solvedForm.append('image', fileImage as Blob );
                  }`}
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
-                  disabled={isSubmitted}
+                  disabled={isDisabled}
                 />
                 <div className="text-center col-span-12">
-                <ButtonSubmit
-                  label="SUBMIT"
+               <ButtonSubmit
+                label={isSubmittedData ? "UPDATE" : "SUBMIT"}
                   onClick={handleSubmitReject}
-                  disabled={isSubmitted}
+                  disabled={isDisabled}
                   showError={selectedProgress === "Tolak" && reason.trim() === ""}
                 />
               </div>
@@ -536,79 +672,80 @@ solvedForm.append('image', fileImage as Blob );
           </div>
           {/* <!-- Progress Tindak Lanjut--> */}
           {selectedProgress === "Terima" &&  (  
-            isSubmitted?(
+            isSubmittedGL || isSubmittedSH?(
             <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
-            <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Tindak Lanjut</h3>
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Penanggulangan</h3>
               <div className="text-sm text-gray-700 dark:text-gray-300">
                 {/* Saran dan Usulan */}
                 <div className="grid grid-cols-12 gap-2">
                 {/* Kolom 1: PIC */}
-                  <div className="col-span-6 md:col-span-8">
-                    <p className='mb-1 font-bold'>PIC Penanggulangan</p>
-                   <div className=" rounded-2xl border border-gray-400 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
-                    <RadioGroupProgress
-                      options={optionsUser}
-                      onChange={(value) => {
-                        setSelectedPIC(value);
-                        if (value !== "Pihak lain") {
-                        setPihakLain(''); // reset kalau bukan pihak lain
-                      }
-                      }}
-                      group="pic"
-                      name="picRadio" 
-                      value={selectedPIC}
-                      error={false}
-                      disabled={isSubmitted}
-                    />
-                     {selectedPIC === "Pihak lain" && (
-                      <div className="mt-3">
-                        <input
-                          type="text"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                          placeholder="Nama Pihak Lain"
-                          value={pihakLain}
-                          onChange={(e) => setPihakLain(e.target.value)}
-                          disabled={isSubmitted}
-                        />
-                      </div>
-                    )}
-                   </div>
-                </div>
-
-                {/* Kolom 2: Tanggal */}
-                <div className="col-span-6 md:col-span-4 space-y-4">
-                  <div>
-                    <label className="block font-medium mb-1">Tanggal Plan C/M</label>
-                     <DatePicker
-                      id="plan-cm"
-                      mode="single"
-                      defaultDate={planCM}
-                      onChange={handleChangePlanCM}
-                      placeholder='dd-MMM-yyyy'
-                      dateFormat="d-M-Y"
-                      className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
-                      hint={errors.submissions?.incidentDate}
-                      error={errors?.submissions?.incidentDate !== undefined}
-                      disabled={isSubmitted}
-                    />
+                 {/* Kolom 1: PIC Penanggulangan */}
+                  <div className="col-span-8 md:col-span-12">
+                    <p className="mb-1 font-bold">PIC Penanggulangan</p>
+                    <div className="rounded-2xl border border-gray-400 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
+                      <RadioGroupProgress
+                        options={optionsUser}
+                        onChange={(value) => {
+                          setSelectedPIC(value);
+                          if (value !== "Pihak lain") {
+                            setPihakLain(""); // reset kalau bukan pihak lain
+                          }
+                        }}
+                        group="pic"
+                        name="picRadio"
+                        value={selectedPIC}
+                        error={false}
+                        disabled={isDisabled}
+                      />
+                      {selectedPIC === "Pihak lain" && (
+                        <div className="mt-3">
+                          <input
+                            type="text"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            placeholder="Nama Pihak Lain"
+                            value={pihakLain}
+                            onChange={(e) => setPihakLain(e.target.value)}
+                            disabled={isDisabled}
+                          />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <div>
-                    <label className="block font-medium mb-1">Tanggal Plan Selesai</label>
-                  <DatePicker
-                    id="finish-plan"
-                    mode="single"
-                    defaultDate={finishplan ?? undefined}
-                    onChange={handleChangeFinishPlan}
-                    placeholder='dd-MMM-yyyy'
-                    dateFormat="d-M-Y"
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
-                    hint={errors.submissions?.incidentDate}
-                    error={errors?.submissions?.incidentDate !== undefined}
-                    disabled={isSubmitted}
-                  />
 
+                  {/* Kolom 2: Tanggal */}
+                  <div className="col-span-12 md:col-span-4 space-y-4">
+                    <div>
+                      <label className="block font-medium mb-1">Tanggal Plan C/M</label>
+                      <DatePicker
+                        id="plan-cm"
+                        mode="single"
+                        defaultDate={planCM}
+                        onChange={handleChangePlanCM}
+                        placeholder="dd-MMM-yyyy"
+                        dateFormat="d-M-Y"
+                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                        hint={errors.submissions?.incidentDate}
+                        error={errors?.submissions?.incidentDate !== undefined}
+                        disabled={isDisabled}
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-medium mb-1">Tanggal Plan Selesai</label>
+                      <DatePicker
+                        id="finish-plan"
+                        mode="single"
+                        defaultDate={finishplan ?? undefined}
+                        onChange={handleChangeFinishPlan}
+                        placeholder="dd-MMM-yyyy"
+                        dateFormat="d-M-Y"
+                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                        hint={errors.submissions?.incidentDate}
+                        error={errors?.submissions?.incidentDate !== undefined}
+                        disabled={isDisabled}
+                      />
+                    </div>
                   </div>
-                </div>
+
               </div>
               {finishplan && (
                 <>
@@ -616,14 +753,14 @@ solvedForm.append('image', fileImage as Blob );
               <label className="block font-bold mb-1 mt-3">Saran & Usulan</label>
              <div>
               <label className="block mb-1">Section Head</label>
-              <TextArea
+             <TextArea
                 rows={4}
                 value={suggestionsect}
                 onChange={(e) => setSuggestionsect(e.target.value)}
-                disabled={isSubmitted || auth.roleName !== 'section head'}
+                disabled={auth.roleName !== 'section head' || isSubmittedSH} // hanya disable kalau bukan role SH atau sudah submit SH
                 placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
                 className={`w-full rounded-md border shadow-sm py-2 px-2 ${
-                  isSubmitted || auth.roleName !== 'section'
+                  auth.roleName !== 'section head' || isSubmittedSH
                     ? 'bg-gray-100 text-gray-500 border-gray-300'
                     : 'border-gray-500 focus:ring-primary focus:border-primary'
                 }`}
@@ -632,18 +769,18 @@ solvedForm.append('image', fileImage as Blob );
 
             <div>
               <label className="block mb-1">Group Leader</label>
-              <TextArea
-                rows={4}
-                value={suggestiongroup}
-                onChange={(e) => setSuggestiongroup(e.target.value)}
-                disabled={isSubmitted || auth.roleName !== 'line head'}
-                placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
-                className={`w-full rounded-md border shadow-sm py-2 px-2 ${
-                  isSubmitted || auth.roleName !== 'group'
-                    ? 'bg-gray-100 text-gray-500 border-gray-300'
-                    : 'border-gray-500 focus:ring-primary focus:border-primary'
-                }`}
-              />
+            <TextArea
+              rows={4}
+              value={suggestiongroup}
+              onChange={(e) => setSuggestiongroup(e.target.value)}
+              disabled={auth.roleName !== 'line head' || isSubmittedGL}
+              placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
+              className={`w-full rounded-md border shadow-sm py-2 px-2 ${
+                auth.roleName !== 'line head' || isSubmittedGL
+                  ? 'bg-gray-100 text-gray-500 border-gray-300'
+                  : 'border-gray-500 focus:ring-primary focus:border-primary'
+              }`}
+            />
             </div>
 
               </div>
@@ -709,15 +846,6 @@ solvedForm.append('image', fileImage as Blob );
 
             {/* Canvas untuk capture dari kamera */}
             <canvas ref={canvasRef} style={{ display: 'none' }} />
-
-            {/* Tombol Submit */}
-            <div className="text-center col-span-12">
-            <ButtonSubmit
-              label="SUBMIT"
-              onClick={handleSubmitAccept}
-              disabled={isSubmitted}
-            />
-            </div>
              {isCameraModalOpen && (
               <div className="fixed inset-0 z-50 flex items-center justify-center">
                 {/* BACKDROP BLUR & KLIK UNTUK CLOSE */}
@@ -761,6 +889,60 @@ solvedForm.append('image', fileImage as Blob );
               </div>
             )}
         </div>
+       <div className="text-center col-span-12">
+        {isLoadingSubmit || isLoadingUpdate ? (
+          <div className="flex justify-center items-center gap-2 mt-4">
+            <svg
+              className="animate-spin h-5 w-5 text-green-600"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+                fill="none"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"
+              />
+            </svg>
+            <span className="text-gray-600 font-semibold">Menyimpan...</span>
+          </div>
+        ) : (
+        <div className="grid grid-cols-12 gap-2">
+  {/* Tombol UPDATE */}
+  <div className="col-span-6">
+    <ButtonSubmit
+      label="UPDATE"
+      onClick={handleUpdateData}
+      disabled={isUpdateDisabled}
+    />
+  </div>
+
+  {/* Tombol SUBMIT */}
+  <div className="col-span-6">
+    <ButtonSubmit
+      label="SUBMIT"
+      onClick={handleSubmitCounter}
+      disabled={isSubmitDisabled}
+      showError={
+        auth.roleName === 'line head' &&
+        selectedProgress === 'Terima' &&
+        !fileImage &&
+        !isSubmittedGL
+      }
+    />
+  </div>
+</div>
+
+
+        )}
+      </div>
         </>
         )}
       </div>
@@ -770,7 +952,7 @@ solvedForm.append('image', fileImage as Blob );
 
         //Buat Input
        <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
-            <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Tindak Lanjut</h3>
+            <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Penanggulangan</h3>
               <div className="text-sm text-gray-700 dark:text-gray-300">
                 {/* Saran dan Usulan */}
                 <div className="grid grid-cols-12 gap-2">
@@ -790,7 +972,7 @@ solvedForm.append('image', fileImage as Blob );
                       name="picRadio" 
                       value={selectedPIC}
                       error={false}
-                      disabled={isSubmitted}
+                      disabled={isDisabled}
                     />
                      {selectedPIC === "Pihak lain" && (
                       <div className="mt-3">
@@ -800,7 +982,7 @@ solvedForm.append('image', fileImage as Blob );
                           placeholder="Nama Pihak Lain"
                           value={pihakLain}
                           onChange={(e) => setPihakLain(e.target.value)}
-                          disabled={isSubmitted}
+                          disabled={isDisabled}
                         />
                       </div>
                     )}
@@ -821,7 +1003,7 @@ solvedForm.append('image', fileImage as Blob );
                       className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
                       hint={errors.submissions?.incidentDate}
                       error={errors?.submissions?.incidentDate !== undefined}
-                      disabled={isSubmitted}
+                      disabled={isDisabled}
                     />
                   </div>
                   <div>
@@ -836,7 +1018,7 @@ solvedForm.append('image', fileImage as Blob );
                     className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
                     hint={errors.submissions?.incidentDate}
                     error={errors?.submissions?.incidentDate !== undefined}
-                    disabled={isSubmitted}
+                    disabled={isDisabled}
                   />
                   </div>
                 </div>
@@ -848,14 +1030,14 @@ solvedForm.append('image', fileImage as Blob );
               <label className="block font-bold mb-1 mt-3">Saran & Usulan</label>
              <div>
               <label className="block mb-1">Section Head</label>
-              <TextArea
+             <TextArea
                 rows={4}
                 value={suggestionsect}
                 onChange={(e) => setSuggestionsect(e.target.value)}
-                disabled={isSubmitted || auth.roleName !== 'section head'}
+                disabled={auth.roleName !== 'section head' || isSubmittedSH} // hanya disable kalau bukan role SH atau sudah submit SH
                 placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
                 className={`w-full rounded-md border shadow-sm py-2 px-2 ${
-                  isSubmitted || auth.roleName !== 'section'
+                  auth.roleName !== 'section head' || isSubmittedSH
                     ? 'bg-gray-100 text-gray-500 border-gray-300'
                     : 'border-gray-500 focus:ring-primary focus:border-primary'
                 }`}
@@ -868,10 +1050,10 @@ solvedForm.append('image', fileImage as Blob );
                 rows={4}
                 value={suggestiongroup}
                 onChange={(e) => setSuggestiongroup(e.target.value)}
-                disabled={isSubmitted || auth.roleName !== 'line head'}
+                disabled={auth.roleName !== 'line head' || isSubmittedGL}
                 placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
                 className={`w-full rounded-md border shadow-sm py-2 px-2 ${
-                  isSubmitted || auth.roleName !== 'group'
+                  auth.roleName !== 'line head' || isSubmittedGL
                     ? 'bg-gray-100 text-gray-500 border-gray-300'
                     : 'border-gray-500 focus:ring-primary focus:border-primary'
                 }`}
@@ -1004,31 +1186,60 @@ solvedForm.append('image', fileImage as Blob );
         </div>
        </>
       )}
-        <div className="text-center col-span-12">
-                {isSubmitted ? (
-                  <div className="flex justify-center items-center gap-2 mt-4">
-                    <svg className="animate-spin h-5 w-5 text-green-600" viewBox="0 0 24 24">
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                        fill="none"
-                      />
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8v8H4z"
-                      />
-                    </svg>
-                    <span className="text-gray-600 font-semibold">Menyimpan...</span>
-                  </div>
-                ) : (
-                  <ButtonSubmit label="SUBMIT" onClick={handleSubmitAccept} disabled={isSubmitted} />
-                )}
-              </div>
+     <div className="text-center col-span-12">
+  {isLoadingSubmit || isLoadingUpdate ? (
+    <div className="flex justify-center items-center gap-2 mt-4">
+      <svg
+        className="animate-spin h-5 w-5 text-green-600"
+        viewBox="0 0 24 24"
+      >
+        <circle
+          className="opacity-25"
+          cx="12"
+          cy="12"
+          r="10"
+          stroke="currentColor"
+          strokeWidth="4"
+          fill="none"
+        />
+        <path
+          className="opacity-75"
+          fill="currentColor"
+          d="M4 12a8 8 0 018-8v8H4z"
+        />
+      </svg>
+      <span className="text-gray-600 font-semibold">Menyimpan...</span>
+    </div>
+  ) : (
+    <div className="grid grid-cols-12 gap-2">
+  {/* Tombol UPDATE */}
+  <div className="col-span-6">
+    <ButtonSubmit
+      label="UPDATE"
+      onClick={handleUpdateData}
+      disabled={isUpdateDisabled}
+    />
+  </div>
+
+  {/* Tombol SUBMIT */}
+  <div className="col-span-6">
+    <ButtonSubmit
+      label="SUBMIT"
+      onClick={handleSubmitCounter}
+      disabled={isSubmitDisabled}
+      showError={
+        auth.roleName === 'line head' &&
+        selectedProgress === 'Terima' &&
+        !fileImage &&
+        !isSubmittedGL
+      }
+    />
+  </div>
+</div>
+
+  )}
+</div>
+
       </div>
       </div>
 

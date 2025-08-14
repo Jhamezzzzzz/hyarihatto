@@ -4,15 +4,16 @@ import Button from "../button/Button";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSadTear } from '@fortawesome/free-solid-svg-icons';
 import useShowAlert from "../../../hooks/useShowAlert";
-import Select from "../../form/Select";
+// import Select from "../../form/Select";
+import { MdCameraFront, MdCameraRear } from "react-icons/md";
 
-// Define the type for the Webcam component instance to use with the ref
+
 
 type FaceCapture = {
   type: "hyarihatto" | "voice-member";
-  setImageFile: (image: string | null) => void,
-  handleSubmit: () => void
-}
+  setImageFile: (image: string | null) => void;
+  handleSubmit: () => void;
+};
 
 export default function FaceCapture({
   type,
@@ -59,24 +60,28 @@ export default function FaceCapture({
   }
 
 
-  const optionFacingModes = [{
-    value: "user",
-    label: "Kamera Depan",
-  }, {
-    value: "environment",
-    label: "Kamera Belakang"
-  }]
-  
+  // const optionFacingModes = [{
+  //   value: "user",
+  //   label: "Kamera Depan",
+  //   icon: <MdCameraFront />
+  // }, {
+  //   value: "environment",
+  //   label: "Kamera Belakang",
+  //   icon: <MdCameraRear />
+  // }]
 
-  const handleChangeFacingMode = (_name: unknown, value: string) => {
-    setSelectedFacingMode(value)
-  }
+ const toggleCamera = () => {
+    setSelectedFacingMode((prev) =>
+      prev === "user" ? "environment" : "user"
+    );
+  };
 
   return (
     <div>
       {(!imageWebcam && !deviceError) && (
         <div className="flex justify-center flex-col items-center">
           {/* We only render the Webcam if there is a selectedDeviceId */}
+          <div className="relative">
             <Webcam
               ref={webcamRef}
               audio={false}
@@ -85,16 +90,18 @@ export default function FaceCapture({
               videoConstraints={{ facingMode: selectedFacingMode}}
               onUserMediaError={handleError}
             />
-          
           {/* Select component to switch between cameras */}
-            <Select
-              placeholder="Pilih kamera"
-              className="w-full mt-4"
-              options={optionFacingModes}
-              defaultValue={selectedFacingMode}
-              onChange={handleChangeFacingMode}
-            />
-
+           <button
+            onClick={toggleCamera}
+            className="absolute top-2 right-2 w-12 h-12 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 transition"
+          >
+            {selectedFacingMode === "user" ? (
+              <MdCameraFront size={24} />
+            ) : (
+              <MdCameraRear size={24} />
+            )}
+          </button>
+         </div>
           <Button className="w-full mt-4" variant="blue" onClick={captureImage}>Ambil</Button>
         </div>
       )}

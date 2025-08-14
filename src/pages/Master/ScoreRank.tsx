@@ -93,7 +93,6 @@ const ScoreRank = () => {
     try {
       setLoading({ ...loading, fetch: true})
       const response = await getMasterData(api, pagination.currentPage, pagination.limitPerPage, searchQ)
-      console.log(response)
       setDataMaster(response?.data?.data)
       setPagination({
         currentPage: response?.data.meta.page,

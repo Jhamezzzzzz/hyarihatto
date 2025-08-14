@@ -43,7 +43,6 @@ const IdentityFormVoiceMember: React.FC = () => {
         setLine("Loading");
         setSection("Loading");
         const response = await getUserByNoreg(formData.noreg);
-        console.log("response noreg: ", response)
   
         const data = response?.data
         setName(data?.name);

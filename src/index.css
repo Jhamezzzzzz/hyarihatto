@@ -408,6 +408,24 @@ layer(base);
   @apply mt-2 !bg-white !rounded-xl !p-5 !border !border-gray-200 !text-gray-500 dark:!bg-gray-dark dark:!border-gray-700 dark:!text-gray-400 dark:!shadow-theme-xl 2xsm:!w-auto;
 }
 
+/* Tailwind approach */
+.flatpickr-time {
+  @apply bg-white border dark:bg-gray-900  rounded-lg w-[125px] ;
+}
+.flatpickr-time input:focus{
+  @apply dark:bg-gray-700! bg-gray-200!
+}
+.flatpickr-time input:hover{
+  @apply dark:bg-gray-700! bg-gray-200!
+}
+.flatpickr-time input {
+  @apply text-lg font-semibold dark:text-gray-200!;
+}
+
+#timepicker-wrapper{
+  @apply top-1/2! left-1/2! w-[400px]! bg-black! relative! z-999999999999! h-[400px]!;
+}
+ 
 .flatpickr-months .flatpickr-prev-month:hover svg,
 .flatpickr-months .flatpickr-next-month:hover svg {
   @apply stroke-brand-500;

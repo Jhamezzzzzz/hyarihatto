@@ -92,7 +92,7 @@ const Pagination: React.FC<PaginationComponent> = ({
       { showLimit && (
         <div className={`${isMobile && "flex items-center gap-4 justify-end w-full"}`}>
           {isMobile && (
-            <p>
+            <p className="dark:text-gray-300">
               Showing :
             </p>
           )}

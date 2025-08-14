@@ -1,5 +1,6 @@
 import type React from "react";
-import type { FC } from "react";
+import { useCallback, type FC } from "react";
+import { FaTimes } from "react-icons/fa";
 
 interface InputProps {
   type?: "text" | "number" | "email" | "password" | "date" | "time" | string;
@@ -17,6 +18,7 @@ interface InputProps {
   error?: boolean;
   hint?: string;
   endIcon?: React.ReactNode;
+  clearable?: boolean;
 }
 
 const Input: FC<InputProps> = ({
@@ -34,7 +36,8 @@ const Input: FC<InputProps> = ({
   success = false,
   error = false,
   hint,
-  endIcon
+  endIcon,
+  clearable
 }) => {
 
   let inputClasses = ` h-11 w-full bg-white rounded-lg border appearance-none px-4 py-2.5 text-sm shadow-theme-xs placeholder:text-gray-400 focus:outline-hidden focus:ring-3  dark:bg-gray-900 dark:text-white/90 dark:placeholder:text-white/30 ${className}`;
@@ -51,6 +54,19 @@ const Input: FC<InputProps> = ({
     inputClasses += ` bg-transparent text-gray-800 border-gray-300 focus:border-brand-300 focus:ring-brand-500/20 dark:border-gray-700 dark:text-white/90  dark:focus:border-brand-800`;
   }
 
+  const clearInput = useCallback(() => {
+    if (onChange) {
+      // Create a new synthetic event object to pass to the onChange handler.
+      // This is necessary because the Input component is controlled by its parent.
+      const syntheticEvent = {
+        target: {
+          value: ""
+        },
+      } as React.ChangeEvent<HTMLInputElement>;
+      onChange(syntheticEvent);
+    }
+  }, [onChange]);
+
   return (
     <div className="relative w-full sm:w-auto">
       <div className="relative">
@@ -65,9 +81,10 @@ const Input: FC<InputProps> = ({
           max={max}
           step={step}
           disabled={disabled}
-          className={`${inputClasses} ${endIcon ? "pr-10" : ""}`}
+          className={`${inputClasses} ${(endIcon || clearable) ? "pr-10" : ""} ${(endIcon && clearable) ? "pr-14" : ""}`}
         />
         {endIcon && (<span className="absolute top-1/2 -translate-y-1/2 right-4 text-gray-300">{endIcon}</span>)}
+        {(clearable && value !== "") && (<button onClick={clearInput} className={`absolute top-1/2 -translate-y-1/2 ${endIcon ? "right-10" : "right-4"} `}><FaTimes/></button>)}
       </div>
 
       {hint && (

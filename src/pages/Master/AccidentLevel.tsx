@@ -287,6 +287,7 @@ const AccidentLevel = () => {
                   onChange={(e)=>setSearchQ(e.target.value)}
                   value={searchQ}
                   endIcon={<FaSearch/>}
+                  clearable
                 />
               </div>
             </div>

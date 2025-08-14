@@ -314,6 +314,7 @@ const HyarihattoSubmissions = () => {
                 endIcon={<FaSearch/>}
                 value={searchQ}
                 onChange={(e)=>setSearchQ(e.target.value)}
+                clearable
               />
             </div>
           </div>

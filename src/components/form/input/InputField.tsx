@@ -52,21 +52,23 @@ const Input: FC<InputProps> = ({
   }
 
   return (
-    <div className="relative w-full">
-      <input
-        type={type}
-        id={id}
-        name={name}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        min={min}
-        max={max}
-        step={step}
-        disabled={disabled}
-        className={`${inputClasses} ${endIcon ? "pr-10" : ""}`}
-      />
-      {endIcon && (<span className="absolute top-1/2 -translate-y-1/2 right-4 text-gray-300">{endIcon}</span>)}
+    <div className="relative w-full sm:w-auto">
+      <div className="relative">
+        <input
+          type={type}
+          id={id}
+          name={name}
+          placeholder={placeholder}
+          value={value}
+          onChange={onChange}
+          min={min}
+          max={max}
+          step={step}
+          disabled={disabled}
+          className={`${inputClasses} ${endIcon ? "pr-10" : ""}`}
+        />
+        {endIcon && (<span className="absolute top-1/2 -translate-y-1/2 right-4 text-gray-300">{endIcon}</span>)}
+      </div>
 
       {hint && (
         <p

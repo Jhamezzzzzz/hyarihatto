@@ -255,64 +255,68 @@ const HazardLevel = () => {
       <div>
         <Card>
           <CardContent>
-            <div className='flex justify-between'>
+            <div className='flex justify-between flex-wrap'>
               <Button size='sm' onClick={()=>handleOpenModal('add', form)}>Tambah Data</Button>
-              <Input
-                placeholder='Cari'
-                onChange={(e)=>setSearchQ(e.target.value)}
-                value={searchQ}
-                endIcon={<FaSearch/>}
-              />
+              <div className="sm:w-auto w-full sm:mt-0 mt-4">
+                <Input
+                  placeholder='Cari'
+                  onChange={(e)=>setSearchQ(e.target.value)}
+                  value={searchQ}
+                  endIcon={<FaSearch/>}
+                />
+              </div>
             </div>
-            <Table className='mt-10'>
-              <TableHeader>
-                <TableRow>
-                  <TableCell>No</TableCell>
-                  <TableCell>Level</TableCell>
-                  <TableCell>Nilai</TableCell>
-                  <TableCell>Tanggal Pembuatan</TableCell>
-                  <TableCell>Dibuat Oleh</TableCell>
-                  <TableCell>Tanggal Perubahan</TableCell>
-                  <TableCell>Diubah Oleh</TableCell>
-                  <TableCell>Action</TableCell>
-                </TableRow>
-              </TableHeader>
-              { (dataMaster.length > 0 && !loading.fetch) && (
-                <TableBody>
-                  { dataMaster?.map((item: MasterDataProps, index: number)=>{
-                    const dateLocalCreated = new Date(item.createdAt || "").toLocaleString('en-CA', {
-                        hourCycle: 'h23',    // Use 24-hour format
-                        timeZone: 'Asia/Jakarta'
-                    });
-                    const dateLocalUpdated = new Date(item.updatedAt || "").toLocaleString('en-CA', {
-                        hourCycle: 'h23',    // Use 24-hour format
-                        timeZone: 'Asia/Jakarta'
-                    });
-                    const numberIndex = index+1 + ((pagination.currentPage-1)*pagination.limitPerPage)
+            <div className='overflow-x-auto'>
+              <Table className='mt-10'>
+                <TableHeader>
+                  <TableRow>
+                    <TableCell>No</TableCell>
+                    <TableCell>Level</TableCell>
+                    <TableCell>Nilai</TableCell>
+                    <TableCell>Tanggal Pembuatan</TableCell>
+                    <TableCell>Dibuat Oleh</TableCell>
+                    <TableCell>Tanggal Perubahan</TableCell>
+                    <TableCell>Diubah Oleh</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHeader>
+                { (dataMaster.length > 0 && !loading.fetch) && (
+                  <TableBody>
+                    { dataMaster?.map((item: MasterDataProps, index: number)=>{
+                      const dateLocalCreated = new Date(item.createdAt || "").toLocaleString('en-CA', {
+                          hourCycle: 'h23',    // Use 24-hour format
+                          timeZone: 'Asia/Jakarta'
+                      });
+                      const dateLocalUpdated = new Date(item.updatedAt || "").toLocaleString('en-CA', {
+                          hourCycle: 'h23',    // Use 24-hour format
+                          timeZone: 'Asia/Jakarta'
+                      });
+                      const numberIndex = index+1 + ((pagination.currentPage-1)*pagination.limitPerPage)
 
-                    return(
-                      <TableRow key={index}>
-                        <TableCell>{numberIndex}</TableCell>
-                        <TableCell>{item.option}</TableCell>
-                        <TableCell>{item.score}</TableCell>
-                        <TableCell>
-                          {dateLocalCreated}
-                        </TableCell>
-                        <TableCell>{item.createdBy?.name}</TableCell>
-                        <TableCell>{item.updatedAt !== item.createdAt ? dateLocalUpdated : ""}</TableCell>
-                        <TableCell>{item.updatedBy?.name}</TableCell>
-                        <TableCell>
-                          <div className='flex gap-2'>
-                            <Button variant='blue' onClick={()=>handleOpenModal('update', item)}><FontAwesomeIcon icon={faPenToSquare} /></Button>
-                            <Button variant='red' onClick={()=>handleOpenModal('delete', item)}><FontAwesomeIcon icon={faTrash}/></Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    )
-                  })}
-                </TableBody>
-              )}
-            </Table>
+                      return(
+                        <TableRow key={index}>
+                          <TableCell>{numberIndex}</TableCell>
+                          <TableCell>{item.option}</TableCell>
+                          <TableCell>{item.score}</TableCell>
+                          <TableCell>
+                            {dateLocalCreated}
+                          </TableCell>
+                          <TableCell>{item.createdBy?.name}</TableCell>
+                          <TableCell>{item.updatedAt !== item.createdAt ? dateLocalUpdated : ""}</TableCell>
+                          <TableCell>{item.updatedBy?.name}</TableCell>
+                          <TableCell>
+                            <div className='flex gap-2'>
+                              <Button variant='blue' onClick={()=>handleOpenModal('update', item)}><FontAwesomeIcon icon={faPenToSquare} /></Button>
+                              <Button variant='red' onClick={()=>handleOpenModal('delete', item)}><FontAwesomeIcon icon={faTrash}/></Button>
+                            </div>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    })}
+                  </TableBody>
+                )}
+              </Table>
+            </div>
             <NoDataOrLoading data={dataMaster} loading={loading.fetch}/>
             <Pagination
               currentPage={pagination.currentPage}

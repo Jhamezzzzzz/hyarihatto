@@ -62,16 +62,12 @@ const useHyarihattoDataService = () => {
     }
 
     const getSubmissionsRecent = async(type: string, month: string, year: number, page: string | number, limit: string | number, q: string) => {
-        try {
-            const response = await axiosJWT.get(`dashboard/recents?type=${type}&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
+        const response = await axiosJWT.get(`dashboard/recents?type=${type}&month=${month}&year=${year}&page=${page}&limit=${limit}&q=${q}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
-            return response
-        } catch (error) {
-            handleError(error)
-        }
+        return response
     }
 
         const getSubmissionById = async (id: number) => {
@@ -139,55 +135,39 @@ const useHyarihattoDataService = () => {
     }
 
     const getDashboardStatusReport = async(type: string, year: number, month: string) => {
-        try {
-            const response = await axiosJWT.get(`dashboard/by-status?type=${type}&year=${year}&month=${month}`, {
+        const response = await axiosJWT.get(`dashboard/by-status?type=${type}&year=${year}&month=${month}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
-            return response
-        } catch (error) {
-            handleError(error)
-        }
+        return response
     }
 
     const getDashboardBarChart = async(type: string, year: number, month: string) => {
-        try {
-            const response = await axiosJWT.get(`dashboard/by-line?type=${type}&year=${year}&month=${month}`, {
+        const response = await axiosJWT.get(`dashboard/by-line?type=${type}&year=${year}&month=${month}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
-            return response
-        } catch (error) {
-            handleError(error)
-        }
+        return response
     }
 
     const getDashboardPieChart = async(year: number, month: string) => {
-        try {
-            const response = await axiosJWT.get(`dashboard/by-accident-type?year=${year}&month=${month}`, {
+        const response = await axiosJWT.get(`dashboard/by-accident-type?year=${year}&month=${month}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
-            return response
-        } catch (error) {
-            handleError(error)   
-        }
+        return response
     }
 
     const getDashboardLeaderboard = async(type: string, year: number, month: string) => {
-        try {
-            const response = await axiosJWT.get(`/dashboard/by-user?type=${type}&year=${year}&month=${month}`, {
+        const response = await axiosJWT.get(`/dashboard/by-user?type=${type}&year=${year}&month=${month}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 }
             })
-            return response
-        } catch (error) {
-            handleError(error)
-        }
+        return response
     }
     
 

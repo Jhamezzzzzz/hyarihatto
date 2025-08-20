@@ -116,6 +116,8 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('section', "")
     localStorage.setItem('formattedDate', "")
     localStorage.setItem('image', "")
+    localStorage.setItem('hour', "")
+    localStorage.setItem('minute', "")
     localStorage.setItem('submissions.userId', "")
     localStorage.setItem('submissions.lineId', "")
     localStorage.setItem('submissions.sectionId', "")

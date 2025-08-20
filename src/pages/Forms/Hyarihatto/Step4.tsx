@@ -22,16 +22,18 @@ const Step4FormHyarihatto = () => {
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      try {
         if (!e.target.files) return;
-
+        
         updateError(null, "image", undefined)
         const file = e.target.files[0];
 
         // Check the size of the file directly
         const sizeInMB = file.size / (1024 * 1024);
+        alertError(`Ukuran gambar: ${sizeInMB}`)
         
         const MAX_SIZE_MB = 10;
-
+        
         if (sizeInMB > MAX_SIZE_MB) {
             alertError("Ukuran file gambar tidak boleh lebih dari 10MB.");
             // Optionally, reset the input to clear the selected file
@@ -53,6 +55,11 @@ const Step4FormHyarihatto = () => {
         // Show preview
         updateFormData(null, "image", base64Image)
         localStorage.setItem("hyarihatto.imageFileName", file.name)
+        
+      } catch (error) {
+        console.error("Error reading file:", error);
+        alertError("Terjadi kesalahan saat membaca file gambar.");
+      }
 
     };
 

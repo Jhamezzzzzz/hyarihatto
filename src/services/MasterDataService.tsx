@@ -17,7 +17,6 @@ const useMasterDataService = () => {
 
     const handleError = (typedError: unknown) => {
         const error = typedError as ErrorResponse
-        console.log("ERROR: ", error)
         if(error.response){
             if(Array.isArray(error?.response?.data?.errors)){
                 error?.response?.data?.errors?.forEach(element => {
@@ -67,7 +66,6 @@ const useMasterDataService = () => {
                     Authorization: `Bearer ${token}`
                 }
             })
-            console.log("TES SINI")
             alertSuccess(response.data.message)
             return response
         } catch (error) {

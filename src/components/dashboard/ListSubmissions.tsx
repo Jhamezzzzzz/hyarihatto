@@ -60,7 +60,6 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
       setLoading(true)
       const response = await getSubmissionsRecent(filter.type, filter.month, filter.year, pagination.page, pagination.limit, searchQ)
       const data = response?.data?.data
-      console.log("dashboard table: ", data)
       const meta = response?.data?.meta
       setDataSubmissions(data)
       setPagination({
@@ -101,6 +100,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
             onChange={(e)=>setSearchQ(e.target.value)}
             value={searchQ}
             className="w-full!"
+            clearable
           />
         </div>
       </div>

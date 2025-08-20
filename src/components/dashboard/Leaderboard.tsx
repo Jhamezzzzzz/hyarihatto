@@ -79,7 +79,6 @@ const Leaderboard = ({ filter } : { filter: Filter}) => {
                             ? "#81BD61"
                             : "#CCCCCC"; // fallback kalau type nggak cocok
                     
-                    console.log(`imagenya ${item.user.name}: ${item.user.img}`)
                     return(
                         <div key={index} className='grid grid-cols-12 border dark:border-gray-700 rounded-md mb-3 p-5'>
                             <div className='flex gap-3 items-center lg:col-span-3 md:col-span-6 col-span-12 '>

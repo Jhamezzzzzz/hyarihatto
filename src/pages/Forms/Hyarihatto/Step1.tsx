@@ -9,36 +9,115 @@ import { useFormErrors } from "../../../context/FormErrorContext";
 
 const Step1FormHyarihatto = () => {
   const { ButtonPrevious, ButtonNext } = ButtonNavigation();
-   const { formData, updateFormData } = useFormHyarihatto();
-   const { errors, updateError } = useFormErrors()
-   const [formattedDate, setFormattedDate] = useState(localStorage.getItem("hyarihatto.formattedDate") || "")
+  const { formData, updateFormData } = useFormHyarihatto();
+  const { errors, updateError } = useFormErrors();
+  const [formattedDate, setFormattedDate] = useState(
+    localStorage.getItem("hyarihatto.formattedDate") || ""
+  );
+  const [hour, setHour] = useState(
+    localStorage.getItem("hyarihatto.hour") || ""
+  );
+  const [minute, setMinute] = useState(
+    localStorage.getItem("hyarihatto.minute") || ""
+  );
 
-   const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target
-    updateError("submissions", name, undefined)
-    updateFormData("submissions", name, value)
-   }
+  const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    updateError("submissions", name, undefined);
+    updateFormData("submissions", name, value);
+  };
 
-   const handleChangeDate = (date: Date[]) => {
-        const dateString = new Date(date[0]).toLocaleDateString('en-CA')
-        const formattedDate = new Date(date[0]).toLocaleDateString("en-GB", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-        }).replace(/ /g, '-');
+  const handleChangeDate = (date: Date[]) => {
+    const dateString = new Date(date[0]).toLocaleDateString("en-CA");
+    const formattedDate = new Date(date[0])
+      .toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+      .replace(/ /g, "-");
 
-        updateError("submissions", "incidentDate", undefined)
-        updateFormData("submissions", "incidentDate", dateString)
-        setFormattedDate(formattedDate)
-        localStorage.setItem("hyarihatto.formattedDate", formattedDate)
-    };
+    updateError("submissions", "incidentDate", undefined);
+    updateFormData("submissions", "incidentDate", dateString);
+    setFormattedDate(formattedDate);
+    localStorage.setItem("hyarihatto.formattedDate", formattedDate);
+  };
 
-  const handleChangeTime = (date: Date[]) => {
-        const stringTime = date[0].toLocaleTimeString("id-ID").replace(".", ":").slice(0, 5)
-         updateError("submissions", "incidentTime", undefined)
-        updateFormData("submissions", "incidentTime", stringTime)
+  const handleChangeTimeHour = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setHour(value);
+    updateError("submissions", "incidentTime", undefined);
+    localStorage.setItem("hyarihatto.hour", value);
+    const timeFormatted = `${value}:${minute}`;
+    updateFormData("submissions", "incidentTime", timeFormatted);
+    if (value === "" && minute === "") {
+      updateFormData("submissions", "incidentTime", "");
     }
-  
+  };
+
+  const handleChangeTimeMinute = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setMinute(value);
+    updateError("submissions", "incidentTime", undefined);
+    localStorage.setItem("hyarihatto.minute", value);
+    const timeFormatted = `${hour}:${value}`;
+    updateFormData("submissions", "incidentTime", timeFormatted);
+    if (hour === "" && value === "") {
+      updateFormData("submissions", "incidentTime", "");
+    }
+  };
+
+  const addZeroFormat = (value: string) => {
+    return value.length === 1 ? `0${value}` : value;
+  };
+
+  const handleBlurHour = (e: React.FocusEvent<HTMLInputElement>) => {
+    updateError(null, hour, undefined);
+    const { value } = e.target;
+    let blurredValue = addZeroFormat(value);
+    if (Number(value) > 23) {
+      setHour("23");
+      blurredValue = "23";
+    }
+    if (Number(value) < 0) {
+      setHour("00");
+      blurredValue = "00";
+    }
+    if (blurredValue === "" || minute === "") {
+      setHour(blurredValue);
+      localStorage.setItem("hour", blurredValue);
+      updateFormData("submissions", "incidentTime", "");
+    } else {
+      setHour(blurredValue);
+      localStorage.setItem("hyarihatto.hour", blurredValue);
+      const timeFormatted = `${blurredValue}:${minute}`;
+      updateFormData("submissions", "incidentTime", timeFormatted);
+    }
+  };
+
+  const handleBlurMinute = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    let blurredValue = addZeroFormat(value);
+    if (Number(value) > 59) {
+      setMinute("59");
+      blurredValue = "59";
+    }
+    if (Number(value) < 0) {
+      setMinute("00");
+      blurredValue = "00";
+    }
+    if (hour === "" || blurredValue === "") {
+      setMinute(blurredValue);
+      localStorage.setItem("minute", blurredValue);
+      updateFormData("submissions", "incidentTime", "");
+    } else {
+      setMinute(blurredValue);
+      localStorage.setItem("hyarihatto.minute", blurredValue);
+      const timeFormatted = `${hour}:${blurredValue}`;
+      updateFormData("submissions", "incidentTime", timeFormatted);
+    }
+  };
+
   return (
     <div>
       <Template showStep step={1}>
@@ -67,16 +146,50 @@ const Step1FormHyarihatto = () => {
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">
                 Waktu:<span className="text-red-500">*</span>
               </label>
-              <DatePicker
-                id="incidentTime"
-                placeholder="Masukkan waktu kejadian"
-                mode="time"
-                dateFormat="H:i"
-                defaultDate={formData.submissions.incidentTime}
-                onChange={handleChangeTime}
-                hint={errors.submissions?.incidentTime}
-                error={errors?.submissions?.incidentTime !== undefined}
-              />
+              <div className="flex items-center gap-2">
+                <Input
+                  id="hour"
+                  type="number"
+                  name="hour"
+                  max="23"
+                  min="0"
+                  onChange={handleChangeTimeHour}
+                  value={hour}
+                  onBlur={handleBlurHour}
+                  error={errors?.submissions?.incidentTime !== undefined}
+                  hint={errors?.submissions?.incidentTime}
+                />
+                <p
+                  className={`${
+                    errors?.submissions?.incidentTime !== undefined
+                      ? "mb-6"
+                      : "mb-0"
+                  }`}
+                >
+                  :
+                </p>
+                <Input
+                  id="minute"
+                  type="number"
+                  name="minute"
+                  max="59"
+                  min="0"
+                  onChange={handleChangeTimeMinute}
+                  value={minute}
+                  onBlur={handleBlurMinute}
+                  error={errors?.submissions?.incidentTime !== undefined}
+                  hint={errors?.submissions?.incidentTime}
+                />
+                <p
+                  className={`${
+                    errors?.submissions?.incidentTime !== undefined
+                      ? "mb-6"
+                      : "mb-0"
+                  }`}
+                >
+                  WIB
+                </p>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-400 mb-1">

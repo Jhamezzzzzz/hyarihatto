@@ -11,6 +11,8 @@ const Step1FormVoiceMember = () => {
    const { formData, updateFormData } = useFormData();
    const { errors, updateError } = useFormErrors()
    const [formattedDate, setFormattedDate] = useState(localStorage.getItem("formattedDate") || "")
+   const [hour, setHour] = useState(localStorage.getItem("hour") || "")
+   const [minute, setMinute] = useState(localStorage.getItem("minute") || "")
 
    const handleChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -32,11 +34,80 @@ const Step1FormVoiceMember = () => {
         localStorage.setItem("formattedDate", formattedDate)
     };
 
-  const handleChangeTime = (date: Date[]) => {
-        const stringTime = date[0].toLocaleTimeString("id-ID").replace(".", ":").slice(0, 5)
-         updateError("submissions", "incidentTime", undefined)
-        updateFormData("submissions", "incidentTime", stringTime)
+  const handleChangeTimeHour = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setHour(value);
+    updateError("submissions", "incidentTime", undefined);
+    localStorage.setItem("hour", value);
+    const timeFormatted = `${value}:${minute}`;
+    updateFormData("submissions", "incidentTime", timeFormatted);
+    if (value === "" && minute === "") {
+      updateFormData("submissions", "incidentTime", "");
     }
+  };
+
+  const handleChangeTimeMinute = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setMinute(value);
+    updateError("submissions", "incidentTime", undefined);
+    localStorage.setItem("minute", value);
+    const timeFormatted = `${hour}:${value}`;
+    updateFormData("submissions", "incidentTime", timeFormatted);
+    if (hour === "" && value === "") {
+      updateFormData("submissions", "incidentTime", "");
+    }
+  };
+
+  const addZeroFormat = (value: string) => {
+    return value.length === 1 ? `0${value}` : value;
+  };
+
+  const handleBlurHour = (e: React.FocusEvent<HTMLInputElement>) => {
+    updateError(null, hour, undefined);
+    const { value } = e.target;
+    let blurredValue = addZeroFormat(value);
+    if (Number(value) > 23) {
+      setHour("23");
+      blurredValue = "23";
+    }
+    if (Number(value) < 0) {
+      setHour("00");
+      blurredValue = "00";
+    }
+    if (blurredValue === "" || minute === "") {
+      setHour(blurredValue);
+      localStorage.setItem("hour", blurredValue);
+      updateFormData("submissions", "incidentTime", "");
+    } else {
+      setHour(blurredValue);
+      localStorage.setItem("hour", blurredValue);
+      const timeFormatted = `${blurredValue}:${minute}`;
+      updateFormData("submissions", "incidentTime", timeFormatted);
+    }
+  };
+
+  const handleBlurMinute = (e: React.FocusEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    let blurredValue = addZeroFormat(value);
+    if (Number(value) > 59) {
+      setMinute("59");
+      blurredValue = "59";
+    }
+    if (Number(value) < 0) {
+      setMinute("00");
+      blurredValue = "00";
+    }
+    if (hour === "" || blurredValue === "") {
+      setMinute(blurredValue);
+      localStorage.setItem("minute", blurredValue);
+      updateFormData("submissions", "incidentTime", "");
+    } else {
+      setMinute(blurredValue);
+      localStorage.setItem("minute", blurredValue);
+      const timeFormatted = `${hour}:${blurredValue}`;
+      updateFormData("submissions", "incidentTime", timeFormatted);
+    }
+  };
   
   return (
     <div>
@@ -65,15 +136,50 @@ const Step1FormVoiceMember = () => {
               <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400">
                 Waktu:<span className="text-red-500">*</span>
               </label>
-              <DatePicker
-                id="incidentTime"
-                mode="time"
-                dateFormat="H:i"
-                defaultDate={formData.submissions.incidentTime}
-                onChange={handleChangeTime}
-                hint={errors.submissions?.incidentTime}
-                error={errors?.submissions?.incidentTime !== undefined}
-              />
+              <div className="flex items-center gap-2">
+                <Input
+                  id="hour"
+                  type="number"
+                  name="hour"
+                  max="23"
+                  min="0"
+                  onChange={handleChangeTimeHour}
+                  value={hour}
+                  onBlur={handleBlurHour}
+                  error={errors?.submissions?.incidentTime !== undefined}
+                  hint={errors?.submissions?.incidentTime}
+                />
+                <p
+                  className={`${
+                    errors?.submissions?.incidentTime !== undefined
+                      ? "mb-6"
+                      : "mb-0"
+                  }`}
+                >
+                  :
+                </p>
+                <Input
+                  id="minute"
+                  type="number"
+                  name="minute"
+                  max="59"
+                  min="0"
+                  onChange={handleChangeTimeMinute}
+                  value={minute}
+                  onBlur={handleBlurMinute}
+                  error={errors?.submissions?.incidentTime !== undefined}
+                  hint={errors?.submissions?.incidentTime}
+                />
+                <p
+                  className={`${
+                    errors?.submissions?.incidentTime !== undefined
+                      ? "mb-6"
+                      : "mb-0"
+                  }`}
+                >
+                  WIB
+                </p>
+              </div>
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1 dark:text-gray-400">

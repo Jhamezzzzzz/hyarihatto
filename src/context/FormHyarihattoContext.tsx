@@ -148,6 +148,8 @@ export const FormHyarihattoProvider = ({ children }: { children: ReactNode }) =>
     localStorage.setItem('hyarihatto.section', "")
     localStorage.setItem('hyarihatto.formattedDate', "")
     localStorage.setItem('hyarihatto.image', "")
+    localStorage.setItem('hyarihatto.hour', "")
+    localStorage.setItem('hyarihatto.minute', "")
     localStorage.setItem('hyarihatto.submissions.userId', "")
     localStorage.setItem('hyarihatto.submissions.lineId', "")
     localStorage.setItem('hyarihatto.submissions.sectionId', "")

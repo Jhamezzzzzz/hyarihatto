@@ -43,7 +43,6 @@ const IdentityFormVoiceMember: React.FC = () => {
         setLine("Loading");
         setSection("Loading");
         const response = await getUserByNoreg(formData.noreg);
-        console.log("response noreg: ", response)
   
         const data = response?.data
         setName(data?.name);
@@ -151,7 +150,7 @@ const IdentityFormVoiceMember: React.FC = () => {
                 type="text"
                 name="noreg"
                 className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-900 focus:border-blue-500 sm:text-sm"
-                placeholder="Nomor Registrasi"
+                placeholder="Nomor Registrasi 8 Digit (Tambahkan 0 di depan)"
                 value={formData.noreg}
                 onChange={handleChangeNoreg}
                 hint={errors.noreg}
@@ -174,6 +173,8 @@ const IdentityFormVoiceMember: React.FC = () => {
                 name="name"
                 placeholder="Nama"
                 value={name}
+                hint={errors.submissions?.userId}
+                error={errors.submissions?.userId !== undefined}
               />
             </div>
               <div>
@@ -191,6 +192,8 @@ const IdentityFormVoiceMember: React.FC = () => {
                 name="name"
                 placeholder="Nama"
                 value={line}
+                hint={errors.submissions?.userId}
+                error={errors.submissions?.userId !== undefined}
               />
             </div>
               <div>
@@ -208,8 +211,8 @@ const IdentityFormVoiceMember: React.FC = () => {
                 name="name"
                 placeholder="Nama"
                 value={section}
-                error={errors.submissions?.sectionId !== undefined}
-                hint={errors.submissions?.sectionId}
+                hint={errors.submissions?.userId}
+                error={errors.submissions?.userId !== undefined}
               />
             </div>
             <div>

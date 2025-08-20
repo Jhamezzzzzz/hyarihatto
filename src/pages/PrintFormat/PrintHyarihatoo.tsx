@@ -192,14 +192,14 @@ return (
         </div>
         <div className="border p-3">
           <h3 className="font-semibold mb-2">Penanggulangan</h3>
-           {( data?.Reviews?.proof) ? (
+           {/* {( data?.Reviews?.proof) ? (
               <img
                 src={`${config.BACKEND_URL}/${data?.Reviews?.proof}`}
                 className="w-48 h-42 inline-block mr-2"
               />
             ) : (
               <span className="text-sm text-gray-500">belum ada penanggulangan</span>
-            )}
+            )} */}
           <p>{data?.HazardAssessment?.improvementSuggestion || "-"}</p>
         </div>
       </div>

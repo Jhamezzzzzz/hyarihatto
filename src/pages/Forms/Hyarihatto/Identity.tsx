@@ -158,7 +158,6 @@ const IdentityFormHyarihatto: React.FC = () => {
                 error={errors.noreg !== undefined}
               />
             </div>
-
             <div>
               <label
                 htmlFor="name"
@@ -174,6 +173,8 @@ const IdentityFormHyarihatto: React.FC = () => {
                 name="name"
                 placeholder="Nama"
                 value={name}
+                hint={errors.submissions?.userId}
+                error={errors.submissions?.userId !== undefined}
               />
             </div>
             <div>
@@ -187,6 +188,8 @@ const IdentityFormHyarihatto: React.FC = () => {
                 className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Nama line"
                 value={line}
+                hint={errors.submissions?.userId}
+                error={errors.submissions?.userId !== undefined}
               />
             </div>
             <div>
@@ -200,8 +203,8 @@ const IdentityFormHyarihatto: React.FC = () => {
                 className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
                 placeholder="Nama section"
                 value={section}
-                hint={errors.submissions?.sectionId}
-                error={errors?.submissions?.sectionId !== undefined}
+                hint={errors.submissions?.userId}
+                error={errors.submissions?.userId !== undefined}
               />
             </div>
             <div>

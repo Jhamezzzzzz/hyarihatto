@@ -71,7 +71,7 @@ const StaticOptions = () => {
     ]
     
     const errorMessageObject: ErrorMessageObject = {
-        userId: "Noreg",
+        userId: "Pengguna",
         sectionId: "Section",
         shift: "Shift",
         incidentDate: "Tanggal",

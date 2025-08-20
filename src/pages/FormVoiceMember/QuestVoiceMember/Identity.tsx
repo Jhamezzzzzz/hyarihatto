@@ -173,6 +173,8 @@ const IdentityFormVoiceMember: React.FC = () => {
                 name="name"
                 placeholder="Nama"
                 value={name}
+                hint={errors.submissions?.userId}
+                error={errors.submissions?.userId !== undefined}
               />
             </div>
               <div>
@@ -190,6 +192,8 @@ const IdentityFormVoiceMember: React.FC = () => {
                 name="name"
                 placeholder="Nama"
                 value={line}
+                hint={errors.submissions?.userId}
+                error={errors.submissions?.userId !== undefined}
               />
             </div>
               <div>
@@ -207,8 +211,8 @@ const IdentityFormVoiceMember: React.FC = () => {
                 name="name"
                 placeholder="Nama"
                 value={section}
-                error={errors.submissions?.sectionId !== undefined}
-                hint={errors.submissions?.sectionId}
+                hint={errors.submissions?.userId}
+                error={errors.submissions?.userId !== undefined}
               />
             </div>
             <div>

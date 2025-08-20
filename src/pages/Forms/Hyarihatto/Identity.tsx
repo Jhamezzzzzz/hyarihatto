@@ -151,7 +151,7 @@ const IdentityFormHyarihatto: React.FC = () => {
                 id="noreg"
                 type="text"
                 name="noreg"
-                placeholder="Nomor Registrasi"
+                placeholder="Nomor Registrasi 8 Digit (Tambahkan 0 di depan)"
                 value={formData.noreg}
                 onChange={handleChangeNoreg}
                 hint={errors.noreg}

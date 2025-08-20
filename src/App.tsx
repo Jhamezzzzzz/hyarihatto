@@ -30,6 +30,8 @@ import Step1FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step1
 import Step2FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step2Voice";
 import Step3FormVoiceMember from "./pages/FormVoiceMember/QuestVoiceMember/Step3Voice";
 import VoiceMemberFinish from "./pages/FormVoiceMember/QuestVoiceMember/FinishVoice";
+import PrintHyarihatto from './pages/PrintFormat/PrintHyarihatoo';
+import PrintVoice from './pages/PrintFormat/PrintVoiceMember';
 
 
 
@@ -44,6 +46,8 @@ export default function App() {
             <Route  path="/home" element={<Home />} />
             <Route path="/hyarihatto/:id" element={<DetailHyarihatto />} />
             <Route path="/voice-member/:id" element={<DetailVoice />} />
+            <Route path="/print-hyarihatto/:id" element={<PrintHyarihatto />} />
+            <Route path="/print-voice-member/:id" element={<PrintVoice />} />
             <Route path="/submissions" element={<HyarihattoSubmissions />} />
 
             {/* Voice Member */}

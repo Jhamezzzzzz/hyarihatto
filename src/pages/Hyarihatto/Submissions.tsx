@@ -5,7 +5,7 @@ import PageMeta from '../../components/common/PageMeta';
 import Label from '../../components/form/Label';
 import DatePicker from '../../components/form/date-picker';
 import Input from '../../components/form/input/InputField';
-import { FaClone, FaSearch } from 'react-icons/fa';
+import { FaClone, FaSearch,FaPrint } from 'react-icons/fa';
 import { Table, TableBody, TableCell, TableHeader, TableRow } from '../../components/ui/table';
 import { Card, CardContent } from '../../components/ui/card/card';
 import NoDataOrLoading from '../../components/ui/table/NoDataOrLoading';
@@ -100,6 +100,7 @@ const HyarihattoSubmissions = () => {
   const { STATUS_SUBMISSION, optionsStatus, optionsShift } = StaticOptions()
   const [optionsLine, setOptionsLine] = useState([])
   const [optionsSection, setOptionsSection] = useState([])
+   const printType = filter.type === "hyarihatto" ? "print-hyarihatto" : filter.type === "voice member" ? "print-voice-member" : ""
   const hrefType = filter.type === "hyarihatto" ? "hyarihatto" : filter.type === "voice member" ? "voice-member" : ""
   const { isMobile } = useSidebar()
 
@@ -287,7 +288,8 @@ const HyarihattoSubmissions = () => {
       <Card className='mt-4'>
         <CardContent className='border border-gray-300 dark:border-gray-700 rounded-lg'>
           {/* Search */}
-          <div className='grid grid-cols-12 gap-4'>
+          <div className='flex gap-2 justify-between flex-wrap'>
+            <div className='flex gap-4'>
             <div className='xl:col-span-2 lg:col-span-3 col-span-6'>
               <Select
                 options={optionsShift}
@@ -308,7 +310,8 @@ const HyarihattoSubmissions = () => {
                 isClearable
               />
             </div>
-            <div className='xl:col-span-8 lg:col-span-6 col-span-12'>
+            </div>
+            <div className='xl:col-span-4 lg:col-span-6 col-span-12'>
               <Input
                 placeholder={`Cari nama, no reg, atau issue`}
                 endIcon={<FaSearch/>}
@@ -426,6 +429,7 @@ const HyarihattoSubmissions = () => {
                   <TableCell>Line</TableCell>
                   <TableCell>Status</TableCell>
                   <TableCell>Action</TableCell>
+                   <TableCell>Print</TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -470,6 +474,14 @@ const HyarihattoSubmissions = () => {
                           onClick={() => window.open(`/${hrefType}/${item.id}`)}
                         >
                           <FaClone/>
+                        </Button>
+                      </TableCell>
+                       <TableCell>
+                        <Button
+                          className="px-4 py-1 text-sm font-medium text-dark bg-secondary hover:bg-secondary-dark rounded-md transition duration-200"
+                          onClick={() => window.open(`/${printType}/${item.id}`)}
+                        >
+                          <FaPrint/>
                         </Button>
                       </TableCell>
                     </TableRow>

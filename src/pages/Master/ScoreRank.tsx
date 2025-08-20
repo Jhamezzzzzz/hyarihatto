@@ -280,14 +280,18 @@ const ScoreRank = () => {
       <div>
         <Card>
           <CardContent>
-            <div className='flex justify-between'>
-              <Button size='sm' onClick={()=>handleOpenModal('add', form)}>Tambah Data</Button>
-              <Input
-                placeholder='Cari'
+            <div className='flex items-center justify-between '>
+              <div>
+                <Button size='sm' onClick={()=>handleOpenModal('add', form)}>Tambah Data</Button>
+              </div>
+                <div className="w-1/3">
+               <Input
+                placeholder='Cari '
                 onChange={(e)=>setSearchQ(e.target.value)}
                 value={searchQ}
                 endIcon={<FaSearch/>}
               />
+               </div>
             </div>
             <Table className='mt-10'>
               <TableHeader>

@@ -5,13 +5,15 @@ import useHyarihattoDataService from '../../services/HyarihattoDataService'
 import { Filter } from '../../pages/QuestLeader/HomeLeader'
 import NoDataOrLoading from '../ui/table/NoDataOrLoading'
 
+
 interface DataLeaderboard{
     count: number,
     user: {
         name: string;
         img: string;
         username: string;
-    }
+    },
+      type: string;
 }
 
 const Leaderboard = ({ filter } : { filter: Filter}) => {
@@ -55,24 +57,27 @@ const Leaderboard = ({ filter } : { filter: Filter}) => {
   return (
     <div>
         <Card className='border border-gray-300 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6 shadow-none'>
-            <h1 className='font-semibold text-gray-800 dark:text-gray-200'>Member Leaderboard</h1>
+            {filter.type == 'voice member' &&(
+                <h1 className='font-semibold text-gray-800 dark:text-gray-200'>Voice Member Leaderboard</h1>
+            )}
+            {filter.type == 'hyarihatto' &&(
+                <h1 className='font-semibold text-gray-800 dark:text-gray-200'>Hyarihatto Leaderboard</h1>
+            )}
+            
             <CardContent className=''>
                 {  (!loading && dataLeaderboard.length > 0 ) && dataLeaderboard.map((item, index)=>{
-                    const barWidth = item.count / maxSubmission
-                    const colorCrown = index+1 === 1 ? "#C8B653"
+                     const barWidth = item.count / maxSubmission 
+                     const colorCrown = index+1 === 1 ? "#C8B653"
                         : index+1 === 2
                         ? "#A9A9A9" 
                             : index+1 === 3 ? "#B65800" 
                                 : "" 
-                    const barColor = barWidth === 1 
-                        ? "#61BD98"
-                        :barWidth >= 0.75 
+                  const barColor =
+                        filter.type === "voice member"
+                            ? "#91C8E4"
+                            : filter.type === "hyarihatto"
                             ? "#81BD61"
-                            : barWidth >= 0.5
-                                ? "#81BD61"
-                                : barWidth >= 0.25
-                                    ? "#B9BB36"
-                                    : "#F5FF2F"
+                            : "#CCCCCC"; // fallback kalau type nggak cocok
                     
                     console.log(`imagenya ${item.user.name}: ${item.user.img}`)
                     return(

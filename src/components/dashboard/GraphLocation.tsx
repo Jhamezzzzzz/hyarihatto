@@ -250,7 +250,7 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                     }}
                     
                   />
-                  <Tooltip />
+                  <Tooltip cursor={false} />
                   {lineNames.map((name, index) => (
                     <Bar
                       width={20}
@@ -258,6 +258,8 @@ export default function GraphLocationHyat({ filter }: { filter: Filter }) {
                       dataKey={name}
                       stackId="year-month"
                       fill={COLORS[index % COLORS.length]}
+                      activeBar={false} // matikan efek hover
+                      // isAnimationActive={false} // opsional, hilangkan animasi masuk
                     >
                       <LabelList dataKey={name} position="center" color="white" fill="white" />
                     </Bar>

@@ -10,6 +10,8 @@ import config from '../../utils/Config'
 import TextArea from "../../components/form/input/TextArea";
 import { useAuth } from '../../../src/context/AuthProvider'; // pastikan path-nya sesuai
 import { useFormErrors } from "../../../src/context/FormErrorContext";
+import FaceDetail from "../../components/ui/face-capture/face-detail";
+import useShowAlert from "../../hooks/useShowAlert";
 // import 'bootstrap/dist/css/bootstrap.min.css';
 
 export type Submission = {
@@ -94,6 +96,8 @@ const imageSolved = data?.Reviews?.find(r => r.feedback === "solved" );
   const [isSubmitDisabled, setIsSubmitDisabled] = useState(false);
 const [isUpdateDisabled, setIsUpdateDisabled] = useState(true);
 const isDisabled = isSubmittedGL || isSubmittedSH;
+const { alertError, alertSuccess } = useShowAlert();
+
 
   //UseEffect Untuk mengambil data submission berdasarkan ID
 useEffect(() => {
@@ -244,27 +248,16 @@ useEffect(() => {
     }
   };
 
-  const capturePhoto = () => {
-    if (!videoRef.current || !canvasRef.current) return;
-
-    const video = videoRef.current;
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-
-    if (!context) return;
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    const imageDataUrl = canvas.toDataURL('image/png');
-    setPreviewImage(imageDataUrl);
-
-    localStorage.setItem("hyarihatto.detail.image", imageDataUrl);
-    localStorage.setItem("hyarihatto.detail.imageFileName", `proof_${Date.now()}.png`);
-    closeCameraModal();
-    stopCamera(); // stop kamera setelah ambil gambar
-  };
+ const handleSubmitCapture = (file: File | null) => {
+  if (!file) {
+    alertError("Gambar tidak ditemukan!");
+    return;
+  }
+  // Simpan ke state → nanti dipakai pas solved/update API
+  setFileImage(file);
+  setPreviewImage(URL.createObjectURL(file));
+  alertSuccess("Gambar berhasil diambil, siap untuk disubmit ke server.");
+};
 
 
    const openCameraModal = () => {
@@ -529,7 +522,7 @@ console.log (isUpdateSuccess,isCounterFromGL,isSubmitSuccess)
 
       {/* <!-- Detail--> */}
       <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
-        <h3 className="text-xl font-bold text-gray-800 dark:text-white">Detail Catatan</h3>
+        <h3 className="text-xl font-bold text-gray-800 dark:text-white">Detil Catatan</h3>
 
         <div className="grid-cols-12  text-sm text-gray-700 dark:text-gray-300">
           {/* Baris 1 */}
@@ -670,8 +663,7 @@ console.log (isUpdateSuccess,isCounterFromGL,isSubmitSuccess)
               )
             )}
           </div>
-          {/* <!-- Progress Tindak Lanjut--> */}
-          {selectedProgress === "Terima" &&  (  
+        {selectedProgress === "Terima" &&  (  
             isSubmittedGL || isSubmittedSH?(
             <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
             <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Penanggulangan</h3>
@@ -680,7 +672,7 @@ console.log (isUpdateSuccess,isCounterFromGL,isSubmitSuccess)
                 <div className="grid grid-cols-12 gap-2">
                 {/* Kolom 1: PIC */}
                  {/* Kolom 1: PIC Penanggulangan */}
-                  <div className="col-span-8 md:col-span-12">
+                   <div className="col-span-12 md:col-span-8">
                     <p className="mb-1 font-bold">PIC Penanggulangan</p>
                     <div className="rounded-2xl border border-gray-400 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
                       <RadioGroupProgress
@@ -747,209 +739,177 @@ console.log (isUpdateSuccess,isCounterFromGL,isSubmitSuccess)
                   </div>
 
               </div>
-              {finishplan && (
-                <>
-              <div className="md:col-span-2">
-              <label className="block font-bold mb-1 mt-3">Saran & Usulan</label>
-             <div>
-              <label className="block mb-1">Section Head</label>
-             <TextArea
-                rows={4}
-                value={suggestionsect}
-                onChange={(e) => setSuggestionsect(e.target.value)}
-                disabled={auth.roleName !== 'section head' || isSubmittedSH} // hanya disable kalau bukan role SH atau sudah submit SH
-                placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
-                className={`w-full rounded-md border shadow-sm py-2 px-2 ${
-                  auth.roleName !== 'section head' || isSubmittedSH
-                    ? 'bg-gray-100 text-gray-500 border-gray-300'
-                    : 'border-gray-500 focus:ring-primary focus:border-primary'
-                }`}
-              />
-            </div>
-
-            <div>
-              <label className="block mb-1">Group Leader</label>
-            <TextArea
-              rows={4}
-              value={suggestiongroup}
-              onChange={(e) => setSuggestiongroup(e.target.value)}
-              disabled={auth.roleName !== 'line head' || isSubmittedGL}
-              placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
-              className={`w-full rounded-md border shadow-sm py-2 px-2 ${
-                auth.roleName !== 'line head' || isSubmittedGL
-                  ? 'bg-gray-100 text-gray-500 border-gray-300'
-                  : 'border-gray-500 focus:ring-primary focus:border-primary'
-              }`}
-            />
-            </div>
-
-              </div>
-              <div className="md:col-span-2">
-              <label className="block font-bold mb-1 mt-2">Gambar</label>
-               <div className="relative flex items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-48 cursor-pointer hover:border-primary">
-                {previewImage ? (
-                  <div className="relative w-full max-w-xs h-40 mx-auto">
-                    {/* Gambar Preview */}
-                    <img
-                      src={previewImage}
-                      alt="Preview"
-                      className="w-full h-full object-contain rounded-md border"
-                    />
-
-                    {/* Tombol X di pojok kanan atas gambar */}
-                   
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="mx-auto h-10 w-10 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    <p className="text-gray-500 mt-2">Tambahkan gambar bukti setelah perbaikan</p>
-                    <div className="flex justify-center gap-2 mt-3">
-                      <button
-                        className="text-primary text-sm underline"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          fileInputRef.current?.click();
-                        }}
-                      >
-                        Galeri
-                      </button>
-                      <span className="text-gray-400">|</span>
-                      <button
-                        className="text-primary text-sm underline"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openCameraModal();
-                        }}
-                      >
-                        Kamera
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            {/* Input Galeri */}
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-            />
-
-            {/* Canvas untuk capture dari kamera */}
-            <canvas ref={canvasRef} style={{ display: 'none' }} />
-             {isCameraModalOpen && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center">
-                {/* BACKDROP BLUR & KLIK UNTUK CLOSE */}
-                <div
-                  className="absolute inset-0 bg-black/30 backdrop-blur-sm"
-                  onClick={closeCameraModal}
-                ></div>
-
-                {/* MODAL KAMERA */}
-                <div className="relative bg-white p-4 rounded-lg shadow-lg w-full max-w-md z-10">
-                  {/* Tombol Close Bulat */}
-                  <button
-                    onClick={closeCameraModal}
-                    className="absolute top-1 right-1 w-10 h-10 flex items-center justify-center
-                              text-red-500 hover:text-white text-2xl font-bold 
-                              border-2 border-red-500 hover:bg-red-500 
-                              rounded-full transition duration-300"
-                  >
-                    &times;
-                  </button>
-
-                  {/* Live Video */}
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    muted
-                    playsInline
-                    className="w-full h-auto rounded mb-1 mt-4"
+            {finishplan && (
+              <>
+                <div className="md:col-span-2">
+                  <label className="block font-bold mb-1 mt-3">Saran & Usulan</label>
+                  <div>
+                    <label className="block mb-1">Section Head</label>
+                    <TextArea
+                        rows={4}
+                        value={suggestionsect}
+                        onChange={(e) => setSuggestionsect(e.target.value)}
+                        disabled={auth.roleName !== 'section head' || isSubmittedSH} // hanya disable kalau bukan role SH atau sudah submit SH
+                        placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
+                        className={`w-full rounded-md border shadow-sm py-2 px-2 ${
+                          auth.roleName !== 'section head' || isSubmittedSH
+                            ? 'bg-gray-100 text-gray-500 border-gray-300'
+                            : 'border-gray-500 focus:ring-primary focus:border-primary'
+                        }`}
+                      />
+                </div>
+                <div>
+                  <label className="block mb-1">Group Leader</label>
+                  <TextArea
+                    rows={4}
+                    value={suggestiongroup}
+                    onChange={(e) => setSuggestiongroup(e.target.value)}
+                    disabled={auth.roleName !== 'line head' || isSubmittedGL}
+                    placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
+                    className={`w-full rounded-md border shadow-sm py-2 px-2 ${
+                      auth.roleName !== 'line head' || isSubmittedGL
+                        ? 'bg-gray-100 text-gray-500 border-gray-300'
+                        : 'border-gray-500 focus:ring-primary focus:border-primary'
+                    }`}
                   />
-
-                  {/* Tombol Ambil Foto */}
-                  <div className="text-center">
-                    <button
-                      onClick={capturePhoto}
-                      className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
-                    >
-                      Ambil Foto
-                    </button>
-                  </div>
                 </div>
               </div>
-            )}
+
+              <div className="md:col-span-2">
+                <label className="block font-bold mb-1 mt-2">Gambar</label>
+                  <div className="relative flex items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-48 cursor-pointer hover:border-primary">
+                    {previewImage ? (
+                    <div className="relative w-full max-w-xs h-40 mx-auto">
+                      <img
+                        src={previewImage}
+                        alt="Preview"
+                        className="w-full h-full object-contain rounded-md border"
+                      />
+                    </div>
+                    ) : (
+                    <div className="text-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="mx-auto h-10 w-10 text-gray-400"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        <p className="text-gray-500 mt-2">Tambahkan gambar bukti setelah perbaikan</p>
+                      <div className="flex justify-center gap-2 mt-3">
+                        <button
+                          className="text-primary text-sm underline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            fileInputRef.current?.click();
+                          }}
+                        >
+                          Galeri
+                        </button>
+                          <span className="text-gray-400">|</span>
+                        <button
+                          className="text-primary text-sm underline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openCameraModal();
+                          }}
+                        >
+                          Kamera
+                        </button>
+                      </div>
+                    </div>
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                  />
+                  <canvas ref={canvasRef} style={{ display: 'none' }} />
+                  {isCameraModalOpen && (
+                    <div className="fixed inset-0 bg-opacity-40 backdrop-blur-sm z-25 flex items-center justify-center">
+                      <div className="bg-white dark:bg-gray-900 w-full max-w-3xl rounded-lg shadow-lg overflow-hidden">
+                        <div className="flex justify-between items-center px-4 py-3 border-b dark:border-gray-700">
+                          <h5 className="text-lg font-medium dark:text-gray-200">Ambil Foto</h5>
+                          <button
+                            onClick={()=>setIsCameraModalOpen(false)}
+                            className="text-gray-500 hover:text-red-500"
+                          >
+                            ✕
+                          </button>
+                        </div>
+                        <div className="p-4 text-center">
+                          <FaceDetail
+                          type="hyarihatto"
+                          setFileImage={setFileImage}
+                          setPreviewImage={setPreviewImage}
+                          handleSubmit={() => handleSubmitCapture(fileImage)}
+                            onClose={() => setIsCameraModalOpen(false)} 
+                        />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+              </div>
+              <div className="text-center col-span-12">
+                {isLoadingSubmit || isLoadingUpdate ? (
+                  <div className="flex justify-center items-center gap-2 mt-4">
+                    <svg
+                      className="animate-spin h-5 w-5 text-green-600"
+                      viewBox="0 0 24 24"
+                    >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      fill="none"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    />
+                    </svg>
+                    <span className="text-gray-600 font-semibold">Menyimpan...</span>
+                  </div>
+                ) : (
+                <div className="grid grid-cols-12 gap-2">
+                  <div className="col-span-6">
+                    <ButtonSubmit
+                      label="UPDATE"
+                      onClick={handleUpdateData}
+                      disabled={isUpdateDisabled}
+                    />
+                  </div>
+                  {/* Tombol SUBMIT */}
+                  <div className="col-span-6">
+                    <ButtonSubmit
+                      label="SUBMIT"
+                      onClick={handleSubmitCounter}
+                      disabled={isSubmitDisabled}
+                      showError={
+                        auth.roleName === 'line head' &&
+                        selectedProgress === 'Terima' &&
+                        !fileImage &&
+                        !isSubmittedGL
+                      }
+                    />
+                  </div>
+                </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
-       <div className="text-center col-span-12">
-        {isLoadingSubmit || isLoadingUpdate ? (
-          <div className="flex justify-center items-center gap-2 mt-4">
-            <svg
-              className="animate-spin h-5 w-5 text-green-600"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-                fill="none"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8v8H4z"
-              />
-            </svg>
-            <span className="text-gray-600 font-semibold">Menyimpan...</span>
-          </div>
-        ) : (
-        <div className="grid grid-cols-12 gap-2">
-  {/* Tombol UPDATE */}
-  <div className="col-span-6">
-    <ButtonSubmit
-      label="UPDATE"
-      onClick={handleUpdateData}
-      disabled={isUpdateDisabled}
-    />
-  </div>
-
-  {/* Tombol SUBMIT */}
-  <div className="col-span-6">
-    <ButtonSubmit
-      label="SUBMIT"
-      onClick={handleSubmitCounter}
-      disabled={isSubmitDisabled}
-      showError={
-        auth.roleName === 'line head' &&
-        selectedProgress === 'Terima' &&
-        !fileImage &&
-        !isSubmittedGL
-      }
-    />
-  </div>
-</div>
-
-
-        )}
-      </div>
-        </>
-        )}
-      </div>
       </div>
       ) :(
-
-
         //Buat Input
        <div className="col-span-12 rounded-2xl border border-gray-200 bg-white p-6 shadow-md dark:border-gray-800 dark:bg-white/[0.03] space-y-4">
             <h3 className="text-xl font-bold text-gray-800 dark:text-white">Progress Penanggulangan</h3>
@@ -957,290 +917,240 @@ console.log (isUpdateSuccess,isCounterFromGL,isSubmitSuccess)
                 {/* Saran dan Usulan */}
                 <div className="grid grid-cols-12 gap-2">
                 {/* Kolom 1: PIC */}
-                  <div className="col-span-6 md:col-span-8">
-                    <p className='mb-1 font-bold'>PIC Penanggulangan</p>
-                   <div className=" rounded-2xl border border-gray-400 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
-                    <RadioGroupProgress
-                      options={optionsUser}
-                      onChange={(value) => {
-                        setSelectedPIC(value);
-                        if (value !== "Pihak lain") {
-                        setPihakLain(''); // reset kalau bukan pihak lain
-                      }
-                      }}
-                      group="pic"
-                      name="picRadio" 
-                      value={selectedPIC}
-                      error={false}
-                      disabled={isDisabled}
-                    />
-                     {selectedPIC === "Pihak lain" && (
-                      <div className="mt-3">
-                        <input
-                          type="text"
-                          className="w-full px-3 py-2 border border-gray-300 rounded-md"
-                          placeholder="Nama Pihak Lain"
-                          value={pihakLain}
-                          onChange={(e) => setPihakLain(e.target.value)}
-                          disabled={isDisabled}
-                        />
-                      </div>
-                    )}
-                   </div>
-                </div>
-
-                {/* Kolom 2: Tanggal */}
-                <div className="col-span-6 md:col-span-4 space-y-4">
-                  <div>
-                    <label className="block font-medium mb-1">Tanggal Plan C/M</label>
-                     <DatePicker
-                      id="plan-cm"
-                      mode="single"
-                      defaultDate={planCM}
-                      onChange={handleChangePlanCM}
-                      placeholder='dd-MMM-yyyy'
-                      dateFormat="d-M-Y"
-                      className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
-                      hint={errors.submissions?.incidentDate}
-                      error={errors?.submissions?.incidentDate !== undefined}
-                      disabled={isDisabled}
-                    />
-                  </div>
-                  <div>
-                    <label className="block font-medium mb-1">Tanggal Plan Selesai</label>
-                  <DatePicker
-                    id="finish-plan"
-                    mode="single"
-                    defaultDate={finishplan ?? undefined}
-                    onChange={handleChangeFinishPlan}
-                    placeholder='dd-MMM-yyyy'
-                    dateFormat="d-M-Y"
-                    className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
-                    hint={errors.submissions?.incidentDate}
-                    error={errors?.submissions?.incidentDate !== undefined}
-                    disabled={isDisabled}
-                  />
-                  </div>
-                </div>
-              </div>
-             {finishplan && (
-
-              <>
-              <div className="md:col-span-2">
-              <label className="block font-bold mb-1 mt-3">Saran & Usulan</label>
-             <div>
-              <label className="block mb-1">Section Head</label>
-             <TextArea
-                rows={4}
-                value={suggestionsect}
-                onChange={(e) => setSuggestionsect(e.target.value)}
-                disabled={auth.roleName !== 'section head' || isSubmittedSH} // hanya disable kalau bukan role SH atau sudah submit SH
-                placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
-                className={`w-full rounded-md border shadow-sm py-2 px-2 ${
-                  auth.roleName !== 'section head' || isSubmittedSH
-                    ? 'bg-gray-100 text-gray-500 border-gray-300'
-                    : 'border-gray-500 focus:ring-primary focus:border-primary'
-                }`}
-              />
-            </div>
-
-            <div>
-              <label className="block mb-1">Group Leader</label>
-              <TextArea
-                rows={4}
-                value={suggestiongroup}
-                onChange={(e) => setSuggestiongroup(e.target.value)}
-                disabled={auth.roleName !== 'line head' || isSubmittedGL}
-                placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
-                className={`w-full rounded-md border shadow-sm py-2 px-2 ${
-                  auth.roleName !== 'line head' || isSubmittedGL
-                    ? 'bg-gray-100 text-gray-500 border-gray-300'
-                    : 'border-gray-500 focus:ring-primary focus:border-primary'
-                }`}
-              />
-            </div>
-
-              </div>
-           
-              <div className="md:col-span-2">
-              <label className="block font-bold mb-1 mt-2">Gambar</label>
-               <div className="relative flex items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-48 cursor-pointer hover:border-primary">
-                {previewImage ? (
-                  <div className="relative w-full max-w-xs h-40 mx-auto">
-                    {/* Gambar Preview */}
-                    <img
-                      src={previewImage}
-                      alt="Preview"
-                      className="w-full h-full object-contain rounded-md border"
-                    />
-
-                    {/* Tombol X di pojok kanan atas gambar */}
-                    <button
-                      onClick={() => setPreviewImage(null)}
-                      className="absolute top-1 right-1 bg-white/80 hover:bg-white text-red-600 rounded-full p-1 shadow z-10"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-4 w-4 text-red-500"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </button>
-                  </div>
-                ) : (
-                  <div className="text-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="mx-auto h-10 w-10 text-gray-400"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    <p className="text-gray-500 mt-2">Tambahkan gambar bukti setelah perbaikan</p>
-                    <div className="flex justify-center gap-2 mt-3">
-                      <button
-                        className="text-primary text-sm underline"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          fileInputRef.current?.click();
+                 {/* Kolom 1: PIC Penanggulangan */}
+                  <div className="col-span-12 md:col-span-8">
+                    <p className="mb-1 font-bold">PIC Penanggulangan</p>
+                    <div className="rounded-2xl border border-gray-400 bg-white p-2 shadow-sm dark:border-gray-800 dark:bg-white/[0.03]">
+                      <RadioGroupProgress
+                        options={optionsUser}
+                        onChange={(value) => {
+                          setSelectedPIC(value);
+                          if (value !== "Pihak lain") {
+                            setPihakLain(""); // reset kalau bukan pihak lain
+                          }
                         }}
-                      >
-                        Galeri
-                      </button>
-                      <span className="text-gray-400">|</span>
-                      <button
-                        className="text-primary text-sm underline"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openCameraModal();
-                        }}
-                      >
-                        Kamera
-                      </button>
+                        group="pic"
+                        name="picRadio"
+                        value={selectedPIC}
+                        error={false}
+                        disabled={isDisabled}
+                      />
+                      {selectedPIC === "Pihak lain" && (
+                        <div className="mt-3">
+                          <input
+                            type="text"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                            placeholder="Nama Pihak Lain"
+                            value={pihakLain}
+                            onChange={(e) => setPihakLain(e.target.value)}
+                            disabled={isDisabled}
+                          />
+                        </div>
+                      )}
                     </div>
                   </div>
-                )}
-              </div>
-              
-            {/* Input Galeri */}
-            <input
-              type="file"
-              accept="image/*"
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-            />
 
-            {/* Canvas untuk capture dari kamera */}
-            <canvas ref={canvasRef} style={{ display: 'none' }} />
- 
-            {/* Tombol Submit */}
-         
-             {isCameraModalOpen && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center">
-                {/* BACKDROP BLUR & KLIK UNTUK CLOSE */}
-                <div
-                  className="absolute inset-0 bg-black/30 backdrop-blur-sm"
-                  onClick={closeCameraModal}
-                ></div>
-
-                {/* MODAL KAMERA */}
-                <div className="relative bg-white p-4 rounded-lg shadow-lg w-full max-w-md z-10">
-                  {/* Tombol Close Bulat */}
-                  <button
-                    onClick={closeCameraModal}
-                    className="absolute top-1 right-1 w-10 h-10 flex items-center justify-center
-                              text-red-500 hover:text-white text-2xl font-bold 
-                              border-2 border-red-500 hover:bg-red-500 
-                              rounded-full transition duration-300"
-                  >
-                    &times;
-                  </button>
-
-                  {/* Live Video */}
-                  <video
-                    ref={videoRef}
-                    autoPlay
-                    muted
-                    playsInline
-                    className="w-full h-auto rounded mb-1 mt-4"
-                  />
-
-                  {/* Tombol Ambil Foto */}
-                  <div className="text-center">
-                    <button
-                      onClick={capturePhoto}
-                      className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
-                    >
-                      Ambil Foto
-                    </button>
+                  {/* Kolom 2: Tanggal */}
+                  <div className="col-span-12 md:col-span-4 space-y-4">
+                    <div>
+                      <label className="block font-medium mb-1">Tanggal Plan C/M</label>
+                      <DatePicker
+                        id="plan-cm"
+                        mode="single"
+                        defaultDate={planCM}
+                        onChange={handleChangePlanCM}
+                        placeholder="dd-MMM-yyyy"
+                        dateFormat="d-M-Y"
+                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                        hint={errors.submissions?.incidentDate}
+                        error={errors?.submissions?.incidentDate !== undefined}
+                        disabled={isDisabled}
+                      />
+                    </div>
+                    <div>
+                      <label className="block font-medium mb-1">Tanggal Plan Selesai</label>
+                      <DatePicker
+                        id="finish-plan"
+                        mode="single"
+                        defaultDate={finishplan ?? undefined}
+                        onChange={handleChangeFinishPlan}
+                        placeholder="dd-MMM-yyyy"
+                        dateFormat="d-M-Y"
+                        className="w-full border rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-200"
+                        hint={errors.submissions?.incidentDate}
+                        error={errors?.submissions?.incidentDate !== undefined}
+                        disabled={isDisabled}
+                      />
+                    </div>
                   </div>
+
+              </div>
+            {finishplan && (
+              <>
+                <div className="md:col-span-2">
+                  <label className="block font-bold mb-1 mt-3">Saran & Usulan</label>
+                  <div>
+                    <label className="block mb-1">Section Head</label>
+                    <TextArea
+                        rows={4}
+                        value={suggestionsect}
+                        onChange={(e) => setSuggestionsect(e.target.value)}
+                        disabled={auth.roleName !== 'section head' || isSubmittedSH} // hanya disable kalau bukan role SH atau sudah submit SH
+                        placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
+                        className={`w-full rounded-md border shadow-sm py-2 px-2 ${
+                          auth.roleName !== 'section head' || isSubmittedSH
+                            ? 'bg-gray-100 text-gray-500 border-gray-300'
+                            : 'border-gray-500 focus:ring-primary focus:border-primary'
+                        }`}
+                      />
+                </div>
+                <div>
+                  <label className="block mb-1">Group Leader</label>
+                  <TextArea
+                    rows={4}
+                    value={suggestiongroup}
+                    onChange={(e) => setSuggestiongroup(e.target.value)}
+                    disabled={auth.roleName !== 'line head' || isSubmittedGL}
+                    placeholder="Silakan isi countermeasure untuk kejadian Hyarihatto tersebut"
+                    className={`w-full rounded-md border shadow-sm py-2 px-2 ${
+                      auth.roleName !== 'line head' || isSubmittedGL
+                        ? 'bg-gray-100 text-gray-500 border-gray-300'
+                        : 'border-gray-500 focus:ring-primary focus:border-primary'
+                    }`}
+                  />
                 </div>
               </div>
-            )}
+
+              <div className="md:col-span-2">
+                <label className="block font-bold mb-1 mt-2">Gambar</label>
+                  <div className="relative flex items-center justify-center border-2 border-dashed border-gray-300 rounded-md h-48 cursor-pointer hover:border-primary">
+                    {previewImage ? (
+                    <div className="relative w-full max-w-xs h-40 mx-auto">
+                      <img
+                        src={previewImage}
+                        alt="Preview"
+                        className="w-full h-full object-contain rounded-md border"
+                      />
+                    </div>
+                    ) : (
+                    <div className="text-center">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="mx-auto h-10 w-10 text-gray-400"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                        <p className="text-gray-500 mt-2">Tambahkan gambar bukti setelah perbaikan</p>
+                      <div className="flex justify-center gap-2 mt-3">
+                        <button
+                          className="text-primary text-sm underline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            fileInputRef.current?.click();
+                          }}
+                        >
+                          Galeri
+                        </button>
+                          <span className="text-gray-400">|</span>
+                        <button
+                          className="text-primary text-sm underline"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openCameraModal();
+                          }}
+                        >
+                          Kamera
+                        </button>
+                      </div>
+                    </div>
+                    )}
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                    onChange={handleFileChange}
+                  />
+                  <canvas ref={canvasRef} style={{ display: 'none' }} />
+                  {isCameraModalOpen && (
+                    <div className="fixed inset-0 bg-opacity-40 backdrop-blur-sm z-25 flex items-center justify-center">
+                      <div className="bg-white dark:bg-gray-900 w-full max-w-3xl rounded-lg shadow-lg overflow-hidden">
+                        <div className="flex justify-between items-center px-4 py-3 border-b dark:border-gray-700">
+                          <h5 className="text-lg font-medium dark:text-gray-200">Ambil Foto</h5>
+                         <button onClick={closeCameraModal} className="text-gray-500 hover:text-red-500">
+                          ✕
+                        </button>
+                        </div>
+                        <div className="p-4 text-center">
+                         <FaceDetail
+                          type="hyarihatto"
+                          setFileImage={setFileImage}
+                          setPreviewImage={setPreviewImage}
+                          handleSubmit={() => handleSubmitCapture(fileImage)}
+                            onClose={() => setIsCameraModalOpen(false)} 
+                        />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+              </div>
+              <div className="text-center col-span-12">
+                {isLoadingSubmit || isLoadingUpdate ? (
+                  <div className="flex justify-center items-center gap-2 mt-4">
+                    <svg
+                      className="animate-spin h-5 w-5 text-green-600"
+                      viewBox="0 0 24 24"
+                    >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      fill="none"
+                    />
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v8H4z"
+                    />
+                    </svg>
+                    <span className="text-gray-600 font-semibold">Menyimpan...</span>
+                  </div>
+                ) : (
+                <div className="grid grid-cols-12 gap-2">
+                  <div className="col-span-6">
+                    <ButtonSubmit
+                      label="UPDATE"
+                      onClick={handleUpdateData}
+                      disabled={isUpdateDisabled}
+                    />
+                  </div>
+                  {/* Tombol SUBMIT */}
+                  <div className="col-span-6">
+                    <ButtonSubmit
+                      label="SUBMIT"
+                      onClick={handleSubmitCounter}
+                      disabled={isSubmitDisabled}
+                      showError={
+                        auth.roleName === 'line head' &&
+                        selectedProgress === 'Terima' &&
+                        !fileImage &&
+                        !isSubmittedGL
+                      }
+                    />
+                  </div>
+                </div>
+                )}
+              </div>
+            </>
+          )}
         </div>
-       </>
-      )}
-     <div className="text-center col-span-12">
-  {isLoadingSubmit || isLoadingUpdate ? (
-    <div className="flex justify-center items-center gap-2 mt-4">
-      <svg
-        className="animate-spin h-5 w-5 text-green-600"
-        viewBox="0 0 24 24"
-      >
-        <circle
-          className="opacity-25"
-          cx="12"
-          cy="12"
-          r="10"
-          stroke="currentColor"
-          strokeWidth="4"
-          fill="none"
-        />
-        <path
-          className="opacity-75"
-          fill="currentColor"
-          d="M4 12a8 8 0 018-8v8H4z"
-        />
-      </svg>
-      <span className="text-gray-600 font-semibold">Menyimpan...</span>
-    </div>
-  ) : (
-    <div className="grid grid-cols-12 gap-2">
-  {/* Tombol UPDATE */}
-  <div className="col-span-6">
-    <ButtonSubmit
-      label="UPDATE"
-      onClick={handleUpdateData}
-      disabled={isUpdateDisabled}
-    />
-  </div>
-
-  {/* Tombol SUBMIT */}
-  <div className="col-span-6">
-    <ButtonSubmit
-      label="SUBMIT"
-      onClick={handleSubmitCounter}
-      disabled={isSubmitDisabled}
-      showError={
-        auth.roleName === 'line head' &&
-        selectedProgress === 'Terima' &&
-        !fileImage &&
-        !isSubmittedGL
-      }
-    />
-  </div>
-</div>
-
-  )}
-</div>
-
-      </div>
       </div>
 
     )

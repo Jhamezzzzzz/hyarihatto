@@ -51,7 +51,7 @@ const Step3FormVoiceMember = () => {
 
     const handleSubmitCapture = (image: string | null) => {
       updateFormData(null, "image", image)
-      localStorage.setItem("imageFileName", `hyarihatto-proof-${new Date()}`)
+      localStorage.setItem("imageFileName", `voice-member-proof-${new Date()}`)
       setShowCameraModal(false)
     }
     

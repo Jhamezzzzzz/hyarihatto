@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
 // 1. Define the type
 type FormData = {
@@ -43,6 +43,51 @@ interface FormDataContextType {
 // 3. Create context
 const FormDataContext = createContext<FormDataContextType | undefined>(undefined);
 
+// Utils to initialize IndexedDB
+const initIndexedDB = (dbName: string, storeName: string): Promise<IDBDatabase> => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(dbName, 1);
+
+    request.onupgradeneeded = (event) => {
+      const db = (event.target as IDBRequest).result;
+      if (!db.objectStoreNames.contains(storeName)) {
+        db.createObjectStore(storeName, { keyPath: 'id' });
+      }
+    };
+
+    request.onsuccess = (event) => {
+      resolve((event.target as IDBRequest).result);
+    };
+
+    request.onerror = (event) => {
+      reject((event.target as IDBRequest).error);
+    };
+  });
+};
+
+// Utils Get saved image from IndexedDB
+const getSavedImageFromDB = (dbName: string, storeName: string, key: IDBValidKey): Promise<string | null> => {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(dbName);
+    request.onsuccess = (event) => {
+      const db = (event.target as IDBRequest).result;
+      const transaction = db.transaction([storeName], "readonly");
+      const store = transaction.objectStore(storeName);
+      const getRequest = store.get(key);
+      getRequest.onsuccess = () => {
+        resolve(getRequest.result?.data || null);
+      };
+      getRequest.onerror = () => {
+        reject(getRequest.error);
+      };
+    };
+    request.onerror = (event) => {
+      reject((event.target as IDBRequest).error);
+    };
+  });
+};
+
+
 // 4. Provider
 export const FormDataProvider = ({ children }: { children: ReactNode }) => {
   const [formData, setFormData] = useState<FormData>({
@@ -55,7 +100,7 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
     time: "",
     line: "",
     location: "",
-    image: localStorage.getItem("image") || "",
+    image: "",
 
     submissions: {
       userId: Number(localStorage.getItem("submissions.userId")) || null,
@@ -76,13 +121,45 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
     }
   });
 
+  // useEffect to initialize the database and load the image
+    useEffect(() => {
+      const setupDBAndLoadImage = async () => {
+        try {
+          await initIndexedDB('imagesDB', 'images');
+          const imageData = await getSavedImageFromDB('imagesDB', 'images', 2);
+          if (imageData) {
+            setFormData((prev) => ({
+              ...prev,
+              image: imageData,
+            }));
+          }
+        } catch (error) {
+          console.error('Failed to set up IndexedDB or load image:', error);
+        }
+      };
+      setupDBAndLoadImage();
+    }, []); // Run only once on mount
+
   // 5. Helper to update nested formData and localStorage
   const updateFormData = (
     section: keyof Pick<FormData, "submissions" | "voiceMember"> | null,
     key: string,
     value: string | number | null
   ) => {
-    if(section === null){
+    // Check if the key is 'image'
+    if (key.includes('image')) {
+      console.log("Updating image in formData:", value);
+      // Use IndexedDB to save the image data
+      const dbRequest = indexedDB.open('imagesDB', 1);
+      dbRequest.onsuccess = (event) => {
+        const db = (event.target as IDBRequest).result;
+        const transaction = db.transaction(['images'], 'readwrite');
+        const store = transaction.objectStore('images');
+        store.put({ id: 2, data: value }); // Assuming you use a fixed key '1'
+      };
+      setFormData((prev) => ({ ...prev, image: value as string }));
+    }
+    else if(section === null){
       setFormData((prev) => {
         const updatedSection = {
           ...prev,
@@ -115,7 +192,7 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('line', "")
     localStorage.setItem('section', "")
     localStorage.setItem('formattedDate', "")
-    localStorage.setItem('image', "")
+    // localStorage.setItem('image', "")
     localStorage.setItem('hour', "")
     localStorage.setItem('minute', "")
     localStorage.setItem('submissions.userId', "")
@@ -129,6 +206,7 @@ export const FormDataProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('voiceMember.issue', "")
     localStorage.setItem('voiceMember.expectedCondition', "")
     localStorage.setItem('voiceMember.improvementSuggestion', "")
+    updateFormData(null, "image", "")
   }
 
   return (

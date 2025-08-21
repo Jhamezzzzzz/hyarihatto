@@ -30,7 +30,6 @@ const Step4FormHyarihatto = () => {
 
         // Check the size of the file directly
         const sizeInMB = file.size / (1024 * 1024);
-        alertError(`Ukuran gambar: ${sizeInMB}`)
         
         const MAX_SIZE_MB = 10;
         

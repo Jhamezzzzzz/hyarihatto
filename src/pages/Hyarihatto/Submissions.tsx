@@ -439,7 +439,7 @@ const HyarihattoSubmissions = () => {
                   return(
                     <TableRow key={index}>
                       <TableCell>{numberIndex}</TableCell>
-                      <TableCell>{item.incidentDate}</TableCell>
+                      <TableCell className='min-w-30'>{item.incidentDate}</TableCell>
                       <TableCell>{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
                       <TableCell>{item?.HazardAssessment?.potentialHazard || item?.VoiceMember?.issue}</TableCell>
                       <TableCell>{item.user.name}</TableCell>

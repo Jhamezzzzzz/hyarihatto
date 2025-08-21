@@ -222,7 +222,7 @@ export default function ListSubmissions({ filter }:{ filter: Filter}) {
               {(dataSubmissions.length > 0 && !loading) && dataSubmissions.map((item: DataSubmissions, index: number) => (
                 <TableRow key={item.id}>
                   <TableCell>{index+1 + ((pagination.page-1)*pagination.limit)}</TableCell>
-                  <TableCell>{item.incidentDate}</TableCell>
+                  <TableCell className="min-w-30">{item.incidentDate}</TableCell>
                   <TableCell>{item.incidentTime.split("T")[1].slice(0, 5)}</TableCell>
                   <TableCell>{item?.HazardAssessment?.potentialHazard || item?.VoiceMember?.issue}</TableCell>
                   <TableCell>{item.user.name}</TableCell>

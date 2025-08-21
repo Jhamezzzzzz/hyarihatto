@@ -254,20 +254,6 @@ const AccidentLevel = () => {
       <div>
         <Card>
           <CardContent>
-<<<<<<< HEAD
-            <div className='flex items-center justify-between '>
-              <div>
-                <Button size='sm' onClick={()=>handleOpenModal('add', form)}>Tambah Data</Button>
-              </div>
-                <div className="w-1/3">
-               <Input
-                placeholder='Cari '
-                onChange={(e)=>setSearchQ(e.target.value)}
-                value={searchQ}
-                endIcon={<FaSearch/>}
-              />
-               </div>
-=======
             <div className='flex justify-between flex-wrap'>
               <Button size='sm' onClick={()=>handleOpenModal('add', form)}>Tambah Data</Button>
               <div className='sm:w-auto w-full sm:mt-0 mt-4'>
@@ -279,7 +265,6 @@ const AccidentLevel = () => {
                   clearable
                 />
               </div>
->>>>>>> d501ce411e5cb265435aa816e9a119aea419aac8
             </div>
             <div className='overflow-x-auto'>
               <Table className='mt-10'>

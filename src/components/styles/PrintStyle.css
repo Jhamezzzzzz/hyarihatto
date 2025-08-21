@@ -1,0 +1,27 @@
+@media print {
+    @page {
+    size: A4;
+    margin: 0; /* biar full page */
+  }
+  /* Sembunyikan semua */
+    body {
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+
+  .print-wrapper {
+    width: 210mm;   /* lebar A4 */
+    height: 297mm;  /* tinggi A4 */
+    padding: 15mm;  /* margin dalam */
+    box-sizing: border-box;
+    overflow: hidden; /* biar ga ada yang kepotong keluar */
+  }
+
+  /* Hilangkan tombol print */
+  .no-print {
+    display: none !important;
+  }
+}

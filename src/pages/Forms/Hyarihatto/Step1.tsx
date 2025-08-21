@@ -83,6 +83,11 @@ const Step1FormHyarihatto = () => {
       setHour("00");
       blurredValue = "00";
     }
+    if(value.length > 2){
+      const length = value.length
+      blurredValue = blurredValue.slice(length-2, length); // Limit to 2 digits ends
+      setHour(blurredValue);
+    }
     if (blurredValue === "" || minute === "") {
       setHour(blurredValue);
       localStorage.setItem("hour", blurredValue);
@@ -105,6 +110,11 @@ const Step1FormHyarihatto = () => {
     if (Number(value) < 0) {
       setMinute("00");
       blurredValue = "00";
+    }
+    if(value.length > 2){
+      const length = value.length
+      blurredValue = blurredValue.slice(length-2, length); // Limit to 2 digits
+      setMinute(blurredValue);
     }
     if (hour === "" || blurredValue === "") {
       setMinute(blurredValue);
@@ -149,6 +159,7 @@ const Step1FormHyarihatto = () => {
               <div className="flex items-center gap-2">
                 <Input
                   id="hour"
+                  placeholder="00"
                   type="number"
                   name="hour"
                   max="23"
@@ -170,6 +181,7 @@ const Step1FormHyarihatto = () => {
                 </p>
                 <Input
                   id="minute"
+                  placeholder="00"
                   type="number"
                   name="minute"
                   max="59"

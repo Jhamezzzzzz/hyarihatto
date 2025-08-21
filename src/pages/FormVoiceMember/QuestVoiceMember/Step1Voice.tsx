@@ -74,6 +74,11 @@ const Step1FormVoiceMember = () => {
       setHour("00");
       blurredValue = "00";
     }
+    if(value.length > 2){
+      const length = value.length
+      blurredValue = blurredValue.slice(length-2, length); // Limit to 2 digits
+      setHour(blurredValue);
+    }
     if (blurredValue === "" || minute === "") {
       setHour(blurredValue);
       localStorage.setItem("hour", blurredValue);
@@ -96,6 +101,11 @@ const Step1FormVoiceMember = () => {
     if (Number(value) < 0) {
       setMinute("00");
       blurredValue = "00";
+    }
+    if(value.length > 2){
+      const length = value.length
+      blurredValue = blurredValue.slice(length-2, length); // Limit to 2 digits
+      setMinute(blurredValue);
     }
     if (hour === "" || blurredValue === "") {
       setMinute(blurredValue);
@@ -140,6 +150,7 @@ const Step1FormVoiceMember = () => {
                 <Input
                   id="hour"
                   type="number"
+                  placeholder="00"
                   name="hour"
                   max="23"
                   min="0"
@@ -161,6 +172,7 @@ const Step1FormVoiceMember = () => {
                 <Input
                   id="minute"
                   type="number"
+                  placeholder="00"
                   name="minute"
                   max="59"
                   min="0"
